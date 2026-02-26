@@ -8,38 +8,49 @@
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f9f4; margin: 0; padding: 0; }
         
         /* Üst Bilgi ve Butonlar */
-        header { background-color: #006400; color: white; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; }
-        header h1 { margin: 0; font-size: 22px; }
-        .btn { padding: 8px 15px; background-color: #ffc107; color: #333; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        header { background-color: #006400; color: white; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+        header h1 { margin: 0; font-size: 22px; display: flex; align-items: center; }
+        header h1 span { margin-right: 10px; font-size: 28px; }
+        .btn { padding: 8px 15px; background-color: #ffc107; color: #333; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        .btn:hover { background-color: #e0a800; }
         .btn-danger { background-color: #dc3545; color: white; }
+        .btn-danger:hover { background-color: #c82333; }
         
         /* Açılır Menü (Navigasyon) Tasarımı */
-        nav { background-color: #008f39; display: flex; justify-content: center; flex-wrap: wrap; }
+        nav { background-color: #008f39; display: flex; justify-content: center; flex-wrap: wrap; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
         .dropdown { position: relative; display: inline-block; }
-        .dropbtn { background-color: #008f39; color: white; padding: 14px 20px; font-size: 15px; border: none; cursor: pointer; font-weight: bold; }
-        .dropdown:hover .dropbtn { background-color: #006400; }
-        .dropdown-content { display: none; position: absolute; background-color: #f9f9f9; min-width: 220px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1; border-radius: 0 0 8px 8px; overflow: hidden; }
-        .dropdown-content a { color: black; padding: 12px 16px; text-decoration: none; display: block; border-bottom: 1px solid #eee; }
-        .dropdown-content a:hover { background-color: #e9ecef; color: #008f39; font-weight: bold; }
+        .dropbtn { background-color: #008f39; color: white; padding: 15px 20px; font-size: 15px; border: none; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        .dropdown:hover .dropbtn { background-color: #005c25; }
+        .dropdown-content { display: none; position: absolute; background-color: #ffffff; min-width: 220px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 100; border-radius: 0 0 8px 8px; overflow: hidden; }
+        .dropdown-content a { color: #333; padding: 12px 16px; text-decoration: none; display: block; border-bottom: 1px solid #eee; font-size: 14px; transition: 0.2s; }
+        .dropdown-content a:hover { background-color: #f4f9f4; color: #008f39; padding-left: 20px; }
         .dropdown:hover .dropdown-content { display: block; }
 
         /* Ana Gövde */
-        .container { max-width: 1000px; margin: 20px auto; padding: 20px; background: white; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        .container { max-width: 1000px; margin: 30px auto; padding: 25px; background: white; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.08); }
         #login-view, #admin-view { display: none; }
         
         /* Form ve İçerik */
-        input, select, textarea { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
-        .post-card { border: 1px solid #ddd; border-radius: 8px; padding: 15px; margin-bottom: 15px; background-color: #fafafa; }
-        .post-badge { display: inline-block; background-color: #008f39; color: white; padding: 4px 10px; border-radius: 12px; font-size: 12px; margin-bottom: 10px; font-weight: bold; }
-        .post-img { width: 100%; max-height: 400px; object-fit: cover; border-radius: 5px; margin-top: 10px; }
+        input, select, textarea { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; font-family: inherit; }
+        input:focus, select:focus, textarea:focus { outline: none; border-color: #008f39; }
         
-        #current-category { color: #008f39; border-bottom: 2px solid #008f39; padding-bottom: 5px; }
+        /* Galeri Kartları */
+        .post-card { border-radius: 10px; padding: 0; margin-bottom: 25px; background-color: #ffffff; box-shadow: 0 3px 10px rgba(0,0,0,0.08); overflow: hidden; border: 1px solid #eee; }
+        .post-content { padding: 15px 20px; }
+        .post-badge { display: inline-block; background-color: #008f39; color: white; padding: 5px 12px; border-radius: 20px; font-size: 13px; margin-bottom: 10px; font-weight: 600; letter-spacing: 0.5px; }
+        .post-img-container { width: 100%; height: 400px; overflow: hidden; background-color: #f0f0f0; display: flex; align-items: center; justify-content: center; }
+        .post-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
+        .post-card:hover .post-img { transform: scale(1.03); }
+        .post-text { font-size: 16px; line-height: 1.5; color: #444; margin-bottom: 0; }
+        
+        #current-category { color: #008f39; border-bottom: 3px solid #008f39; padding-bottom: 10px; display: inline-block; }
+        optgroup { font-weight: bold; color: #006400; }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>⚽ Kütahya Yeşilay SK</h1>
+        <h1><span>⚽</span> Kütahya Yeşilay SK</h1>
         <div>
             <button id="loginBtn" class="btn" onclick="showLogin()">Yönetici Girişi</button>
             <button id="logoutBtn" class="btn btn-danger" style="display:none;" onclick="logout()">Çıkış Yap</button>
@@ -58,164 +69,6 @@
                 <a href="#" onclick="filterPosts('U-8 Futbol Okulu')">U-8 Yaş Grubu</a>
                 <a href="#" onclick="filterPosts('U-9 Futbol Okulu')">U-9 Yaş Grubu</a>
                 <a href="#" onclick="filterPosts('U-10 Futbol Okulu')">U-10 Yaş Grubu</a>
-                </div>
-        </div>
-        <div class="dropdown">
-            <button class="dropbtn">GELİŞİM GRUPLARI ▼</button>
-            <div class="dropdown-content">
-                <a href="#" onclick="filterPosts('U-9 Gelişim')">U-9 Gelişim</a>
-                <a href="#" onclick="filterPosts('U-10 Gelişim')">U-10 Gelişim</a>
-                <a href="#" onclick="filterPosts('U-11 Gelişim')">U-11 Gelişim</a>
-                <a href="#" onclick="filterPosts('U-12 Gelişim')">U-12 Gelişim</a>
-                <a href="#" onclick="filterPosts('Özel İdman Grubu')">Özel İdman Grubu</a>
             </div>
         </div>
-        <div class="dropdown">
-            <button class="dropbtn">ANA GRUPLAR ▼</button>
-            <div class="dropdown-content">
-                <a href="#" onclick="filterPosts('A Takım')">A Takım</a>
-                <a href="#" onclick="filterPosts('U-19 Ana Grup')">U-19 Ana Grup</a>
-                <a href="#" onclick="filterPosts('U-17 Ana Grup')">U-17 Ana Grup</a>
-                <a href="#" onclick="filterPosts('U-16 Ana Grup')">U-16 Ana Grup</a>
-                <a href="#" onclick="filterPosts('Trabzonspor Kampı')">Trabzonspor Kamp Ekibi</a>
-            </div>
-        </div>
-        <div class="dropdown">
-            <button class="dropbtn">AKADEMİ GRUPLARI ▼</button>
-            <div class="dropdown-content">
-                <a href="#" onclick="filterPosts('U-14 Akademi')">U-14 Akademi</a>
-                <a href="#" onclick="filterPosts('U-15 Akademi')">U-15 Akademi</a>
-                <a href="#" onclick="filterPosts('Kaleci Akademisi')">Kaleci Akademisi</a>
-                <a href="#" onclick="filterPosts('Atletik Performans')">Atletik Performans Grubu</a>
-            </div>
-        </div>
-    </nav>
-
-    <div id="public-view" class="container">
-        <h2 id="current-category">📸 Tüm Paylaşımlar</h2>
-        <p>Kütahya Yeşilay SK güncel antrenman ve maç görüntüleri.</p>
-        <div id="post-feed">
-            </div>
-    </div>
-
-    <div id="login-view" class="container">
-        <h2>🔒 Yönetici Girişi</h2>
-        <input type="text" id="username" placeholder="Kullanıcı Adı (Örn: ALİ)">
-        <input type="password" id="password" placeholder="Şifre (Örn: ALİ43)">
-        <button class="btn" onclick="login()">Sisteme Gir</button>
-        <button class="btn" style="background:#ccc;" onclick="showPublic()">İptal</button>
-        <p id="error-msg" style="color:red; display:none;">Hatalı kullanıcı adı veya şifre!</p>
-    </div>
-
-    <div id="admin-view" class="container">
-        <h2>⚙️ Yönetici Paneli - Hoş Geldin ALİ</h2>
-        <div style="background: #e9ecef; padding: 20px; border-radius: 8px; border-left: 5px solid #008f39;">
-            <h3>Yeni İçerik (Fotoğraf/Video) Ekle</h3>
-            
-            <label><strong>Hangi Gruba Yüklenecek?</strong></label>
-            <select id="group-select">
-                <optgroup label="FUTBOL OKULU GRUPLARI">
-                    <option value="U-6 Futbol Okulu">U-6 Yaş Grubu</option>
-                    <option value="U-10 Futbol Okulu">U-10 Yaş Grubu</option>
-                </optgroup>
-                <optgroup label="GELİŞİM GRUPLARI">
-                    <option value="U-11 Gelişim">U-11 Gelişim</option>
-                    <option value="U-12 Gelişim">U-12 Gelişim</option>
-                </optgroup>
-                <optgroup label="ANA GRUPLAR">
-                    <option value="A Takım">A Takım</option>
-                    <option value="Trabzonspor Kampı">Trabzonspor Kamp Ekibi</option>
-                </optgroup>
-                <optgroup label="AKADEMİ GRUPLARI">
-                    <option value="Kaleci Akademisi">Kaleci Akademisi</option>
-                    <option value="U-15 Akademi">U-15 Akademi</option>
-                </optgroup>
-            </select>
-
-            <textarea id="post-text" rows="3" placeholder="Antrenman hakkında bir şeyler yazın..."></textarea>
-            <input type="text" id="post-image" placeholder="Fotoğraf URL'si (Prototip için internetten resim linki yapıştırın)">
-            
-            <button class="btn" style="width: 100%; padding: 12px; font-size: 16px; margin-top: 10px;" onclick="addPost()">Seçili Gruba Yükle</button>
-        </div>
-    </div>
-
-    <script>
-        // Varsayılan Veriler
-        let posts = [
-            { group: "Trabzonspor Kampı", text: "Oğuz Akalan hocamız kontrolünde Çağatay Kavak ve ekibinin Trabzonspor kampı hazırlıkları tüm hızıyla devam ediyor. Veli izin belgeleri tamamlandı!", img: "" },
-            { group: "U-12 Gelişim", text: "Hafta sonu oynanan hazırlık maçından kareler. Gelişim grubumuz harikaydı!", img: "https://via.placeholder.com/800x400/008f39/ffffff?text=U-12+Gelisim+Maci" },
-            { group: "Kaleci Akademisi", text: "Kalecilerimiz bugün refleks ve çeviklik antrenmanlarını tamamladı.", img: "" }
-        ];
-
-        let currentFilter = "Tümü";
-
-        function renderPosts() {
-            const feed = document.getElementById('post-feed');
-            feed.innerHTML = '';
-            
-            let filteredPosts = posts;
-            if (currentFilter !== "Tümü") {
-                filteredPosts = posts.filter(post => post.group === currentFilter);
-            }
-
-            if (filteredPosts.length === 0) {
-                feed.innerHTML = '<p style="color:#777;">Bu gruba ait henüz bir paylaşım yapılmamış.</p>';
-            }
-
-            filteredPosts.forEach(post => {
-                let imgHTML = post.img ? `<img src="${post.img}" class="post-img">` : '';
-                feed.innerHTML = `
-                    <div class="post-card">
-                        <span class="post-badge">${post.group}</span>
-                        <p><strong>${post.text}</strong></p>
-                        ${imgHTML}
-                    </div>
-                ` + feed.innerHTML;
-            });
-        }
-
-        function filterPosts(groupName) {
-            currentFilter = groupName;
-            document.getElementById('current-category').innerText = groupName === "Tümü" ? "📸 Tüm Paylaşımlar" : "📸 " + groupName + " Paylaşımları";
-            showPublic(); // Yönetici panelindeyse vitrine dönsün
-            renderPosts();
-        }
-
-        function showLogin() { hideAll(); document.getElementById('login-view').style.display = 'block'; }
-        function showPublic() { hideAll(); document.getElementById('public-view').style.display = 'block'; }
-        function showAdmin() { hideAll(); document.getElementById('admin-view').style.display = 'block'; document.getElementById('public-view').style.display = 'block'; }
-        function hideAll() { document.getElementById('public-view').style.display = 'none'; document.getElementById('login-view').style.display = 'none'; document.getElementById('admin-view').style.display = 'none'; document.getElementById('error-msg').style.display = 'none'; }
-
-        function login() {
-            let user = document.getElementById('username').value.toUpperCase();
-            let pass = document.getElementById('password').value.toUpperCase();
-            if((user === 'ALİ' || user === 'ALI') && pass === 'ALİ43' || pass === 'ALI43') {
-                document.getElementById('loginBtn').style.display = 'none'; document.getElementById('logoutBtn').style.display = 'block'; showAdmin();
-            } else { document.getElementById('error-msg').style.display = 'block'; }
-        }
-
-        function logout() {
-            document.getElementById('username').value = ''; document.getElementById('password').value = '';
-            document.getElementById('loginBtn').style.display = 'block'; document.getElementById('logoutBtn').style.display = 'none';
-            currentFilter = "Tümü"; document.getElementById('current-category').innerText = "📸 Tüm Paylaşımlar";
-            showPublic(); renderPosts();
-        }
-
-        function addPost() {
-            let group = document.getElementById('group-select').value;
-            let text = document.getElementById('post-text').value;
-            let img = document.getElementById('post-image').value;
-
-            if(text === "") { alert("Lütfen bir açıklama yazın!"); return; }
-
-            posts.push({ group: group, text: text, img: img });
-            document.getElementById('post-text').value = ''; document.getElementById('post-image').value = '';
-            
-            alert(group + " grubuna başarıyla eklendi!");
-            filterPosts(group); // Ekledikten sonra direkt o grubu göstersin
-        }
-
-        renderPosts();
-    </script>
-</body>
-</html>
+        <div
