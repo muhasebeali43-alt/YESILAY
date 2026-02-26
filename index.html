@@ -4,37 +4,58 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Kütahya Yeşilay | CANLI BULUT SİSTEMİ</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
     <style>
         :root { --yesil: #006a33; --sari: #f1c40f; --dark: #121212; --light: #f8faf9; }
         body { margin: 0; font-family: 'Poppins', sans-serif; background: var(--light); color: #333; overflow-x: hidden; }
-        header { background: linear-gradient(135deg, var(--yesil) 0%, #004d26 100%); color: white; padding: 25px 5%; text-align: center; border-bottom: 6px solid var(--sari); }
+        
+        header { 
+            background: linear-gradient(135deg, var(--yesil) 0%, #004d26 100%); 
+            color: white; padding: 25px 5%; text-align: center; border-bottom: 6px solid var(--sari); 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
         nav { display: flex; justify-content: center; flex-wrap: wrap; gap: 15px; padding: 15px; background: #003d1d; position: sticky; top: 0; z-index: 1000; }
         nav a { color: white; text-decoration: none; font-weight: 700; font-size: 0.85rem; cursor: pointer; text-transform: uppercase; }
         .admin-trigger { background: var(--sari); color: var(--yesil) !important; padding: 8px 15px; border-radius: 8px; font-weight: 900; border: none; cursor: pointer; }
+
         .page { display: none; padding: 30px 5%; }
         .page.active { display: block; }
+        
         .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
         @media (min-width: 1024px) { .grid { grid-template-columns: repeat(5, 1fr); gap: 25px; } }
+        
         .card { background: white; padding: 25px 15px; border-radius: 20px; text-align: center; border-bottom: 6px solid var(--yesil); box-shadow: 0 5px 15px rgba(0,0,0,0.05); cursor: pointer; }
         .card img { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 4px solid var(--yesil); margin-bottom: 15px; }
+
+        /* ADMIN PANEL */
         #admin-panel { display: none; position: fixed; inset: 0; background: white; z-index: 9999; flex-direction: column; }
         .admin-nav { background: var(--dark); color: white; padding: 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 5px solid var(--sari); }
+        .admin-layout { display: flex; flex-direction: column; flex: 1; overflow: hidden; }
+        @media (min-width: 1024px) { .admin-layout { flex-direction: row; } }
         .admin-sidebar { background: #1a1a1a; padding: 15px; display: flex; overflow-x: auto; gap: 10px; }
-        @media (min-width: 1024px) { .admin-sidebar { width: 280px; flex-direction: column; overflow-x: visible; padding: 20px; } }
+        @media (min-width: 1024px) { .admin-sidebar { width: 280px; flex-direction: column; overflow-x: visible; } }
         .sidebar-btn { color: #aaa; padding: 15px; cursor: pointer; border-radius: 12px; font-weight: 700; }
         .sidebar-btn.active { background: var(--yesil); color: white; }
         .admin-main { flex: 1; padding: 25px; overflow-y: auto; background: #f4f6f5; }
+        
         .admin-card { background: white; padding: 20px; border-radius: 15px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #eee; }
         .btn-green { background: var(--yesil); color: white; padding: 15px; border-radius: 10px; border: none; font-weight: 800; cursor: pointer; width: 100%; margin-bottom: 20px; }
-        input, textarea { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; font-family: inherit; }
-        #status-light { width: 10px; height: 10px; border-radius: 50%; background: red; display: inline-block; margin-right: 5px; }
+
+        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 10001; justify-content: center; align-items: center; }
+        .modal-box { background: white; padding: 35px; border-radius: 25px; width: 90%; max-width: 700px; position: relative; max-height: 85vh; overflow-y: auto; text-align: center; }
+        .modal-close-x { position: absolute; top: 15px; right: 20px; font-size: 35px; cursor: pointer; color: #333; }
+
+        input, textarea { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; }
+        #lightbox { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 10005; justify-content: center; align-items: center; cursor: pointer; }
+        #lightbox img { max-width: 95%; max-height: 90vh; border: 4px solid white; border-radius: 10px; }
     </style>
 </head>
 <body>
+
+<div id="lightbox" onclick="this.style.display='none'"><img id="lb-img" src=""></div>
 
 <header><h1>Kütahya Yeşilay Futbol Okulu</h1></header>
 
@@ -42,78 +63,151 @@
     <a onclick="showPage('home')">ANASAYFA</a>
     <a onclick="showPage('groups')">GRUPLAR</a>
     <a onclick="showPage('coaches')">HOCALAR</a>
-    <button class="admin-trigger" onclick="adminGiris()">ADMİN PANELİ</button>
+    <a onclick="showPage('contact')">İLETİŞİM</a>
+    <button class="admin-trigger" onclick="adminLoginPrompt()">ADMİN PANELİ</button>
 </nav>
 
 <div id="page-home" class="page active">
-    <div style="background:white; padding:30px; border-radius:25px; border-top:10px solid var(--sari);">
+    <h2 style="color:var(--yesil); font-weight:900; border-left:10px solid var(--sari); padding-left:15px;">VİTRİN</h2>
+    <div id="public-vitrin" class="grid"></div>
+    <div style="margin-top:40px; background:white; padding:30px; border-radius:25px; border-top:10px solid var(--sari);">
         <h3 style="color:var(--yesil); margin-top:0;">📢 DUYURULAR</h3>
-        <div id="public-anns">Bulut verileri yükleniyor...</div>
+        <div id="public-anns">Bağlanıyor...</div>
     </div>
 </div>
 
-<div id="page-groups" class="page"><h2 style="color:var(--yesil); font-weight:900;">GRUPLARIMIZ</h2><div id="public-groups" class="grid"></div></div>
-<div id="page-coaches" class="page"><h2 style="color:var(--yesil); font-weight:900;">TEKNİK KADRO</h2><div id="public-coaches" class="grid"></div></div>
+<div id="page-groups" class="page"><h2 style="color:var(--yesil); font-weight:900; border-left:10px solid var(--sari); padding-left:15px;">GRUPLARIMIZ</h2><div id="public-groups" class="grid"></div></div>
+<div id="page-coaches" class="page"><h2 style="color:var(--yesil); font-weight:900; border-left:10px solid var(--sari); padding-left:15px;">TEKNİK KADRO</h2><div id="public-coaches" class="grid"></div></div>
+<div id="page-contact" class="page"><h2 style="color:var(--yesil); font-weight:900; border-left:10px solid var(--sari); padding-left:15px;">İLETİŞİM</h2><div id="public-contact" style="background:white; padding:40px; border-radius:25px; border-left:15px solid var(--yesil);"></div></div>
 
 <div id="admin-panel">
-    <div class="admin-nav"><span><div id="status-light"></div><b>CANLI BULUT PANELİ</b></span> <button onclick="location.reload()" style="background:red; color:white; border:none; padding:8px 15px; border-radius:8px; cursor:pointer;">ÇIKIŞ</button></div>
+    <div class="admin-nav"><b>CANLI BULUT PANELİ</b><button onclick="location.reload()" style="background:red; color:white; border:none; padding:8px 15px; border-radius:8px; cursor:pointer;">PANELİ KAPAT</button></div>
     <div class="admin-layout">
         <div class="admin-sidebar">
-            <div class="sidebar-btn active" onclick="adminTab('groups', this)">⚽ GRUP YÖNETİMİ</div>
-            <div class="sidebar-btn" onclick="adminTab('coaches', this)">👤 HOCA YÖNETİMİ</div>
-            <div class="sidebar-btn" onclick="adminTab('anns', this)">📢 DUYURU YÖNETİMİ</div>
+            <div class="sidebar-btn active" onclick="adminTab('vitrin', this)">🖼️ VİTRİN</div>
+            <div class="sidebar-btn" onclick="adminTab('groups', this)">⚽ GRUPLAR</div>
+            <div class="sidebar-btn" onclick="adminTab('coaches', this)">👤 HOCALAR</div>
+            <div class="sidebar-btn" onclick="adminTab('anns', this)">📢 DUYURULAR</div>
         </div>
         <div class="admin-main" id="admin-view-content">Bağlanıyor...</div>
     </div>
 </div>
 
+<div id="photo-modal" class="modal-overlay" onclick="this.style.display='none'">
+    <div class="modal-box" onclick="event.stopPropagation()">
+        <span class="modal-close-x" onclick="document.getElementById('photo-modal').style.display='none'">&times;</span>
+        <h3 id="photo-title">Albüm Yönetimi</h3>
+        <input type="file" id="bulk-upload" multiple accept="image/*" onchange="uploadPhotos()">
+        <div id="photo-edit-grid" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(100px, 1fr)); gap:10px; margin-top:15px; background:#f9f9f9; padding:15px; border-radius:15px;"></div>
+    </div>
+</div>
+
+<div id="edit-modal" class="modal-overlay" onclick="this.style.display='none'">
+    <div class="modal-box" onclick="event.stopPropagation()">
+        <span class="modal-close-x" onclick="document.getElementById('edit-modal').style.display='none'">&times;</span>
+        <h3 id="edit-title">Düzenle</h3>
+        <div id="edit-fields"></div>
+        <button class="btn-green" onclick="saveEdit()">DEĞİŞİKLİKLERİ BULUTA KAYDET</button>
+    </div>
+</div>
+
 <script>
-    // --- SENİN OLUŞTURDUĞUN LİNK ---
-    const firebaseConfig = {
-        databaseURL: "https://yesilay-futbol-okulu-default-rtdb.firebaseio.com/" 
-    };
+    // --- FIREBASE AYARLARI ---
+    const firebaseConfig = { databaseURL: "https://yesilay-futbol-okulu-default-rtdb.firebaseio.com/" };
     firebase.initializeApp(firebaseConfig);
     const database = firebase.database();
 
     let db = {};
 
-    // VERİLERİ OTOMATİK DİNLE (Senkronizasyonun kalbi)
+    // VERİLERİ OTOMATİK DİNLE
     database.ref('/').on('value', (snapshot) => {
-        db = snapshot.val() || { gruplar: [], hocalar: [], duyurular: [] };
+        db = snapshot.val() || {
+            vitrin: [], gruplar: [], hocalar: [], duyurular: [],
+            iletisim: { tel: "0543 434 43 01", adres: "Kütahya Yeşilay Tesisleri" }
+        };
         renderAll();
-        document.getElementById('status-light').style.background = "#2ecc71";
     });
 
-    function pushDB() { database.ref('/').set(db); }
+    function syncDB() { database.ref('/').set(db); }
 
     function renderAll() {
-        const aList = document.getElementById('public-anns');
-        aList.innerHTML = (db.duyurular || []).length ? "" : "Henüz duyuru yok.";
-        (db.duyurular || []).forEach(a => { aList.innerHTML += `<div style="padding:15px; border-left:5px solid var(--yesil); margin-bottom:10px; background:#f9f9f9;"><b>${a.baslik}</b><p>${a.metin}</p></div>`; });
+        // Vitrin
+        const vGrid = document.getElementById('public-vitrin'); vGrid.innerHTML = "";
+        (db.vitrin || []).forEach(img => { vGrid.innerHTML += `<img src="${img}" style="width:100%;height:150px;object-fit:cover;border-radius:15px;cursor:pointer;border:3px solid white;box-shadow:0 4px 8px rgba(0,0,0,0.1);" onclick="openLB('${img}')">`; });
 
-        const gGrid = document.getElementById('public-groups');
-        gGrid.innerHTML = "";
-        (db.gruplar || []).forEach(g => { gGrid.innerHTML += `<div class="card"><h3>${g.ad}</h3></div>`; });
+        // Duyurular
+        const aList = document.getElementById('public-anns'); aList.innerHTML = (db.duyurular || []).length ? "" : "Henüz duyuru yok.";
+        (db.duyurular || []).forEach(a => { aList.innerHTML += `<div style="padding:15px; border-left:5px solid var(--yesil); margin-bottom:10px; background:#f9f9f9; border-radius:0 10px 10px 0;"><b>${a.baslik}</b><p>${a.metin}</p></div>`; });
 
-        const hGrid = document.getElementById('public-coaches');
-        hGrid.innerHTML = "";
-        (db.hocalar || []).forEach(h => { hGrid.innerHTML += `<div class="card"><h3>${h.ad}</h3></div>`; });
+        // Gruplar
+        const gGrid = document.getElementById('public-groups'); gGrid.innerHTML = "";
+        (db.gruplar || []).forEach(g => { gGrid.innerHTML += `<div class="card" onclick="openGrupGaleri(${g.id})"><h3>${g.ad}</h3><small style="color:var(--yesil); font-weight:800;">ALBÜMÜ GÖR (${(g.fotos||[]).length})</small></div>`; });
+
+        // Hocalar
+        const hGrid = document.getElementById('public-coaches'); hGrid.innerHTML = "";
+        (db.hocalar || []).forEach(h => { const img = h.img || "https://i.pravatar.cc/150?u="+h.id; hGrid.innerHTML += `<div class="card" onclick="openLB('${img}')"><img src="${img}"><h3>${h.ad}</h3><p>${h.unvan || 'Hoca'}</p></div>`; });
+
+        // İletişim
+        document.getElementById('public-contact').innerHTML = `<p>📞 <b>İletişim:</b> ${db.iletisim.tel}</p><p>📍 <b>Adres:</b> ${db.iletisim.adres}</p>`;
     }
 
+    // --- ADMİN PANEL ---
     function adminTab(tab, btn) {
         document.querySelectorAll('.sidebar-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active');
         const view = document.getElementById('admin-view-content'); view.innerHTML = "";
-        if(tab === 'groups') { view.innerHTML = `<button class="btn-green" onclick="addG()">+ Yeni Grup Ekle</button>`; (db.gruplar || []).forEach(g => { view.innerHTML += `<div class="admin-card"><b>${g.ad}</b><button onclick="del('gruplar', ${g.id})" style="color:red; border:none; background:none; cursor:pointer; font-weight:bold;">Sil</button></div>`; }); }
-        else if(tab === 'coaches') { view.innerHTML = `<button class="btn-green" onclick="addC()">+ Yeni Hoca Ekle</button>`; (db.hocalar || []).forEach(h => { view.innerHTML += `<div class="admin-card"><b>${h.ad}</b><button onclick="del('hocalar', ${h.id})" style="color:red; border:none; background:none; cursor:pointer; font-weight:bold;">Sil</button></div>`; }); }
-        else if(tab === 'anns') { view.innerHTML = `<button class="btn-green" onclick="addA()">+ Yeni Duyuru</button>`; (db.duyurular || []).forEach(a => { view.innerHTML += `<div class="admin-card"><b>${a.baslik}</b><button onclick="del('duyurular', ${a.id})" style="color:red; border:none; background:none; cursor:pointer; font-weight:bold;">Sil</button></div>`; }); }
+        
+        if(tab === 'vitrin') view.innerHTML = `<button class="btn-green" onclick="openPhotoEdit('vitrin')">Vitrin Fotoğraflarını Yönet</button>`;
+        else if(tab === 'groups') {
+            view.innerHTML = `<button class="btn-green" onclick="addG()">+ Yeni Grup Ekle</button>`;
+            (db.gruplar || []).forEach(g => { view.innerHTML += `<div class="admin-card"><b>${g.ad}</b><div><button onclick="openPhotoEdit('group', ${g.id})">Foto</button><button onclick="del('gruplar', ${g.id})" style="color:red; margin-left:10px;">Sil</button></div></div>`; });
+        }
+        else if(tab === 'coaches') {
+            view.innerHTML = `<button class="btn-green" onclick="addC()">+ Yeni Hoca Ekle</button>`;
+            (db.hocalar || []).forEach(h => { view.innerHTML += `<div class="admin-card"><b>${h.ad}</b><button onclick="del('hocalar', ${h.id})" style="color:red;">Sil</button></div>`; });
+        }
+        else if(tab === 'anns') {
+            view.innerHTML = `<button class="btn-green" onclick="addA()">+ Yeni Duyuru</button><div id="ann-sort"></div>`;
+            const sortList = view.querySelector('#ann-sort');
+            (db.duyurular || []).forEach((a, i) => { sortList.innerHTML += `<div class="admin-card" data-idx="${i}"><b>${a.baslik}</b><button onclick="del('duyurular', ${a.id})" style="color:red;">Sil</button></div>`; });
+            new Sortable(sortList, { animation: 150, onEnd: () => { db.duyurular = Array.from(sortList.children).map(el => db.duyurular[el.getAttribute('data-idx')]); syncDB(); }});
+        }
     }
 
-    function addG() { const n=prompt("Grup Adı:"); if(n) { if(!db.gruplar) db.gruplar=[]; db.gruplar.push({id:Date.now(), ad:n}); pushDB(); } }
-    function addC() { const n=prompt("Hoca Adı:"); if(n) { if(!db.hocalar) db.hocalar=[]; db.hocalar.push({id:Date.now(), ad:n}); pushDB(); } }
-    function addA() { const b=prompt("Duyuru Başlığı:"), m=prompt("Mesaj:"); if(b&&m) { if(!db.duyurular) db.duyurular=[]; db.duyurular.unshift({id:Date.now(), baslik:b, metin:m}); pushDB(); } }
-    function del(path, id) { if(confirm("Silinsin mi?")) { db[path] = db[path].filter(x => x.id !== id); pushDB(); adminTab(path, document.querySelector('.active')); } }
+    // --- FOTOĞRAF YÖNETİMİ ---
+    let pMode = 'vitrin', actId = null;
+    function openPhotoEdit(m, id = null) { pMode = m; actId = id; document.getElementById('photo-modal').style.display='flex'; renderPhotoGrid(); }
+    function renderPhotoGrid() {
+        const grid = document.getElementById('photo-edit-grid'); grid.innerHTML = "";
+        let target = pMode === 'vitrin' ? db.vitrin : (db.gruplar.find(x => x.id === actId).fotos || []);
+        (target || []).forEach((img, i) => { grid.innerHTML += `<div data-idx="${i}" style="position:relative; height:80px;"><img src="${img}" style="width:100%;height:100%;object-fit:cover;border-radius:8px;"><button onclick="delFoto(${i})" style="position:absolute;top:0;right:0;background:red;color:white;border:none;border-radius:50%;cursor:pointer;width:20px;height:20px;font-size:12px;">X</button></div>`; });
+        new Sortable(grid, { animation: 150, onEnd: () => {
+            const newOrder = Array.from(grid.children).map(el => target[el.getAttribute('data-idx')]);
+            if(pMode === 'vitrin') db.vitrin = newOrder; else db.gruplar.find(x => x.id === actId).fotos = newOrder;
+            syncDB();
+        }});
+    }
+
+    function uploadPhotos() {
+        let target = pMode === 'vitrin' ? (db.vitrin || (db.vitrin=[])) : (db.gruplar.find(x => x.id === actId).fotos || (db.gruplar.find(x => x.id === actId).fotos=[]));
+        Array.from(document.getElementById('bulk-upload').files).forEach(file => {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                if(pMode === 'group' && target.length >= 100) target.pop();
+                target.unshift(e.target.result); syncDB(); renderPhotoGrid();
+            };
+            reader.readAsDataURL(file);
+        });
+    }
+
+    function delFoto(i) { let target = pMode === 'vitrin' ? db.vitrin : db.gruplar.find(x => x.id === actId).fotos; target.splice(i, 1); syncDB(); renderPhotoGrid(); }
+    function openGrupGaleri(id) { const g = db.gruplar.find(x => x.id === id); document.getElementById('lb-img').src = g.fotos ? g.fotos[0] : ""; if(g.fotos) openLB(g.fotos[0]); else alert("Bu grupta henüz fotoğraf yok."); }
+    function addG() { const n=prompt("Grup Adı:"); if(n) { if(!db.gruplar) db.gruplar=[]; db.gruplar.push({id:Date.now(), ad:n, fotos:[]}); syncDB(); } }
+    function addC() { const n=prompt("Hoca Adı:"); if(n) { if(!db.hocalar) db.hocalar=[]; db.hocalar.push({id:Date.now(), ad:n, unvan:"Antrenör", img:""}); syncDB(); } }
+    function addA() { const b=prompt("Duyuru Başlığı:"), m=prompt("Mesaj:"); if(b&&m) { if(!db.duyurular) db.duyurular=[]; db.duyurular.unshift({id:Date.now(), baslik:b, metin:m}); syncDB(); } }
+    function del(path, id) { if(confirm("Silinsin mi?")) { db[path] = db[path].filter(x => x.id !== id); syncDB(); adminTab(path, document.querySelector('.sidebar-btn.active')); } }
+    function openLB(s) { if(!s) return; document.getElementById('lb-img').src = s; document.getElementById('lightbox').style.display='flex'; }
     function showPage(p) { document.querySelectorAll('.page').forEach(pg => pg.classList.remove('active')); document.getElementById('page-' + p).classList.add('active'); }
-    function adminGiris() { if(prompt("Şifre:") === "ALİ43") document.getElementById('admin-panel').style.display='flex'; }
+    function adminLoginPrompt() { if(prompt("Şifre:") === "ALİ43") document.getElementById('admin-panel').style.display='flex'; }
 </script>
 
 </body>
