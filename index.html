@@ -64,4 +64,240 @@
         }
         .post-card { 
             background: white; border-radius: 16px; overflow: hidden; 
-            box-shadow: 0 4px
+            box-shadow: 0 4px 15px rgba(0,0,0,0.04); transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid #f0f0f0;
+            display: flex; flex-direction: column;
+        }
+        .post-card:hover { transform: translateY(-5px); box-shadow: 0 12px 25px rgba(0,0,0,0.1); }
+        .post-img { width: 100%; height: 220px; object-fit: cover; }
+        .post-content { padding: 25px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
+        .post-badge { 
+            display: inline-block; background: rgba(0, 143, 57, 0.1); color: #008f39; 
+            padding: 6px 14px; border-radius: 8px; font-size: 12px; font-weight: 700; margin-bottom: 15px; width: fit-content;
+        }
+        .post-text { font-size: 15px; color: #4a5568; line-height: 1.6; margin: 0; }
+        
+        /* Form Elemanları */
+        .form-group { margin-bottom: 20px; text-align: left; }
+        .form-group label { display: block; font-weight: 600; font-size: 14px; margin-bottom: 8px; color: #2d3748; }
+        input, select, textarea { 
+            width: 100%; padding: 14px; border: 2px solid #e2e8f0; border-radius: 10px; 
+            font-size: 15px; transition: border-color 0.2s; background: #f8fafc;
+        }
+        input:focus, select:focus, textarea:focus { outline: none; border-color: #008f39; background: white; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo"><span>⚽</span> Kütahya Yeşilay SK</div>
+        <div>
+            <button id="loginBtn" class="btn btn-primary" onclick="showLogin()">Yönetici Girişi</button>
+            <button id="logoutBtn" class="btn btn-danger" style="display:none;" onclick="logout()">Güvenli Çıkış</button>
+        </div>
+    </header>
+
+    <div id="public-view">
+        <div class="hero">
+            <h2>Geleceğin Yıldızları Burada Yetişiyor</h2>
+            <p>Profesyonel altyapı, modern eğitim ve Kütahya Yeşilay SK ruhu.</p>
+        </div>
+
+        <div class="filters">
+            <button class="filter-btn active" onclick="filterPosts('Tümü', this)">Tüm Akış</button>
+            <button class="filter-btn" onclick="filterPosts('U-12 Gelişim', this)">U-12 Gelişim</button>
+            <button class="filter-btn" onclick="filterPosts('U-10 Futbol Okulu', this)">U-10 Futbol Okulu</button>
+            <button class="filter-btn" onclick="filterPosts('Trabzonspor Kampı', this)">Trabzonspor Kampı</button>
+        </div>
+
+        <div class="container">
+            <div id="post-feed"></div>
+        </div>
+    </div>
+
+    <div id="login-view">
+        <div style="text-align: center; margin-bottom: 30px;">
+            <h2 style="color: #006400; margin: 0 0 10px 0;">Sistem Girişi</h2>
+            <p style="color: #718096; margin: 0; font-size: 14px;">Lütfen yetkili bilgilerinizi giriniz.</p>
+        </div>
+        
+        <div class="form-group">
+            <label>Kullanıcı Adı (ALİ)</label>
+            <input type="text" id="username" placeholder="Kullanıcı adınızı girin">
+        </div>
+        <div class="form-group">
+            <label>Şifre (ALİ43)</label>
+            <input type="password" id="password" placeholder="Şifrenizi girin">
+        </div>
+        
+        <button class="btn btn-primary" style="width: 100%; padding: 16px; font-size: 16px; margin-top: 10px;" onclick="login()">Giriş Yap</button>
+        <button class="btn" style="width: 100%; background:#e2e8f0; color: #4a5568; margin-top: 15px;" onclick="showPublic()">İptal</button>
+        
+        <div id="error-msg" style="color: #e53e3e; background: #fff5f5; padding: 10px; border-radius: 8px; margin-top: 20px; text-align: center; display: none; font-weight: 600; font-size: 14px;">
+            Hatalı kullanıcı adı veya şifre girdiniz.
+        </div>
+    </div>
+
+    <div id="admin-view">
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #edf2f7; padding-bottom: 20px; margin-bottom: 30px;">
+            <h2 style="color: #006400; margin: 0;">Kontrol Paneli</h2>
+            <span style="background: #e6ffed; color: #008f39; padding: 5px 15px; border-radius: 50px; font-size: 13px; font-weight: bold;">Yetkili: ALİ</span>
+        </div>
+
+        <div class="form-group">
+            <label>İçerik Hangi Gruba Yüklenecek?</label>
+            <select id="group-select">
+                <option value="U-10 Futbol Okulu">U-10 Futbol Okulu</option>
+                <option value="U-12 Gelişim">U-12 Gelişim</option>
+                <option value="Trabzonspor Kampı">Trabzonspor Kamp Ekibi</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Antrenman / Maç Açıklaması</label>
+            <textarea id="post-text" rows="4" placeholder="Veliler için açıklayıcı bir metin yazın..."></textarea>
+        </div>
+
+        <button class="btn btn-primary" style="width: 100%; padding: 16px; font-size: 16px; margin-top: 10px;" onclick="addPost()">✨ İçeriği Anında Yayınla</button>
+    </div>
+
+    <script>
+        // Yüksek Kaliteli, Kalıcı Örnek Fotoğraflar
+        let posts = [
+            { 
+                group: "U-12 Gelişim", 
+                text: "U-12 Gelişim grubumuz pas ve taktik çalışmasında. Geleceğin yıldızları gümbür gümbür geliyor!", 
+                img: "https://images.pexels.com/photos/50713/pexels-photo-50713.jpeg?auto=compress&cs=tinysrgb&w=800" 
+            },
+            { 
+                group: "Trabzonspor Kampı", 
+                text: "Oğuz Akalan hocamız kontrolünde Çağatay Kavak ve ekibinin Trabzonspor kampı hazırlıkları neşeyle devam ediyor. Veli izin belgeleri tamamlandı!", 
+                img: "https://images.pexels.com/photos/3621104/pexels-photo-3621104.jpeg?auto=compress&cs=tinysrgb&w=800" 
+            },
+            { 
+                group: "U-10 Futbol Okulu", 
+                text: "Miniklerimiz topla buluştu! Sahadaki enerjileri ve öğrenme istekleri hepimizi gururlandırıyor.", 
+                img: "https://images.pexels.com/photos/18473151/pexels-photo-18473151.jpeg?auto=compress&cs=tinysrgb&w=800"
+            }
+        ];
+
+        let currentFilter = "Tümü";
+
+        function renderPosts() {
+            const feed = document.getElementById('post-feed');
+            feed.innerHTML = '';
+            
+            let filteredPosts = posts;
+            if (currentFilter !== "Tümü") {
+                filteredPosts = posts.filter(post => post.group === currentFilter);
+            }
+
+            filteredPosts.forEach(post => {
+                feed.innerHTML = `
+                    <div class="post-card">
+                        <img src="${post.img}" class="post-img" alt="Futbol Antrenmanı">
+                        <div class="post-content">
+                            <div class="post-badge">${post.group}</div>
+                            <p class="post-text">${post.text}</p>
+                        </div>
+                    </div>
+                ` + feed.innerHTML; // Yeni eklenenlerin en başa gelmesi için
+            });
+        }
+
+        // Filtre Butonlarının Görünümünü Yönetme
+        function filterPosts(groupName, btnElement) {
+            currentFilter = groupName;
+            
+            // Aktif buton rengini değiştir
+            if(btnElement) {
+                let buttons = document.querySelectorAll('.filter-btn');
+                buttons.forEach(btn => btn.classList.remove('active'));
+                btnElement.classList.add('active');
+            }
+            
+            showPublic(); 
+            renderPosts();
+        }
+
+        function showLogin() { 
+            document.getElementById('public-view').style.display = 'none'; 
+            document.getElementById('admin-view').style.display = 'none'; 
+            document.getElementById('error-msg').style.display = 'none';
+            document.getElementById('login-view').style.display = 'block'; 
+            window.scrollTo(0,0);
+        }
+
+        function showPublic() { 
+            document.getElementById('login-view').style.display = 'none'; 
+            document.getElementById('admin-view').style.display = 'none'; 
+            document.getElementById('public-view').style.display = 'block'; 
+            window.scrollTo(0,0); 
+        }
+
+        function showAdmin() { 
+            document.getElementById('public-view').style.display = 'none'; 
+            document.getElementById('login-view').style.display = 'none'; 
+            document.getElementById('admin-view').style.display = 'block'; 
+            window.scrollTo(0,0); 
+        }
+
+        function login() {
+            let user = document.getElementById('username').value.toUpperCase().trim();
+            let pass = document.getElementById('password').value.toUpperCase().trim();
+            
+            if((user === 'ALİ' || user === 'ALI') && (pass === 'ALİ43' || pass === 'ALI43')) {
+                document.getElementById('loginBtn').style.display = 'none'; 
+                document.getElementById('logoutBtn').style.display = 'block'; 
+                showAdmin();
+            } else { 
+                document.getElementById('error-msg').style.display = 'block'; 
+            }
+        }
+
+        function logout() {
+            document.getElementById('username').value = ''; 
+            document.getElementById('password').value = '';
+            document.getElementById('loginBtn').style.display = 'block'; 
+            document.getElementById('logoutBtn').style.display = 'none';
+            
+            // Filtreleri sıfırla
+            let buttons = document.querySelectorAll('.filter-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            buttons[0].classList.add('active');
+            
+            filterPosts('Tümü'); 
+        }
+
+        function addPost() {
+            let group = document.getElementById('group-select').value;
+            let text = document.getElementById('post-text').value;
+            if(text === "") { alert("Lütfen bir açıklama yazın!"); return; }
+            
+            // Yeni yüklenenler için alternatif bir futbol görseli
+            let img = "https://images.pexels.com/photos/114296/pexels-photo-114296.jpeg?auto=compress&cs=tinysrgb&w=800"; 
+            
+            posts.push({ group: group, text: text, img: img });
+            document.getElementById('post-text').value = ''; 
+            
+            // Aktif filtreyi güncelle
+            let buttons = document.querySelectorAll('.filter-btn');
+            buttons.forEach(btn => {
+                btn.classList.remove('active');
+                if(btn.innerText.includes(group)) btn.classList.add('active');
+            });
+
+            showPublic(); 
+            filterPosts(group);
+            
+            // Kısa bir gecikme ile başarı mesajı gösterelim ki sayfa değişimi hissedilsin
+            setTimeout(() => {
+                alert("Harika! İçerik başarıyla " + group + " grubuna eklendi ve yayına alındı.");
+            }, 300);
+        }
+
+        // Başlangıçta render et
+        renderPosts();
+    </script>
+</body>
+</html>
