@@ -3,134 +3,156 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Futbol Okulu Yönetim Sistemi</title>
+    <title>Yeşilay Futbol Okulu | Yönetim Paneli</title>
     <style>
         :root {
-            --primary: #1e272e;
-            --okul-color: #2ecc71;
-            --gelisim-color: #3498db;
-            --akademi-color: #e67e22;
-            --bg: #f1f2f6;
+            --yesilay-koyu: #006a33; /* Kurumsal Yeşil */
+            --yesilay-acik: #27ae60;
+            --bg-soft: #f8f9fa;
+            --text-dark: #2d3436;
         }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; display: flex; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg-soft); margin: 0; display: flex; }
         
-        /* Sol Menü */
-        .sidebar { width: 250px; background: var(--primary); color: white; height: 100vh; position: fixed; padding: 20px; }
-        .sidebar h2 { color: var(--okul-color); border-bottom: 1px solid #3d4e5e; padding-bottom: 10px; }
-        .stats { background: rgba(255,255,255,0.1); padding: 10px; border-radius: 8px; margin-top: 20px; font-size: 0.9rem; }
+        /* Sol Menü (Sidebar) */
+        .sidebar { width: 280px; background: var(--yesilay-koyu); color: white; height: 100vh; position: fixed; padding: 25px; box-shadow: 4px 0 10px rgba(0,0,0,0.1); }
+        .logo-area { text-align: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 20px; margin-bottom: 20px; }
+        .logo-area h1 { font-size: 1.2rem; margin: 0; letter-spacing: 1px; }
+        
+        .nav-menu div { padding: 12px; margin: 5px 0; border-radius: 8px; cursor: pointer; transition: 0.3s; }
+        .nav-menu div:hover { background: rgba(255,255,255,0.1); }
+        .nav-menu .active { background: var(--yesilay-acik); font-weight: bold; }
 
         /* Ana İçerik */
-        .content { margin-left: 290px; padding: 40px; width: 100%; }
+        .main-content { margin-left: 320px; padding: 40px; width: calc(100% - 360px); }
         
-        /* Grup Kartları */
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; margin-bottom: 40px; }
-        .card { background: white; padding: 20px; border-radius: 12px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.05); position: relative; overflow: hidden; }
-        .card b { font-size: 1.4rem; color: var(--primary); }
-        .card::before { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 5px; }
+        /* Grup Kartları Tasarımı */
+        .section-header { display: flex; align-items: center; justify-content: space-between; margin: 30px 0 15px 0; padding-bottom: 10px; border-bottom: 2px solid #e0e0e0; }
+        .group-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; }
         
-        /* Renk Sınıfları */
-        .border-okul::before { background: var(--okul-color); }
-        .border-gelisim::before { background: var(--gelisim-color); }
-        .border-akademi::before { background: var(--akademi-color); }
+        .group-card { 
+            background: white; border-radius: 12px; padding: 20px; text-align: center; 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05); border: 1px solid #eee; transition: 0.3s;
+        }
+        .group-card:hover { transform: translateY(-5px); border-color: var(--yesilay-acik); box-shadow: 0 8px 20px rgba(0,106,51,0.1); }
+        .group-card b { font-size: 1.3rem; color: var(--yesilay-koyu); display: block; }
+        .group-card span { font-size: 0.75rem; color: #7f8c8d; text-transform: uppercase; font-weight: 600; }
 
-        .section-header { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #ddd; padding-bottom: 10px; }
-        
-        /* Yönetici Paneli */
-        .admin-box { background: white; padding: 20px; border-radius: 12px; margin-bottom: 30px; display: flex; gap: 10px; align-items: flex-end; }
-        .field { display: flex; flex-direction: column; flex: 1; }
-        input, select, button { padding: 10px; border-radius: 6px; border: 1px solid #ccc; }
-        button { background: var(--primary); color: white; border: none; cursor: pointer; font-weight: bold; }
-        button:hover { background: #000; }
+        /* Yönetici Kayıt Alanı */
+        .admin-panel { 
+            background: white; padding: 25px; border-radius: 15px; display: flex; gap: 15px; 
+            align-items: flex-end; margin-bottom: 30px; border: 1px solid #dcdde1;
+        }
+        .form-item { flex: 1; display: flex; flex-direction: column; gap: 8px; }
+        .form-item label { font-size: 0.85rem; font-weight: bold; color: var(--yesilay-koyu); }
+        input, select { padding: 12px; border: 1px solid #ced4da; border-radius: 8px; font-size: 0.95rem; }
+        .add-btn { background: var(--yesilay-koyu); color: white; border: none; padding: 12px 25px; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        .add-btn:hover { background: var(--yesilay-acik); }
     </style>
 </head>
 <body>
 
     <div class="sidebar">
-        <h2>KULÜP YÖNETİM</h2>
-        <div class="stats">
-            <div>⚽ Toplam Grup: <span id="totalTxt">0</span></div>
+        <div class="logo-area">
+            <h1>YEŞİLAY <br> FUTBOL OKULU</h1>
         </div>
-        <p style="margin-top:30px; font-size:0.8rem; opacity:0.6;">HIZLI MENÜ</p>
-        <div style="cursor:pointer; margin:10px 0;">📋 Yoklama Listesi</div>
-        <div style="cursor:pointer; margin:10px 0;">💰 Ödeme Takibi</div>
+        <div class="nav-menu">
+            <div class="active">⚽ Gruplar & Kadrolar</div>
+            <div>📋 Günlük Yoklama</div>
+            <div>💰 Aidat Takibi</div>
+            <div>🏆 Maç Planlama</div>
+            <div>⚙️ Sistem Ayarları</div>
+        </div>
+        <div style="position: absolute; bottom: 30px; font-size: 0.7rem; opacity: 0.5;">
+            Yeşilay Spor Kulübü © 2026
+        </div>
     </div>
 
-    <div class="content">
-        <h1>Dashboard</h1>
+    <div class="main-content">
+        <h2 style="color: var(--yesilay-koyu); margin-top: 0;">Grup Yönetim Merkezi</h2>
 
-        <div class="admin-box">
-            <div class="field">
-                <label>Grup Türü</label>
-                <select id="type">
-                    <option value="OKUL">Ana Grup (Futbol Okulu)</option>
-                    <option value="GELISIM">Gelişim Grubu</option>
-                    <option value="AKADEMI">Akademi Grubu</option>
+        <div class="admin-panel">
+            <div class="form-item">
+                <label>Kategori Seçin</label>
+                <select id="katType">
+                    <option value="ANA">Ana Gruplar (Futbol Okulu)</option>
+                    <option value="AKADEMI">Akademi Grupları</option>
+                    <option value="GELISIM">Gelişim Grupları</option>
                 </select>
             </div>
-            <div class="field">
-                <label>Grup Adı</label>
-                <input type="text" id="name" placeholder="Örn: 2020">
+            <div class="form-item">
+                <label>Grup İsmi</label>
+                <input type="text" id="gName" placeholder="Örn: 2021 veya 2015 Gelişim 3">
             </div>
-            <button onclick="yeniEkle()">Sisteme Ekle</button>
+            <button class="add-btn" onclick="yeniGrupEkle()">+ Yeni Grup Tanımla</button>
         </div>
 
         <div class="section-header">
-            <div style="width:15px; height:15px; background:var(--okul-color); border-radius:3px;"></div>
-            <h2>Ana Gruplar (2010 - 2018)</h2>
+            <h3>Ana Gruplar (Futbol Okulu)</h3>
+            <small id="count-ANA">9 Grup</small>
         </div>
-        <div class="grid" id="box-OKUL"></div>
+        <div class="group-grid" id="grid-ANA"></div>
 
         <div class="section-header">
-            <div style="width:15px; height:15px; background:var(--akademi-color); border-radius:3px;"></div>
-            <h2>Akademi Grupları (Lisanslı)</h2>
+            <h3>Akademi Grupları (Lisanslı)</h3>
+            <small id="count-AKADEMI">6 Grup</small>
         </div>
-        <div class="grid" id="box-AKADEMI"></div>
+        <div class="group-grid" id="grid-AKADEMI"></div>
 
         <div class="section-header">
-            <div style="width:15px; height:15px; background:var(--gelisim-color); border-radius:3px;"></div>
-            <h2>Gelişim Grupları</h2>
+            <h3>Gelişim Grupları</h3>
+            <small id="count-GELISIM">7 Grup</small>
         </div>
-        <div class="grid" id="box-GELISIM"></div>
+        <div class="group-grid" id="grid-GELISIM"></div>
     </div>
 
     <script>
-        let data = {
-            OKUL: ["2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018"],
+        let database = {
+            ANA: ["2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018"],
             AKADEMI: ["2013", "2014", "2015", "2016", "2017", "2018"],
-            GELISIM: ["2014 Gelişim 1", "2014 Gelişim 2", "2015 Gelişim 1", "2015 Gelişim 2", "2014/2015 Gelişim 3", "2016 Gelişim 1", "2016 Gelişim 2"]
+            GELISIM: [
+                "2014 Gelişim 1", "2014 Gelişim 2", 
+                "2015 Gelişim 1", "2015 Gelişim 2", 
+                "2014/2015 Gelişim 3", 
+                "2016 Gelişim 1", "2016 Gelişim 2"
+            ]
         };
 
-        function yenile() {
-            let total = 0;
-            const categories = ["OKUL", "AKADEMI", "GELISIM"];
+        function renderAll() {
+            const types = ["ANA", "AKADEMI", "GELISIM"];
             
-            categories.forEach(cat => {
-                const container = document.getElementById(`box-${cat}`);
+            types.forEach(t => {
+                const container = document.getElementById(`grid-${t}`);
+                const countLabel = document.getElementById(`count-${t}`);
                 container.innerHTML = "";
-                data[cat].forEach(item => {
-                    total++;
+                
+                database[t].forEach(name => {
                     container.innerHTML += `
-                        <div class="card border-${cat.toLowerCase()}">
-                            <b>${item}</b><br>
-                            <small>${cat === 'OKUL' ? 'Futbol Okulu' : cat}</small>
+                        <div class="group-card">
+                            <span>${t === 'ANA' ? 'Futbol Okulu' : t}</span>
+                            <b>${name}</b>
+                            <div style="margin-top:10px; font-size:0.65rem; color:var(--yesilay-acik)">● Kayıtlar Açık</div>
                         </div>
                     `;
                 });
+                countLabel.innerText = database[t].length + " Grup";
             });
-            document.getElementById('totalTxt').innerText = total;
         }
 
-        function yeniEkle() {
-            const type = document.getElementById('type').value;
-            const name = document.getElementById('name').value;
-            if(name) {
-                data[type].push(name);
-                document.getElementById('name').value = "";
-                yenile();
+        function yeniGrupEkle() {
+            const type = document.getElementById('katType').value;
+            const name = document.getElementById('gName').value;
+            
+            if(name.trim() !== "") {
+                database[type].push(name);
+                document.getElementById('gName').value = "";
+                renderAll();
+            } else {
+                alert("Lütfen bir grup adı girin.");
             }
         }
 
-        yenile();
+        // Sayfa açıldığında verileri yükle
+        renderAll();
     </script>
 </body>
 </html>
