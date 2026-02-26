@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kütahya Yeşilay Futbol Okulu | Full Yönetim Portalı</title>
+    <title>Kütahya Yeşilay Futbol Okulu | Tam Donanımlı Web Portalı</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         :root { --yesil: #006a33; --sari: #f1c40f; --dark: #121212; --light: #f4f7f6; }
         body, html { margin: 0; padding: 0; font-family: 'Poppins', sans-serif; background: var(--light); height: 100vh; overflow: hidden; }
 
-        /* --- HEADER --- */
+        /* --- ŞIK HEADER --- */
         header { 
             background: linear-gradient(90deg, var(--yesil) 0%, #004d26 100%); 
             color: white; padding: 15px 50px; display: flex; justify-content: space-between; align-items: center; 
@@ -17,7 +17,7 @@
         }
         .club-name h1 { margin: 0; font-size: 1.4rem; letter-spacing: 1.5px; font-weight: 800; text-transform: uppercase; }
         .club-name span { font-size: 0.75rem; color: var(--sari); font-weight: 600; letter-spacing: 2px; }
-        .nav-links a { color: white; text-decoration: none; margin-left: 20px; font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: 0.3s; }
+        .nav-links a { color: white; text-decoration: none; margin-left: 20px; font-weight: 600; font-size: 0.9rem; cursor: pointer; }
         .admin-trigger { background: var(--sari); color: var(--yesil) !important; padding: 10px 20px; border-radius: 8px; font-weight: 800; cursor: pointer; }
 
         /* --- SAYFA YAPISI --- */
@@ -29,7 +29,7 @@
         /* GRIDLER */
         .grid-layout { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
         .vitrin-item { width: 100%; height: 180px; object-fit: cover; border-radius: 12px; border: 4px solid white; box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
-        .group-card { background: white; padding: 25px; border-radius: 15px; border-top: 5px solid var(--sari); box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        .group-card { background: white; padding: 25px; border-radius: 15px; border-top: 5px solid var(--sari); box-shadow: 0 5px 15px rgba(0,0,0,0.05); cursor: pointer; transition: 0.3s; }
         .coach-card { background: white; padding: 20px; border-radius: 15px; text-align: center; border-bottom: 5px solid var(--yesil); }
         .coach-card img { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 3px solid var(--yesil); margin-bottom: 10px; }
 
@@ -50,7 +50,7 @@
         .photo-wrapper img { width: 100%; height: 100%; object-fit: cover; border-radius: 8px; }
         .del-photo { position: absolute; top: -5px; right: -5px; background: red; color: white; border: none; border-radius: 50%; width: 22px; height: 22px; cursor: pointer; }
 
-        input, textarea { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; font-family: inherit; box-sizing: border-box;}
+        input, textarea, select { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; font-family: inherit; box-sizing: border-box; }
         .btn-green { background: var(--yesil); color: white; border: none; padding: 12px 25px; border-radius: 8px; cursor: pointer; font-weight: bold; }
     </style>
 </head>
@@ -104,8 +104,7 @@
                 <div class="sidebar-btn" onclick="adminTab('coaches', this)">👤 HOCALARI YÖNET</div>
                 <div class="sidebar-btn" onclick="adminTab('contact', this)">📞 İLETİŞİMİ DÜZENLE</div>
             </div>
-            <div class="admin-main" id="admin-view-content">
-                </div>
+            <div class="admin-main" id="admin-view-content"></div>
         </div>
     </div>
 
@@ -120,7 +119,7 @@
 
     <div id="photo-manager-modal">
         <div class="modal-box">
-            <h3 id="mgr-title" style="color:var(--yesil)">Fotoğrafları Düzenle</h3>
+            <h3 id="mgr-title">Fotoğrafları Düzenle</h3>
             <input type="file" id="bulk-upload" multiple accept="image/*" onchange="uploadPhotos()">
             <div id="mgr-grid" class="photo-grid-edit"></div>
             <button class="btn-green" style="margin-top:20px; background:#444;" onclick="document.getElementById('photo-manager-modal').style.display='none'">KAPAT</button>
@@ -128,28 +127,25 @@
     </div>
 
     <script>
-        // ANA VERİ TABANI
-        let db = JSON.parse(localStorage.getItem('yesilay_pro_db')) || {
+        // ANA VERİ SİSTEMİ
+        let db = JSON.parse(localStorage.getItem('yesilay_final_master')) || {
             groups: [
                 { id: 1, name: "2014/15-1 Gelişim", coach: "Ali Hoca", time: "Cmt-Paz 09:30", photos: [] },
-                { id: 2, name: "2010 Futbol Okulu", coach: "Mehmet Hoca", time: "Sal-Per 18:00", photos: [] }
+                { id: 2, name: "2017/18-2 Ana Grup", coach: "Mehmet Hoca", time: "Sal-Per 18:00", photos: [] },
+                { id: 3, name: "2010 Futbol Okulu", coach: "Ahmet Hoca", time: "Cmt-Paz 11:00", photos: [] }
             ],
             coaches: Array.from({length: 35}, (_, i) => ({ id: i+1, name: i===0 ? "Ali Hoca" : "Hoca "+(i+1), img: `https://i.pravatar.cc/150?u=${i}` })),
-            contact: {
-                tel1: "0543 434 43 01",
-                tel2: "0543 434 43 02",
-                tel3: "0543 434 43 03",
-                tel4: "0543 434 43 04",
-                adres: "Yeşilay Spor Tesisleri, Kütahya"
-            }
+            contact: { tel1: "0543 434 43 01", tel2: "0543 434 43 02", tel3: "0543 434 43 03", tel4: "0543 434 43 04", adres: "Yeşilay Spor Tesisleri, Kütahya" }
         };
 
-        function saveData() { localStorage.setItem('yesilay_pro_db', JSON.stringify(db)); }
+        function saveData() { localStorage.setItem('yesilay_final_master', JSON.stringify(db)); }
 
         function showPage(p) {
             document.querySelectorAll('.page').forEach(pg => pg.classList.remove('active'));
             document.getElementById('page-' + p).classList.add('active');
             if(p === 'contact') renderPublicContact();
+            if(p === 'groups') renderPublicGroups();
+            if(p === 'coaches') renderPublicCoaches();
         }
 
         function login() {
@@ -167,62 +163,44 @@
             const view = document.getElementById('admin-view-content');
 
             if(tab === 'groups') {
-                view.innerHTML = `<h2>⚽ Grupları Yönet</h2><div class="grid-layout" id="adm-grp-grid"></div>`;
+                view.innerHTML = `<h2>⚽ Grupları Yönet</h2><button class="btn-green" onclick="addNewGrup()">+ Yeni Grup Ekle</button><div class="grid-layout" id="adm-grp-grid" style="margin-top:20px;"></div>`;
                 db.groups.forEach(g => {
                     document.getElementById('adm-grp-grid').innerHTML += `
                         <div class="group-card">
                             <h3>${g.name}</h3>
-                            <button class="btn-green" onclick="openPhotoManager(${g.id})">Fotoğrafları Yönet</button>
-                            <button onclick="deleteItem('groups', ${g.id})" style="color:red; border:none; background:none; cursor:pointer; margin-top:10px;">Grubu Sil</button>
+                            <button class="btn-green" onclick="openPhotoManager(${g.id})">Fotoğrafları Yönet (${g.photos.length})</button>
+                            <button onclick="deleteGrup(${g.id})" style="margin-top:10px; color:red; border:none; background:none; cursor:pointer;">Sil</button>
                         </div>`;
                 });
             } else if(tab === 'contact') {
                 view.innerHTML = `
-                    <h2>📞 İletişim Bilgilerini Güncelle</h2>
-                    <div style="background:white; padding:30px; border-radius:15px;">
-                        <label>Telefon 1:</label><input type="text" id="c-tel1" value="${db.contact.tel1}">
-                        <label>Telefon 2:</label><input type="text" id="c-tel2" value="${db.contact.tel2}">
-                        <label>Telefon 3:</label><input type="text" id="c-tel3" value="${db.contact.tel3}">
-                        <label>Telefon 4:</label><input type="text" id="c-tel4" value="${db.contact.tel4}">
-                        <label>Adres:</label><textarea id="c-adr">${db.contact.adres}</textarea>
-                        <button class="btn-green" onclick="saveContact()">DEĞİŞİKLİKLERİ KAYDET</button>
-                    </div>`;
+                    <h2>📞 İletişim Düzenle</h2>
+                    <input type="text" id="c-tel1" value="${db.contact.tel1}"><input type="text" id="c-tel2" value="${db.contact.tel2}">
+                    <input type="text" id="c-tel3" value="${db.contact.tel3}"><input type="text" id="c-tel4" value="${db.contact.tel4}">
+                    <textarea id="c-adr">${db.contact.adres}</textarea>
+                    <button class="btn-green" onclick="saveContact()">KAYDET</button>`;
             } else {
-                view.innerHTML = `<h2>👤 Hocaları Yönet</h2><div class="grid-layout" id="adm-coach-grid"></div>`;
+                view.innerHTML = `<h2>👤 Hocaları Yönet</h2><div class="grid-layout" id="adm-c-grid"></div>`;
                 db.coaches.forEach(c => {
-                    document.getElementById('adm-coach-grid').innerHTML += `<div class="coach-card"><img src="${c.img}"><h4>${c.name}</h4><button onclick="deleteItem('coaches', ${c.id})" style="color:red; border:none; background:none; cursor:pointer;">Sil</button></div>`;
+                    document.getElementById('adm-c-grid').innerHTML += `<div class="coach-card"><img src="${c.img}"><h4>${c.name}</h4><button onclick="deleteCoach(${c.id})" style="color:red; border:none; background:none; cursor:pointer;">Sil</button></div>`;
                 });
             }
         }
 
-        // --- İLETİŞİM FONKSİYONLARI ---
+        // --- FONKSİYONLAR ---
         function saveContact() {
             db.contact.tel1 = document.getElementById('c-tel1').value;
             db.contact.tel2 = document.getElementById('c-tel2').value;
             db.contact.tel3 = document.getElementById('c-tel3').value;
             db.contact.tel4 = document.getElementById('c-tel4').value;
             db.contact.adres = document.getElementById('c-adr').value;
-            saveData();
-            alert("İletişim bilgileri güncellendi!");
+            saveData(); alert("Güncellendi!");
         }
 
-        function renderPublicContact() {
-            document.getElementById('contact-display').innerHTML = `
-                <p>📞 <b>Kayıt Birimi:</b> ${db.contact.tel1}</p>
-                <p>📞 <b>Koordinatör:</b> ${db.contact.tel2}</p>
-                <p>📞 <b>Veli Hattı 1:</b> ${db.contact.tel3}</p>
-                <p>📞 <b>Veli Hattı 2:</b> ${db.contact.tel4}</p>
-                <hr>
-                <p>📍 <b>Adres:</b> ${db.contact.adres}</p>`;
-        }
-
-        // --- DİĞER FONKSİYONLAR ---
         let activeId = null;
         function openPhotoManager(id) {
-            activeId = id;
-            const g = db.groups.find(x => x.id === id);
-            document.getElementById('mgr-title').innerText = g.name + " Fotoğrafları";
-            renderPhotoGrid(g);
+            activeId = id; const g = db.groups.find(x => x.id === id);
+            document.getElementById('mgr-title').innerText = g.name; renderPhotoGrid(g);
             document.getElementById('photo-manager-modal').style.display = 'flex';
         }
 
@@ -246,22 +224,29 @@
             });
         }
 
-        function removePhoto(idx) {
-            const g = db.groups.find(x => x.id === activeId);
-            g.photos.splice(idx, 1); saveData(); renderPhotoGrid(g);
+        function removePhoto(idx) { const g = db.groups.find(x => x.id === activeId); g.photos.splice(idx, 1); saveData(); renderPhotoGrid(g); }
+        function addNewGrup() { const n = prompt("Grup Adı:"); if(n) { db.groups.push({id:Date.now(), name:n, coach:"Atanmadı", time:"Belirlenmedi", photos:[]}); saveData(); adminTab('groups', document.querySelector('.active')); } }
+        function deleteGrup(id) { if(confirm("Emin misin?")) { db.groups = db.groups.filter(x => x.id !== id); saveData(); adminTab('groups', document.querySelector('.active')); } }
+        function deleteCoach(id) { if(confirm("Emin misin?")) { db.coaches = db.coaches.filter(x => x.id !== id); saveData(); adminTab('coaches', document.querySelector('.active')); } }
+
+        function renderPublicGroups() {
+            const gList = document.getElementById('public-groups'); gList.innerHTML = "";
+            db.groups.forEach(g => { gList.innerHTML += `<div class="group-card" onclick="alert('${g.photos.length} fotoğraf var.')"><h3>${g.name}</h3><p>👤 ${g.coach} | 🕒 ${g.time}</p></div>`; });
         }
 
-        function deleteItem(type, id) {
-            if(confirm("Emin misin Ali Hoca?")) {
-                db[type] = db[type].filter(x => x.id !== id);
-                saveData(); adminTab(type, document.querySelector('.active'));
-            }
+        function renderPublicCoaches() {
+            const cList = document.getElementById('public-coaches'); cList.innerHTML = "";
+            db.coaches.forEach(c => { cList.innerHTML += `<div class="coach-card"><img src="${c.img}"><h4>${c.name}</h4><p>Antrenör</p></div>`; });
+        }
+
+        function renderPublicContact() {
+            document.getElementById('contact-display').innerHTML = `<p>📞 <b>Kayıt:</b> ${db.contact.tel1}</p><p>📞 <b>Yönetim:</b> ${db.contact.tel2}</p><p>📞 <b>Veli Hattı 1:</b> ${db.contact.tel3}</p><p>📞 <b>Veli Hattı 2:</b> ${db.contact.tel4}</p><hr><p>📍 <b>Adres:</b> ${db.contact.adres}</p>`;
         }
 
         window.onload = () => {
             const v = document.getElementById('vitrin-grid');
-            for(let i=1; i<=30; i++) v.innerHTML += `<img src="https://picsum.photos/seed/${i+300}/400/300" class="vitrin-item">`;
-            renderPublicContact();
+            for(let i=1; i<=30; i++) v.innerHTML += `<img src="https://picsum.photos/seed/${i+400}/400/300" class="vitrin-item">`;
+            renderPublicContact(); renderPublicGroups(); renderPublicCoaches();
         };
     </script>
 </body>
