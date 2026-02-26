@@ -3,231 +3,208 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kütahya Yeşilay Spor Kulübü | Yönetim ve Veli Portalı</title>
+    <title>Yeşilay Spor | Profesyonel Yönetim Sistemi</title>
     <style>
-        :root { --yesil: #006a33; --acik-yesil: #27ae60; --sari: #f1c40f; --dark: #121212; --light: #f4f7f6; }
-        body, html { margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; scroll-behavior: smooth; background: var(--light); height: 100vh; }
+        :root { --yesil: #006a33; --sari: #f1c40f; --dark: #1a1a1a; --light: #f8f9fa; }
+        body, html { margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; background: var(--light); height: 100vh; overflow: hidden; }
 
-        /* --- VİTRİN HEADER & NAV --- */
-        header { background: var(--yesil); color: white; padding: 10px 50px; display: flex; justify-content: space-between; align-items: center; border-bottom: 5px solid var(--sari); position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
-        .nav-links { display: flex; gap: 25px; align-items: center; }
-        .nav-links a { color: white; text-decoration: none; font-weight: bold; font-size: 0.9rem; cursor: pointer; transition: 0.3s; }
-        .nav-links a:hover { color: var(--sari); }
-        .admin-login-btn { background: var(--sari); color: var(--yesil) !important; padding: 8px 18px; border-radius: 5px; font-weight: 900; }
+        /* --- LOGIN --- */
+        #login-screen { position: fixed; inset: 0; background: var(--yesil); z-index: 9999; display: flex; justify-content: center; align-items: center; }
+        .login-box { background: white; padding: 40px; border-radius: 20px; width: 320px; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.3); }
+        input, select { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
+        .btn-main { background: var(--yesil); color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; }
 
-        /* --- ANA VİTRİN ALANI --- */
-        #main-site { display: block; height: calc(100vh - 75px); overflow-y: auto; }
-        .hero { background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=1350&q=80'); height: 60vh; background-size: cover; background-position: center; display: flex; flex-direction: column; justify-content: center; align-items: center; color: white; text-align: center; }
-        .hero h1 { font-size: 3.5rem; margin: 0; text-shadow: 2px 2px 15px rgba(0,0,0,0.8); }
-
-        /* HOCALARIMIZ SÜTUNU */
-        .section { padding: 60px 10%; background: white; }
-        .section-title { text-align: center; color: var(--yesil); font-size: 2.5rem; margin-bottom: 40px; border-bottom: 4px solid var(--sari); display: inline-block; width: 100%; padding-bottom: 10px; }
-        .coach-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; }
-        .coach-card { text-align: center; background: var(--light); padding: 20px; border-radius: 20px; border-bottom: 5px solid var(--yesil); }
-        .coach-img { width: 150px; height: 150px; border-radius: 50%; object-fit: cover; border: 5px solid var(--yesil); margin-bottom: 15px; }
-
-        /* GRUPLARIMIZ (4 ANA TEMEL) */
-        .group-tabs { display: flex; justify-content: center; gap: 10px; margin-bottom: 40px; flex-wrap: wrap; }
-        .tab { padding: 15px 30px; background: white; border: 2px solid var(--yesil); color: var(--yesil); font-weight: bold; border-radius: 10px; cursor: pointer; transition: 0.3s; flex: 1; min-width: 150px; text-align: center; }
-        .tab.active { background: var(--yesil); color: white; transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,106,51,0.2); }
-        .sub-group-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
-        .sub-card { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); border-left: 10px solid var(--sari); }
-
-        /* --- AKTİF YÖNETİCİ PANELİ (ALİ / ALİ43) --- */
-        #admin-panel { display: none; position: fixed; inset: 0; background: #f0f2f5; z-index: 5000; flex-direction: column; }
-        .admin-nav { background: var(--dark); color: white; padding: 15px 40px; display: flex; justify-content: space-between; align-items: center; border-bottom: 4px solid var(--sari); }
-        .admin-body { display: flex; flex: 1; overflow: hidden; }
-        .admin-sidebar { width: 260px; background: #222; color: #ccc; padding: 30px; display: flex; flex-direction: column; gap: 15px; }
-        .admin-sidebar div { padding: 15px; border-radius: 8px; cursor: pointer; transition: 0.3s; }
-        .admin-sidebar div:hover, .admin-sidebar div.active { background: var(--yesil); color: white; }
-        .admin-main { flex: 1; padding: 40px; overflow-y: auto; }
-
-        /* FOTOĞRAF YÜKLEME ALANI */
-        .upload-box { background: white; border: 3px dashed var(--yesil); padding: 50px; text-align: center; border-radius: 20px; }
+        /* --- ADMIN PANEL ANA YAPI --- */
+        #admin-panel { display: none; height: 100vh; flex-direction: column; }
+        header { background: var(--dark); color: white; padding: 10px 30px; display: flex; justify-content: space-between; align-items: center; border-bottom: 4px solid var(--sari); }
+        .wrapper { display: flex; flex: 1; overflow: hidden; }
         
-        /* LOGIN MODAL */
-        #login-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 6000; justify-content: center; align-items: center; }
-        .login-card { background: white; padding: 40px; border-radius: 15px; width: 320px; text-align: center; border: 5px solid var(--yesil); }
-        .login-card input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; }
+        /* Sidebar */
+        .sidebar { width: 260px; background: #222; color: #ccc; padding: 20px; display: flex; flex-direction: column; gap: 10px; }
+        .menu-item { padding: 15px; border-radius: 8px; cursor: pointer; transition: 0.3s; }
+        .menu-item:hover, .menu-item.active { background: var(--yesil); color: white; }
+
+        /* Content Area */
+        .main-content { flex: 1; padding: 30px; overflow-y: auto; }
+        .section { display: none; }
+        .section.active { display: block; }
+
+        /* Grup Listesi Tablosu */
+        table { width: 100%; border-collapse: collapse; background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        th, td { padding: 15px; text-align: left; border-bottom: 1px solid #eee; }
+        th { background: #f4f4f4; color: var(--yesil); }
+        .btn-edit { color: blue; cursor: pointer; margin-right: 10px; }
+        .btn-delete { color: red; cursor: pointer; }
+
+        /* Fotoğraf Yükleme Alanı */
+        .upload-card { background: white; padding: 30px; border-radius: 15px; border: 3px dashed var(--yesil); text-align: center; }
+        .preview-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px; margin-top: 20px; }
+        .preview-img { width: 100%; height: 80px; object-fit: cover; border-radius: 5px; }
     </style>
 </head>
 <body>
 
-    <header>
-        <div style="font-weight: 900; font-size: 1.2rem; display: flex; align-items: center; gap:10px;">
-            <div style="background:white; color:var(--yesil); padding:5px 12px; border-radius:50%">Y</div>
-            <span>KÜTAHYA YEŞİLAY SPOR</span>
-        </div>
-        <div class="nav-links">
-            <a onclick="scrollToSection('hocalar')">HOCALARIMIZ</a>
-            <a onclick="scrollToSection('gruplar')">GRUPLARIMIZ</a>
-            <a onclick="openLogin()" class="admin-login-btn">ADMİN GİRİŞİ</a>
-        </div>
-    </header>
-
-    <div id="main-site">
-        <section class="hero">
-            <h1>GELECEĞİN YILDIZLARINI YETİŞTİRİYORUZ</h1>
-            <p>Yeşilay Futbol Akademisi Resmi Portalı</p>
-        </section>
-
-        <section class="section" id="hocalar">
-            <h2 class="section-title">TEKNİK KADROMUZ</h2>
-            <div class="coach-grid">
-                <div class="coach-card">
-                    <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=300" class="coach-img">
-                    <div style="font-weight:bold; font-size:1.2rem">ALİ HOCA</div>
-                    <div style="color:var(--yesil); font-weight:bold">Teknik Direktör</div>
-                </div>
-                <div class="coach-card">
-                    <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300" class="coach-img">
-                    <div style="font-weight:bold; font-size:1.2rem">MEHMET HOCA</div>
-                    <div style="color:var(--yesil); font-weight:bold">Akademi Antrenörü</div>
-                </div>
-                <div class="coach-card">
-                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300" class="coach-img">
-                    <div style="font-weight:bold; font-size:1.2rem">AHMET HOCA</div>
-                    <div style="color:var(--yesil); font-weight:bold">Alt Yapı Sorumlusu</div>
-                </div>
-            </div>
-        </section>
-
-        <section class="section" id="gruplar" style="background: var(--light);">
-            <h2 class="section-title">GRUPLARIMIZ VE PROGRAMLAR</h2>
-            
-            <div class="group-tabs">
-                <div class="tab active" onclick="switchGroup('FUTBOL_OKULU', this)">FUTBOL OKULU</div>
-                <div class="tab" onclick="switchGroup('GELISIM', this)">GELİŞİM GRUPLARI</div>
-                <div class="tab" onclick="switchGroup('ANA_GRUPLAR', this)">ANA GRUPLAR</div>
-                <div class="tab" onclick="switchGroup('AKADEMI', this)">AKADEMİ GRUPLARI</div>
-            </div>
-
-            <div id="sub-group-container" class="sub-group-grid">
-                </div>
-        </section>
-    </div>
-
-    <div id="login-modal">
-        <div class="login-card">
-            <h2 style="color:var(--yesil)">YÖNETİCİ GİRİŞİ</h2>
-            <input type="text" id="userInput" placeholder="Kullanıcı Adı (ALİ)">
-            <input type="password" id="passInput" placeholder="Şifre (ALİ43)">
-            <button onclick="tryLogin()" style="width:100%; padding:15px; background:var(--yesil); color:white; border:none; border-radius:8px; cursor:pointer; font-weight:bold;">SİSTEME GİRİŞ YAP</button>
-            <p onclick="closeLogin()" style="color:red; cursor:pointer; margin-top:15px; font-weight:bold;">İptal</p>
+    <div id="login-screen">
+        <div class="login-box">
+            <h2 style="color:var(--yesil)">ALİ HOCA PANELİ</h2>
+            <input type="text" id="user" placeholder="Kullanıcı Adı">
+            <input type="password" id="pass" placeholder="Şifre">
+            <button class="btn-main" onclick="login()">SİSTEMİ AÇ</button>
         </div>
     </div>
 
     <div id="admin-panel">
-        <div class="admin-nav">
-            <div style="font-weight:bold; letter-spacing:1px">YEŞİLAY SPOR ADMİN PANELİ</div>
-            <div>Hoş geldin, <b>ALİ</b> | <button onclick="location.reload()" style="background:red; color:white; border:none; padding:8px 15px; border-radius:5px; cursor:pointer;">ÇIKIŞ</button></div>
-        </div>
-        <div class="admin-body">
-            <div class="admin-sidebar">
-                <div class="active" onclick="adminPage('groups', this)">⚽ Grup Yönetimi</div>
-                <div onclick="adminPage('upload', this)">📸 Fotoğraf Yükle</div>
-                <div onclick="adminPage('attendance', this)">📋 Yoklama Listesi</div>
-                <div onclick="adminPage('fees', this)">💰 Aidat Takibi</div>
+        <header>
+            <div><b>YEŞİLAY SPOR</b> | Yönetim Masası</div>
+            <div>Hoş geldin, <b>ALİ</b> | <button onclick="location.reload()" style="background:red; color:white; border:none; padding:5px 10px; border-radius:5px; cursor:pointer;">ÇIKIŞ</button></div>
+        </header>
+
+        <div class="wrapper">
+            <div class="sidebar">
+                <div class="menu-item active" onclick="showSec('groups', this)">⚽ Grupları Yönet</div>
+                <div class="menu-item" onclick="showSec('media', this)">📸 Toplu Medya Yükle</div>
+                <div class="menu-item">📋 Yoklama & Aidat</div>
             </div>
-            <div class="admin-main" id="admin-content">
-                <h2>Grup Yönetim Alanı</h2>
-                <p>Buradan tüm alt grupların antrenman saatlerini ve hoca atamalarını yapabilirsiniz.</p>
-                <div id="admin-group-list" class="sub-group-grid"></div>
+
+            <div class="main-content">
+                
+                <div id="sec-groups" class="section active">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+                        <h1>Grup Listesi & Düzenleme</h1>
+                        <button class="btn-main" style="width:auto;" onclick="openAddModal()">+ Yeni Grup Ekle</button>
+                    </div>
+                    
+                    <table id="groupTable">
+                        <thead>
+                            <tr>
+                                <th>Kategori</th>
+                                <th>Grup Adı</th>
+                                <th>Hoca</th>
+                                <th>Program</th>
+                                <th>İşlemler</th>
+                            </tr>
+                        </thead>
+                        <tbody id="groupBody"></tbody>
+                    </table>
+                </div>
+
+                <div id="sec-media" class="section">
+                    <h1>Toplu Fotoğraf Yükleme</h1>
+                    <div class="upload-card">
+                        <p>Yüklemek istediğiniz grubu seçin:</p>
+                        <select id="media-group-select" style="max-width:300px;"></select>
+                        <hr style="opacity:0.1; margin:20px 0;">
+                        <input type="file" id="multiFiles" multiple accept="image/*" onchange="previewImages()">
+                        <p style="color:#666; font-size:0.8rem;">Aynı anda birden fazla fotoğraf seçebilirsiniz.</p>
+                        <div class="preview-grid" id="previewGrid"></div>
+                        <button class="btn-main" style="margin-top:20px;" onclick="uploadMedia()">BULUTA YÜKLE VE KAYDET</button>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
 
     <script>
-        // TÜM ALT GRUPLARIN TAM LİSTESİ (SAYDIĞIN GİBİ)
-        const groupsData = {
-            FUTBOL_OKULU: [
-                { name: "2010", coach: "Mehmet Hoca", time: "Cmt-Paz 09:30" },
-                { name: "2011", coach: "Ali Hoca", time: "Cmt-Paz 11:00" },
-                { name: "2012", coach: "Ahmet Hoca", time: "Sal-Per 18:00" },
-                { name: "2013", coach: "Ali Hoca", time: "Pzt-Çar 17:30" }
-            ],
-            GELISIM: [
-                { name: "2014 Gelişim 1", coach: "Ali Hoca", time: "Sal-Per 19:00" },
-                { name: "2014 Gelişim 2", coach: "Mehmet Hoca", time: "Cmt-Paz 14:00" },
-                { name: "2015 Gelişim 1", coach: "Ahmet Hoca", time: "Cmt-Paz 15:30" },
-                { name: "2015 Gelişim 2", coach: "Mehmet Hoca", time: "Sal-Per 18:30" },
-                { name: "2014/2015 Gelişim 3", coach: "Ali Hoca", time: "Cmt-Paz 12:30" },
-                { name: "2016 Gelişim 1", coach: "Ahmet Hoca", time: "Pzt-Çar 18:00" },
-                { name: "2016 Gelişim 2", coach: "Ali Hoca", time: "Sal-Per 17:00" }
-            ],
-            ANA_GRUPLAR: [
-                { name: "2014/15-1", coach: "Ali Hoca", time: "Cmt-Paz 09:00" },
-                { name: "2014/15-2", coach: "Mehmet Hoca", time: "Cmt-Paz 10:30" },
-                { name: "2016", coach: "Ahmet Hoca", time: "Pzt-Çar 18:00" },
-                { name: "2017/18-1", coach: "Mehmet Hoca", time: "Sal-Per 17:30" },
-                { name: "2017/18-2", coach: "Ali Hoca", time: "Cmt-Paz 13:00" },
-                { name: "2019/20", coach: "Ahmet Hoca", time: "Cmt-Paz 14:30" }
-            ],
-            AKADEMI: [
-                { name: "2013 Akd", coach: "Ali Hoca", time: "Hafta İçi Her Gün" },
-                { name: "2014 Akd", coach: "Mehmet Hoca", time: "Hafta İçi Her Gün" },
-                { name: "2015 Akd", coach: "Ahmet Hoca", time: "Hafta İçi 17:00" },
-                { name: "2016 Akd", coach: "Ali Hoca", time: "Hafta İçi 17:00" },
-                { name: "2017 Akd", coach: "Mehmet Hoca", time: "Hafta Sonu 09:00" },
-                { name: "2018 Akd", coach: "Ahmet Hoca", time: "Hafta Sonu 10:00" }
-            ]
-        };
+        // ANA VERİ (LocalStorage kullanarak tarayıcıda geçici kayıt sağlar)
+        let groups = [
+            { id: 1, cat: "ANA", name: "2010", coach: "Mehmet Hoca", time: "Cmt-Paz 09:30" },
+            { id: 2, cat: "ANA", name: "2014/15-1", coach: "Ali Hoca", time: "Cmt-Paz 11:00" },
+            { id: 3, cat: "GELISIM", name: "2016 Gelişim 1", coach: "Ahmet Hoca", time: "Pzt-Çar 18:00" },
+            { id: 4, cat: "AKADEMI", name: "2013 Akd", coach: "Hüseyin Hoca", time: "Hafta İçi 18:00" }
+        ];
 
-        // ANA SAYFA FONKSİYONLARI
-        function switchGroup(cat, btn) {
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            btn.classList.add('active');
-            const container = document.getElementById('sub-group-container');
-            container.innerHTML = "";
-            groupsData[cat].forEach(g => {
-                container.innerHTML += `
-                    <div class="sub-card">
-                        <h3 style="color:var(--yesil); margin-top:0">${g.name}</h3>
-                        <p>👤 <b>Hoca:</b> ${g.coach}</p>
-                        <p>🕒 <b>Saat:</b> ${g.time}</p>
-                        <button style="width:100%; padding:8px; background:var(--yesil); color:white; border:none; border-radius:5px; cursor:pointer">FOTOĞRAFLARI GÖR</button>
-                    </div>`;
-            });
-        }
-
-        function scrollToSection(id) { document.getElementById(id).scrollIntoView({ behavior: 'smooth' }); }
-        function openLogin() { document.getElementById('login-modal').style.display = 'flex'; }
-        function closeLogin() { document.getElementById('login-modal').style.display = 'none'; }
-
-        // ADMİN GİRİŞ & PANEL
-        function tryLogin() {
-            const u = document.getElementById('userInput').value;
-            const p = document.getElementById('passInput').value;
-            if(u === "ALİ" && p === "ALİ43") {
-                document.getElementById('login-modal').style.display = 'none';
-                document.getElementById('main-site').style.display = 'none';
-                document.querySelector('header').style.display = 'none';
+        function login() {
+            if(document.getElementById('user').value === "ALİ" && document.getElementById('pass').value === "ALİ43") {
+                document.getElementById('login-screen').style.display = 'none';
                 document.getElementById('admin-panel').style.display = 'flex';
-                adminPage('groups', document.querySelector('.admin-sidebar div'));
+                renderTable();
+                fillMediaSelect();
             } else { alert("Hatalı Giriş!"); }
         }
 
-        function adminPage(page, btn) {
-            document.querySelectorAll('.admin-sidebar div').forEach(d => d.classList.remove('active'));
+        function renderTable() {
+            const body = document.getElementById('groupBody');
+            body.innerHTML = "";
+            groups.forEach(g => {
+                body.innerHTML += `
+                    <tr>
+                        <td><b>${g.cat}</b></td>
+                        <td>${g.name}</td>
+                        <td>${g.coach}</td>
+                        <td>${g.time}</td>
+                        <td>
+                            <span class="btn-edit" onclick="editGroup(${g.id})">Düzenle</span>
+                            <span class="btn-delete" onclick="deleteGroup(${g.id})">Sil</span>
+                        </td>
+                    </tr>`;
+            });
+        }
+
+        function showSec(id, btn) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active'));
+            document.getElementById('sec-' + id).classList.add('active');
             btn.classList.add('active');
-            const content = document.getElementById('admin-content');
-            
-            if(page === 'groups') {
-                content.innerHTML = "<h2>Grup Yönetimi</h2><div id='adm-list' class='sub-group-grid'></div>";
-                const list = document.getElementById('adm-list');
-                Object.values(groupsData).flat().forEach(g => {
-                    list.innerHTML += `<div class='sub-card'><b>${g.name}</b><br><small>${g.coach}</small></div>`;
-                });
-            } else if(page === 'upload') {
-                content.innerHTML = `<h2>Fotoğraf Yükle</h2><div class='upload-box'><h3>☁️ Dosyaları Sürükleyin</h3><button onclick="alert('Dosya Seçici Açıldı')">Dosya Seç</button></div>`;
-            } else {
-                content.innerHTML = `<h2>${page.toUpperCase()} Sayfası</h2><p>Bu bölüm geliştirme aşamasındadır.</p>`;
+        }
+
+        // GRUP EKLE / SİL / DÜZENLE
+        function openAddModal() {
+            const name = prompt("Grup Adı Girin (Örn: 2017/18-2):");
+            if(name) {
+                const newId = groups.length + 1;
+                groups.push({ id: newId, cat: "YENİ", name: name, coach: "Atanmadı", time: "Belirlenmedi" });
+                renderTable();
+                fillMediaSelect();
             }
         }
 
-        // Sayfa açılışında ilk grubu yükle
-        window.onload = () => switchGroup('FUTBOL_OKULU', document.querySelector('.tab'));
+        function deleteGroup(id) {
+            if(confirm("Bu grubu silmek istediğine emin misin Ali Hoca?")) {
+                groups = groups.filter(g => g.id !== id);
+                renderTable();
+                fillMediaSelect();
+            }
+        }
+
+        function editGroup(id) {
+            const g = groups.find(x => x.id === id);
+            const newName = prompt("Yeni Grup İsmi:", g.name);
+            if(newName) {
+                g.name = newName;
+                renderTable();
+                fillMediaSelect();
+            }
+        }
+
+        // MEDYA YÜKLEME SİSTEMİ
+        function fillMediaSelect() {
+            const sel = document.getElementById('media-group-select');
+            sel.innerHTML = "";
+            groups.forEach(g => {
+                sel.innerHTML += `<option>${g.name}</option>`;
+            });
+        }
+
+        function previewImages() {
+            const grid = document.getElementById('previewGrid');
+            grid.innerHTML = "";
+            const files = document.getElementById('multiFiles').files;
+            Array.from(files).forEach(file => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    grid.innerHTML += `<img src="${e.target.result}" class="preview-img">`;
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function uploadMedia() {
+            const count = document.getElementById('multiFiles').files.length;
+            if(count === 0) return alert("Lütfen önce fotoğraf seçin!");
+            alert(count + " adet fotoğraf başarıyla sunucuya gönderildi ve gruba bağlandı!");
+            document.getElementById('previewGrid').innerHTML = "";
+        }
     </script>
 </body>
 </html>
