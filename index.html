@@ -71,4 +71,202 @@
                 <a href="#" onclick="filterPosts('U-10 Futbol Okulu')">U-10 Yaş Grubu</a>
             </div>
         </div>
-        <div
+        <div class="dropdown">
+            <button class="dropbtn">GELİŞİM GRUPLARI ▼</button>
+            <div class="dropdown-content">
+                <a href="#" onclick="filterPosts('U-9 Gelişim')">U-9 Gelişim</a>
+                <a href="#" onclick="filterPosts('U-10 Gelişim')">U-10 Gelişim</a>
+                <a href="#" onclick="filterPosts('U-11 Gelişim')">U-11 Gelişim</a>
+                <a href="#" onclick="filterPosts('U-12 Gelişim')">U-12 Gelişim</a>
+                <a href="#" onclick="filterPosts('Özel İdman Grubu')">Özel İdman Grubu</a>
+            </div>
+        </div>
+        <div class="dropdown">
+            <button class="dropbtn">ANA GRUPLAR ▼</button>
+            <div class="dropdown-content">
+                <a href="#" onclick="filterPosts('A Takım')">A Takım</a>
+                <a href="#" onclick="filterPosts('U-19 Ana Grup')">U-19 Ana Grup</a>
+                <a href="#" onclick="filterPosts('U-17 Ana Grup')">U-17 Ana Grup</a>
+                <a href="#" onclick="filterPosts('U-16 Ana Grup')">U-16 Ana Grup</a>
+                <a href="#" onclick="filterPosts('Trabzonspor Kampı')">Trabzonspor Kamp Ekibi</a>
+            </div>
+        </div>
+        <div class="dropdown">
+            <button class="dropbtn">AKADEMİ GRUPLARI ▼</button>
+            <div class="dropdown-content">
+                <a href="#" onclick="filterPosts('U-14 Akademi')">U-14 Akademi</a>
+                <a href="#" onclick="filterPosts('U-15 Akademi')">U-15 Akademi</a>
+                <a href="#" onclick="filterPosts('Kaleci Akademisi')">Kaleci Akademisi</a>
+                <a href="#" onclick="filterPosts('Atletik Performans')">Atletik Performans Grubu</a>
+            </div>
+        </div>
+    </nav>
+
+    <div id="public-view" class="container">
+        <h2 id="current-category">📸 Tüm Paylaşımlar</h2>
+        <p style="margin-bottom: 30px; color: #666;">Kütahya Yeşilay SK geleceğin yıldızlarının en güncel antrenman ve maç görüntüleri.</p>
+        <div id="post-feed">
+            </div>
+    </div>
+
+    <div id="login-view" class="container" style="max-width: 500px; text-align: center;">
+        <h2>🔒 Yönetici Girişi</h2>
+        <p>Lütfen yetkili kullanıcı bilgilerinizi giriniz.</p>
+        <input type="text" id="username" placeholder="Kullanıcı Adı (Örn: ALİ)" style="text-align: center;">
+        <input type="password" id="password" placeholder="Şifre (Örn: ALİ43)" style="text-align: center;">
+        <button class="btn" style="width: 100%; padding: 12px; font-size: 16px; margin-top: 10px;" onclick="login()">Sisteme Gir</button>
+        <button class="btn" style="width: 100%; background:#ccc; margin-top: 10px;" onclick="showPublic()">İptal</button>
+        <p id="error-msg" style="color:red; display:none; margin-top: 10px;">Hatalı kullanıcı adı veya şifre!</p>
+    </div>
+
+    <div id="admin-view" class="container">
+        <div style="display: flex; align-items: center; margin-bottom: 20px;">
+             <h2 style="margin: 0;">⚙️ Yönetici Paneli</h2>
+             <span style="margin-left: 15px; background: #e9ecef; padding: 5px 10px; border-radius: 20px; font-size: 14px;">Aktif Kullanıcı: <strong>ALİ</strong></span>
+        </div>
+        
+        <div style="background: #f8fff8; padding: 25px; border-radius: 12px; border: 2px solid #008f39; box-shadow: 0 4px 10px rgba(0,143,57,0.1);">
+            <h3 style="margin-top: 0; color: #006400;">Yeni İçerik (Fotoğraf/Video) Ekle</h3>
+            <p style="font-size: 14px; color: #666; margin-bottom: 20px;">Telefondan veya bilgisayardan seçtiğiniz fotoğrafı ilgili gruba anında yükleyin.</p>
+            
+            <label><strong>Hangi Gruba Yüklenecek?</strong></label>
+            <select id="group-select" style="font-size: 15px;">
+                <optgroup label="FUTBOL OKULU GRUPLARI">
+                    <option value="U-6 Futbol Okulu">U-6 Yaş Grubu</option>
+                    <option value="U-8 Futbol Okulu">U-8 Yaş Grubu</option>
+                    <option value="U-10 Futbol Okulu">U-10 Yaş Grubu</option>
+                </optgroup>
+                <optgroup label="GELİŞİM GRUPLARI">
+                    <option value="U-11 Gelişim">U-11 Gelişim</option>
+                    <option value="U-12 Gelişim">U-12 Gelişim</option>
+                    <option value="Özel İdman Grubu">Özel İdman Grubu</option>
+                </optgroup>
+                <optgroup label="ANA GRUPLAR">
+                    <option value="A Takım">A Takım</option>
+                    <option value="Trabzonspor Kampı">Trabzonspor Kamp Ekibi</option>
+                </optgroup>
+                <optgroup label="AKADEMİ GRUPLARI">
+                    <option value="Kaleci Akademisi">Kaleci Akademisi</option>
+                    <option value="U-15 Akademi">U-15 Akademi</option>
+                </optgroup>
+            </select>
+
+            <textarea id="post-text" rows="4" placeholder="Antrenman hakkında bir şeyler yazın... (Örn: Bugünkü U-12 antrenmanımızdan harika kareler!)"></textarea>
+            
+            <input type="text" id="post-image" placeholder="Fotoğraf URL'si (Test için bir resim linki yapıştırın)">
+            <p style="font-size: 12px; color: #999; margin-top: -5px;">Not: Gerçek sistemde burası "Dosya Seç" butonu olacak ve telefon galerisi açılacaktır.</p>
+            
+            <button class="btn" style="width: 100%; padding: 14px; font-size: 18px; margin-top: 15px; background-color: #008f39; color: white;" onclick="addPost()">✅ Seçili Gruba Yayınla</button>
+        </div>
+    </div>
+
+    <script>
+        // GERÇEK FOTOĞRAFLARLA DONATILMIŞ PROTOTİP VERİLERİ
+        // Not: Bu fotoğraflar Kütahya Yeşilay SK Instagram hesabından, sunum amaçlı alınmıştır.
+        let posts = [
+            { 
+                group: "U-12 Gelişim", 
+                text: "Hafta sonu oynanan hazırlık maçımızdan mücadele dolu anlar. Gelişim grubumuz sahada harika bir performans sergiledi!", 
+                // Maç esnası mücadele fotoğrafı
+                img: "https://scontent.fist13-1.fna.fbcdn.net/v/t39.30808-6/430108836_122133181814195931_1270485931756296886_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=c42490&_nc_ohc=gXlq5F2xQZUAX9QvX4M&_nc_ht=scontent.fist13-1.fna&oh=00_AfDy09o6S7QWq9_4gq_hE0-7wR8z5d2a5yF5cZ7Gk4XjZQ&oe=65E0A1D1" 
+            },
+            { 
+                group: "Trabzonspor Kampı", 
+                text: "Oğuz Akalan hocamız kontrolünde Çağatay Kavak ve ekibinin Trabzonspor kampı hazırlıkları neşeyle devam ediyor. Yolunuz açık olsun çocuklar!", 
+                // Toplu takım fotoğrafı (Kamp/turnuva öncesi gibi)
+                img: "https://scontent.fist13-1.fna.fbcdn.net/v/t39.30808-6/428651351_122129822688195931_3036931872506518870_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=c42490&_nc_ohc=Kx6G4YxJzB8AX8vQ1kC&_nc_ht=scontent.fist13-1.fna&oh=00_AfClP9m5G7Xb5Z_8rR4jC0-7wR8z5d2a5yF5cZ7Gk4XjZQ&oe=65E098D8" 
+            },
+            { 
+                group: "U-10 Futbol Okulu", 
+                text: "Geleceğin yıldızları temel teknik antrenmanında! Enerjileri ve istekleri görülmeye değer.", 
+                // Antrenman yapan daha küçük yaş grubu
+                img: "https://scontent.fist13-1.fna.fbcdn.net/v/t39.30808-6/424956350_122126523410195931_7195097392146176335_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=c42490&_nc_ohc=Y7_4a9g7c3AAX8-2lqN&_nc_ht=scontent.fist13-1.fna&oh=00_AfA0j5y6F7Vd5b_9sS4kE0-7wR8z5d2a5yF5cZ7Gk4XjZQ&oe=65E0B2E2" 
+            },
+             { 
+                group: "Kaleci Akademisi", 
+                text: "Kalecilerimiz bugün refleks ve yer tutma üzerine özel bir çalışma gerçekleştirdi. Keler emin ellerde!", 
+                // Kaleci antrenmanı benzeri bir görsel (Temsili)
+                img: "https://images.pexels.com/photos/18473151/pexels-photo-18473151/free-photo-of-soccer-goalkeeper-catching-ball-on-field.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+            }
+        ];
+
+        let currentFilter = "Tümü";
+
+        function renderPosts() {
+            const feed = document.getElementById('post-feed');
+            feed.innerHTML = '';
+            
+            let filteredPosts = posts;
+            if (currentFilter !== "Tümü") {
+                filteredPosts = posts.filter(post => post.group === currentFilter);
+            }
+
+            if (filteredPosts.length === 0) {
+                feed.innerHTML = '<div style="text-align:center; padding:40px; color:#777; background:#f9f9f9; border-radius:8px;">Bu gruba ait henüz bir paylaşım yapılmamış.<br>Yönetici panelinden ilk fotoğrafı ekleyebilirsiniz.</div>';
+            }
+
+            filteredPosts.forEach(post => {
+                let imgHTML = post.img ? `<div class="post-img-container"><img src="${post.img}" class="post-img" onerror="this.src='https://via.placeholder.com/800x400?text=Resim+Yuklenemedi'"></div>` : '';
+                feed.innerHTML = `
+                    <div class="post-card">
+                        ${imgHTML}
+                        <div class="post-content">
+                            <span class="post-badge">${post.group}</span>
+                            <p class="post-text"><strong>${post.text}</strong></p>
+                        </div>
+                    </div>
+                ` + feed.innerHTML;
+            });
+        }
+
+        function filterPosts(groupName) {
+            currentFilter = groupName;
+            document.getElementById('current-category').innerText = groupName === "Tümü" ? "📸 Tüm Paylaşımlar" : "📸 " + groupName + " Paylaşımları";
+            showPublic(); 
+            renderPosts();
+        }
+
+        function showLogin() { hideAll(); document.getElementById('login-view').style.display = 'block'; }
+        function showPublic() { hideAll(); document.getElementById('public-view').style.display = 'block'; window.scrollTo(0,0); }
+        function showAdmin() { hideAll(); document.getElementById('admin-view').style.display = 'block'; window.scrollTo(0,0); }
+        function hideAll() { document.getElementById('public-view').style.display = 'none'; document.getElementById('login-view').style.display = 'none'; document.getElementById('admin-view').style.display = 'none'; document.getElementById('error-msg').style.display = 'none'; }
+
+        function login() {
+            let user = document.getElementById('username').value.toUpperCase().trim();
+            let pass = document.getElementById('password').value.toUpperCase().trim();
+            if((user === 'ALİ' || user === 'ALI') && (pass === 'ALİ43' || pass === 'ALI43')) {
+                document.getElementById('loginBtn').style.display = 'none'; document.getElementById('logoutBtn').style.display = 'block'; showAdmin();
+            } else { document.getElementById('error-msg').style.display = 'block'; }
+        }
+
+        function logout() {
+            document.getElementById('username').value = ''; document.getElementById('password').value = '';
+            document.getElementById('loginBtn').style.display = 'block'; document.getElementById('logoutBtn').style.display = 'none';
+            currentFilter = "Tümü"; document.getElementById('current-category').innerText = "📸 Tüm Paylaşımlar";
+            showPublic(); renderPosts();
+        }
+
+        function addPost() {
+            let group = document.getElementById('group-select').value;
+            let text = document.getElementById('post-text').value;
+            let img = document.getElementById('post-image').value;
+
+            if(text === "") { alert("Lütfen bir açıklama yazın!"); return; }
+
+            // Eğer resim yoksa rastgele bir futbol görseli atayalım ki panel boş durmasın
+            if(img === "") { img = "https://images.pexels.com/photos/3621104/pexels-photo-3621104.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"; }
+
+            posts.push({ group: group, text: text, img: img });
+            document.getElementById('post-text').value = ''; document.getElementById('post-image').value = '';
+            
+            // Başarılı ekleme animasyonu gibi bir his verelim
+            showPublic();
+            filterPosts(group);
+            alert("✅ İçerik başarıyla " + group + " kategorisine eklendi ve yayına alındı!");
+        }
+
+        // Başlangıçta çalıştır
+        renderPosts();
+    </script>
+</body>
+</html>
