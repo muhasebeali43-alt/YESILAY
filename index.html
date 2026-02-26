@@ -28,10 +28,16 @@
 
         /* GRIDLER */
         .grid-layout { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
-        .vitrin-item { width: 100%; height: 180px; object-fit: cover; border-radius: 12px; border: 4px solid white; box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
+        .vitrin-item { width: 100%; height: 180px; object-fit: cover; border-radius: 12px; border: 4px solid white; box-shadow: 0 8px 20px rgba(0,0,0,0.1); cursor: pointer; transition: 0.3s; }
+        .vitrin-item:hover { transform: scale(1.05); border-color: var(--sari); }
         .group-card { background: white; padding: 25px; border-radius: 15px; border-top: 5px solid var(--sari); box-shadow: 0 5px 15px rgba(0,0,0,0.05); cursor: pointer; transition: 0.3s; }
         .coach-card { background: white; padding: 20px; border-radius: 15px; text-align: center; border-bottom: 5px solid var(--yesil); }
         .coach-card img { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 3px solid var(--yesil); margin-bottom: 10px; }
+
+        /* --- FOTOĞRAF BÜYÜTME (LIGHTBOX) --- */
+        #lightbox { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 10000; justify-content: center; align-items: center; cursor: pointer; }
+        #lightbox img { max-width: 90%; max-height: 90%; border: 5px solid white; border-radius: 10px; box-shadow: 0 0 50px rgba(0,0,0,0.5); }
+        .close-lightbox { position: absolute; top: 20px; right: 30px; color: white; font-size: 40px; font-weight: bold; }
 
         /* --- ADMİN PANELİ --- */
         #admin-panel { display: none; position: fixed; inset: 0; background: #fff; z-index: 5000; flex-direction: column; }
@@ -42,19 +48,16 @@
         .sidebar-btn.active { background: var(--yesil); color: white; }
         .admin-main { flex: 1; padding: 40px; overflow-y: auto; background: #f0f2f5; }
 
-        /* MODALLAR */
-        #login-modal, #photo-manager-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 6000; justify-content: center; align-items: center; }
-        .modal-box { background: white; padding: 35px; border-radius: 20px; width: 600px; max-height: 80vh; overflow-y: auto; text-align: center; }
-        .photo-grid-edit { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 10px; margin-top: 20px; }
-        .photo-wrapper { position: relative; height: 100px; }
-        .photo-wrapper img { width: 100%; height: 100%; object-fit: cover; border-radius: 8px; }
-        .del-photo { position: absolute; top: -5px; right: -5px; background: red; color: white; border: none; border-radius: 50%; width: 22px; height: 22px; cursor: pointer; }
-
         input, textarea, select { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; font-family: inherit; box-sizing: border-box; }
         .btn-green { background: var(--yesil); color: white; border: none; padding: 12px 25px; border-radius: 8px; cursor: pointer; font-weight: bold; }
     </style>
 </head>
 <body>
+
+    <div id="lightbox" onclick="closeImage()">
+        <span class="close-lightbox">&times;</span>
+        <img id="lightbox-img" src="" alt="Büyük Görsel">
+    </div>
 
     <header>
         <div class="club-name">
@@ -117,28 +120,30 @@
         </div>
     </div>
 
-    <div id="photo-manager-modal">
-        <div class="modal-box">
-            <h3 id="mgr-title">Fotoğrafları Düzenle</h3>
-            <input type="file" id="bulk-upload" multiple accept="image/*" onchange="uploadPhotos()">
-            <div id="mgr-grid" class="photo-grid-edit"></div>
-            <button class="btn-green" style="margin-top:20px; background:#444;" onclick="document.getElementById('photo-manager-modal').style.display='none'">KAPAT</button>
-        </div>
-    </div>
-
     <script>
         // ANA VERİ SİSTEMİ
-        let db = JSON.parse(localStorage.getItem('yesilay_final_master')) || {
+        let db = JSON.parse(localStorage.getItem('yesilay_v4_master')) || {
             groups: [
                 { id: 1, name: "2014/15-1 Gelişim", coach: "Ali Hoca", time: "Cmt-Paz 09:30", photos: [] },
-                { id: 2, name: "2017/18-2 Ana Grup", coach: "Mehmet Hoca", time: "Sal-Per 18:00", photos: [] },
-                { id: 3, name: "2010 Futbol Okulu", coach: "Ahmet Hoca", time: "Cmt-Paz 11:00", photos: [] }
+                { id: 2, name: "2017/18-2 Ana Grup", coach: "Mehmet Hoca", time: "Sal-Per 18:00", photos: [] }
             ],
             coaches: Array.from({length: 35}, (_, i) => ({ id: i+1, name: i===0 ? "Ali Hoca" : "Hoca "+(i+1), img: `https://i.pravatar.cc/150?u=${i}` })),
             contact: { tel1: "0543 434 43 01", tel2: "0543 434 43 02", tel3: "0543 434 43 03", tel4: "0543 434 43 04", adres: "Yeşilay Spor Tesisleri, Kütahya" }
         };
 
-        function saveData() { localStorage.setItem('yesilay_final_master', JSON.stringify(db)); }
+        function saveData() { localStorage.setItem('yesilay_v4_master', JSON.stringify(db)); }
+
+        // FOTOĞRAF BÜYÜTME FONKSİYONLARI
+        function openImage(src) {
+            const lb = document.getElementById('lightbox');
+            const lbImg = document.getElementById('lightbox-img');
+            lbImg.src = src;
+            lb.style.display = 'flex';
+        }
+
+        function closeImage() {
+            document.getElementById('lightbox').style.display = 'none';
+        }
 
         function showPage(p) {
             document.querySelectorAll('.page').forEach(pg => pg.classList.remove('active'));
@@ -163,75 +168,36 @@
             const view = document.getElementById('admin-view-content');
 
             if(tab === 'groups') {
-                view.innerHTML = `<h2>⚽ Grupları Yönet</h2><button class="btn-green" onclick="addNewGrup()">+ Yeni Grup Ekle</button><div class="grid-layout" id="adm-grp-grid" style="margin-top:20px;"></div>`;
+                view.innerHTML = `<h2>⚽ Grupları Yönet</h2><div class="grid-layout" id="adm-grp-grid"></div>`;
                 db.groups.forEach(g => {
                     document.getElementById('adm-grp-grid').innerHTML += `
-                        <div class="group-card">
+                        <div class="group-card" style="cursor:default">
                             <h3>${g.name}</h3>
-                            <button class="btn-green" onclick="openPhotoManager(${g.id})">Fotoğrafları Yönet (${g.photos.length})</button>
-                            <button onclick="deleteGrup(${g.id})" style="margin-top:10px; color:red; border:none; background:none; cursor:pointer;">Sil</button>
+                            <p>📸 ${g.photos.length} Fotoğraf</p>
+                            <button onclick="alert('Fotoğraflar yönetim modalından yüklenebilir.')">Müdahale Et</button>
                         </div>`;
                 });
             } else if(tab === 'contact') {
-                view.innerHTML = `
-                    <h2>📞 İletişim Düzenle</h2>
-                    <input type="text" id="c-tel1" value="${db.contact.tel1}"><input type="text" id="c-tel2" value="${db.contact.tel2}">
-                    <input type="text" id="c-tel3" value="${db.contact.tel3}"><input type="text" id="c-tel4" value="${db.contact.tel4}">
-                    <textarea id="c-adr">${db.contact.adres}</textarea>
-                    <button class="btn-green" onclick="saveContact()">KAYDET</button>`;
+                view.innerHTML = `<h2>📞 İletişim Düzenle</h2><input type="text" id="c-tel1" value="${db.contact.tel1}"><textarea id="c-adr">${db.contact.adres}</textarea><button class="btn-green" onclick="saveContact()">KAYDET</button>`;
             } else {
                 view.innerHTML = `<h2>👤 Hocaları Yönet</h2><div class="grid-layout" id="adm-c-grid"></div>`;
                 db.coaches.forEach(c => {
-                    document.getElementById('adm-c-grid').innerHTML += `<div class="coach-card"><img src="${c.img}"><h4>${c.name}</h4><button onclick="deleteCoach(${c.id})" style="color:red; border:none; background:none; cursor:pointer;">Sil</button></div>`;
+                    document.getElementById('adm-c-grid').innerHTML += `<div class="coach-card"><img src="${c.img}"><h4>${c.name}</h4></div>`;
                 });
             }
         }
 
-        // --- FONKSİYONLAR ---
         function saveContact() {
             db.contact.tel1 = document.getElementById('c-tel1').value;
-            db.contact.tel2 = document.getElementById('c-tel2').value;
-            db.contact.tel3 = document.getElementById('c-tel3').value;
-            db.contact.tel4 = document.getElementById('c-tel4').value;
             db.contact.adres = document.getElementById('c-adr').value;
-            saveData(); alert("Güncellendi!");
+            saveData(); alert("Güncellendi!"); renderPublicContact();
         }
-
-        let activeId = null;
-        function openPhotoManager(id) {
-            activeId = id; const g = db.groups.find(x => x.id === id);
-            document.getElementById('mgr-title').innerText = g.name; renderPhotoGrid(g);
-            document.getElementById('photo-manager-modal').style.display = 'flex';
-        }
-
-        function renderPhotoGrid(g) {
-            const grid = document.getElementById('mgr-grid'); grid.innerHTML = "";
-            g.photos.forEach((src, idx) => {
-                grid.innerHTML += `<div class="photo-wrapper"><img src="${src}"><button class="del-photo" onclick="removePhoto(${idx})">X</button></div>`;
-            });
-        }
-
-        function uploadPhotos() {
-            const g = db.groups.find(x => x.id === activeId);
-            const files = document.getElementById('bulk-upload').files;
-            Array.from(files).forEach(file => {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    if(g.photos.length >= 100) g.photos.shift();
-                    g.photos.push(e.target.result); saveData(); renderPhotoGrid(g);
-                };
-                reader.readAsDataURL(file);
-            });
-        }
-
-        function removePhoto(idx) { const g = db.groups.find(x => x.id === activeId); g.photos.splice(idx, 1); saveData(); renderPhotoGrid(g); }
-        function addNewGrup() { const n = prompt("Grup Adı:"); if(n) { db.groups.push({id:Date.now(), name:n, coach:"Atanmadı", time:"Belirlenmedi", photos:[]}); saveData(); adminTab('groups', document.querySelector('.active')); } }
-        function deleteGrup(id) { if(confirm("Emin misin?")) { db.groups = db.groups.filter(x => x.id !== id); saveData(); adminTab('groups', document.querySelector('.active')); } }
-        function deleteCoach(id) { if(confirm("Emin misin?")) { db.coaches = db.coaches.filter(x => x.id !== id); saveData(); adminTab('coaches', document.querySelector('.active')); } }
 
         function renderPublicGroups() {
             const gList = document.getElementById('public-groups'); gList.innerHTML = "";
-            db.groups.forEach(g => { gList.innerHTML += `<div class="group-card" onclick="alert('${g.photos.length} fotoğraf var.')"><h3>${g.name}</h3><p>👤 ${g.coach} | 🕒 ${g.time}</p></div>`; });
+            db.groups.forEach(g => { 
+                gList.innerHTML += `<div class="group-card"><h3>${g.name}</h3><p>👤 ${g.coach} | 🕒 ${g.time}</p></div>`; 
+            });
         }
 
         function renderPublicCoaches() {
@@ -240,12 +206,15 @@
         }
 
         function renderPublicContact() {
-            document.getElementById('contact-display').innerHTML = `<p>📞 <b>Kayıt:</b> ${db.contact.tel1}</p><p>📞 <b>Yönetim:</b> ${db.contact.tel2}</p><p>📞 <b>Veli Hattı 1:</b> ${db.contact.tel3}</p><p>📞 <b>Veli Hattı 2:</b> ${db.contact.tel4}</p><hr><p>📍 <b>Adres:</b> ${db.contact.adres}</p>`;
+            document.getElementById('contact-display').innerHTML = `<p>📞 <b>İletişim:</b> ${db.contact.tel1}</p><hr><p>📍 <b>Adres:</b> ${db.contact.adres}</p>`;
         }
 
         window.onload = () => {
             const v = document.getElementById('vitrin-grid');
-            for(let i=1; i<=30; i++) v.innerHTML += `<img src="https://picsum.photos/seed/${i+400}/400/300" class="vitrin-item">`;
+            for(let i=1; i<=30; i++) {
+                const src = `https://picsum.photos/seed/${i+500}/800/600`;
+                v.innerHTML += `<img src="${src}" class="vitrin-item" onclick="openImage('${src}')">`;
+            }
             renderPublicContact(); renderPublicGroups(); renderPublicCoaches();
         };
     </script>
