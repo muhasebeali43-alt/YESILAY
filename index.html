@@ -3,143 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kütahya Yeşilay SK - Profesyonel Prototip</title>
+    <title>Kütahya Yeşilay SK - Prototip</title>
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f9f4; margin: 0; padding: 0; }
         
-        /* Üst Bilgi */
-        header { background-color: #006400; color: white; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
-        header h1 { margin: 0; font-size: 22px; display: flex; align-items: center; }
-        header h1 span { margin-right: 10px; font-size: 28px; }
-        .btn { padding: 8px 15px; background-color: #ffc107; color: #333; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; transition: 0.3s; }
-        .btn:hover { background-color: #e0a800; }
-        .btn-danger { background-color: #dc3545; color: white; }
-        .btn-danger:hover { background-color: #c82333; }
+        /* Üst Bilgi (Z-index eklendi ki butonlara kesin tıklansın) */
+        header { background-color: #006400; color: white; padding: 1.5rem 2rem; display: flex; justify-content: space-between; align-items: center; position: relative; z-index: 999; box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
+        header h1 { margin: 0; font-size: 24px; }
         
-        /* Menü */
-        nav { background-color: #008f39; display: flex; justify-content: center; flex-wrap: wrap; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        .dropdown { position: relative; display: inline-block; }
-        .dropbtn { background-color: #008f39; color: white; padding: 15px 20px; font-size: 15px; border: none; cursor: pointer; font-weight: bold; transition: 0.3s; }
-        .dropdown:hover .dropbtn { background-color: #005c25; }
-        .dropdown-content { display: none; position: absolute; background-color: #ffffff; min-width: 220px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 100; border-radius: 0 0 8px 8px; overflow: hidden; }
-        .dropdown-content a { color: #333; padding: 12px 16px; text-decoration: none; display: block; border-bottom: 1px solid #eee; font-size: 14px; transition: 0.2s; }
-        .dropdown-content a:hover { background-color: #f4f9f4; color: #008f39; padding-left: 20px; font-weight: bold; }
-        .dropdown:hover .dropdown-content { display: block; }
+        /* Butonlar */
+        .btn { padding: 12px 20px; background-color: #ffc107; color: #000; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 16px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .btn:hover { background-color: #e0a800; transform: scale(1.05); transition: 0.2s; }
+        .btn-danger { background-color: #dc3545; color: white; }
+        
+        /* Menü (Z-index eklendi) */
+        nav { background-color: #008f39; display: flex; justify-content: center; position: relative; z-index: 998; }
+        .dropbtn { background-color: #008f39; color: white; padding: 15px 20px; font-size: 16px; border: none; cursor: pointer; font-weight: bold; }
+        .dropbtn:hover { background-color: #005c25; }
 
         /* Gövde */
-        .container { max-width: 1000px; margin: 30px auto; padding: 25px; background: white; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.08); }
+        .container { max-width: 900px; margin: 30px auto; padding: 30px; background: white; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); position: relative; z-index: 1; }
         #login-view, #admin-view { display: none; }
         
-        input, select, textarea { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; font-family: inherit; }
+        input, select, textarea { width: 100%; padding: 15px; margin: 10px 0; border: 2px solid #ddd; border-radius: 8px; font-size: 16px; }
         
-        /* Kartlar */
-        .post-card { border-radius: 10px; margin-bottom: 25px; background-color: #ffffff; box-shadow: 0 3px 10px rgba(0,0,0,0.08); overflow: hidden; border: 1px solid #eee; }
-        .post-content { padding: 15px 20px; }
-        .post-badge { display: inline-block; background-color: #008f39; color: white; padding: 5px 12px; border-radius: 20px; font-size: 13px; margin-bottom: 10px; font-weight: 600; }
-        .post-img-container { width: 100%; height: 400px; overflow: hidden; background-color: #f0f0f0; }
-        .post-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
-        .post-card:hover .post-img { transform: scale(1.03); }
-        .post-text { font-size: 16px; line-height: 1.5; color: #444; margin-bottom: 0; }
-        
-        #current-category { color: #008f39; border-bottom: 3px solid #008f39; padding-bottom: 10px; display: inline-block; }
+        /* Kartlar ve Fotoğraflar */
+        .post-card { border-radius: 12px; margin-bottom: 30px; background-color: #fff; border: 2px solid #eee; overflow: hidden; box-shadow: 0 4px 8px rgba(0,0,0,0.05); }
+        .post-badge { display: inline-block; background-color: #008f39; color: white; padding: 8px 15px; border-radius: 20px; font-size: 14px; font-weight: bold; margin: 15px; }
+        .post-img { width: 100%; height: 450px; object-fit: cover; display: block; border-bottom: 2px solid #eee; }
+        .post-text { font-size: 18px; color: #333; padding: 0 15px 15px 15px; }
     </style>
 </head>
 <body>
 
     <header>
-        <h1><span>⚽</span> Kütahya Yeşilay SK</h1>
+        <h1>⚽ Kütahya Yeşilay SK</h1>
         <div>
-            <button id="loginBtn" class="btn" onclick="showLogin()">Yönetici Girişi</button>
+            <button id="loginBtn" class="btn" onclick="showLogin()">YÖNETİCİ GİRİŞİ YAPAN</button>
             <button id="logoutBtn" class="btn btn-danger" style="display:none;" onclick="logout()">Çıkış Yap</button>
         </div>
     </header>
 
     <nav>
-        <div class="dropdown">
-            <button class="dropbtn" onclick="filterPosts('Tümü')">TÜM PAYLAŞIMLAR</button>
-        </div>
-        <div class="dropdown">
-            <button class="dropbtn">FUTBOL OKULU GRUPLARI ▼</button>
-            <div class="dropdown-content">
-                <a href="#" onclick="filterPosts('U-6 Futbol Okulu')">U-6 Yaş Grubu</a>
-                <a href="#" onclick="filterPosts('U-8 Futbol Okulu')">U-8 Yaş Grubu</a>
-                <a href="#" onclick="filterPosts('U-10 Futbol Okulu')">U-10 Yaş Grubu</a>
-            </div>
-        </div>
-        <div class="dropdown">
-            <button class="dropbtn">GELİŞİM GRUPLARI ▼</button>
-            <div class="dropdown-content">
-                <a href="#" onclick="filterPosts('U-11 Gelişim')">U-11 Gelişim</a>
-                <a href="#" onclick="filterPosts('U-12 Gelişim')">U-12 Gelişim</a>
-            </div>
-        </div>
-        <div class="dropdown">
-            <button class="dropbtn">ANA GRUPLAR ▼</button>
-            <div class="dropdown-content">
-                <a href="#" onclick="filterPosts('A Takım')">A Takım</a>
-                <a href="#" onclick="filterPosts('Trabzonspor Kampı')">Trabzonspor Kamp Ekibi</a>
-            </div>
-        </div>
-        <div class="dropdown">
-            <button class="dropbtn">AKADEMİ GRUPLARI ▼</button>
-            <div class="dropdown-content">
-                <a href="#" onclick="filterPosts('Kaleci Akademisi')">Kaleci Akademisi</a>
-            </div>
-        </div>
+        <button class="dropbtn" onclick="filterPosts('Tümü')">Tüm Paylaşımlar</button>
+        <button class="dropbtn" onclick="filterPosts('U-12 Gelişim')">U-12 Gelişim</button>
+        <button class="dropbtn" onclick="filterPosts('U-10 Futbol Okulu')">U-10 Futbol Okulu</button>
+        <button class="dropbtn" onclick="filterPosts('Trabzonspor Kampı')">Trabzonspor Kamp Ekibi</button>
     </nav>
 
-    <div id="public-view" class="container">
-        <h2 id="current-category">📸 Tüm Paylaşımlar</h2>
-        <div id="post-feed"></div>
-    </div>
-
-    <div id="login-view" class="container" style="max-width: 500px; text-align: center;">
-        <h2>🔒 Yönetici Girişi</h2>
-        <input type="text" id="username" placeholder="Kullanıcı Adı (Örn: ALİ)" style="text-align: center;">
-        <input type="password" id="password" placeholder="Şifre (Örn: ALİ43)" style="text-align: center;">
-        <button class="btn" style="width: 100%; padding: 12px; margin-top: 10px;" onclick="login()">Sisteme Gir</button>
-        <button class="btn" style="width: 100%; background:#ccc; margin-top: 10px;" onclick="showPublic()">İptal</button>
-        <p id="error-msg" style="color:red; display:none; margin-top: 10px;">Hatalı kullanıcı adı veya şifre!</p>
-    </div>
-
-    <div id="admin-view" class="container">
-        <div style="background: #f8fff8; padding: 25px; border-radius: 12px; border: 2px solid #008f39;">
-            <h3 style="margin-top: 0; color: #006400;">Yeni İçerik Ekle (Aktif Kullanıcı: ALİ)</h3>
-            
-            <label><strong>Hangi Gruba Yüklenecek?</strong></label>
-            <select id="group-select">
-                <option value="U-8 Futbol Okulu">U-8 Yaş Grubu</option>
-                <option value="U-12 Gelişim">U-12 Gelişim</option>
-                <option value="Trabzonspor Kampı">Trabzonspor Kamp Ekibi</option>
-                <option value="Kaleci Akademisi">Kaleci Akademisi</option>
-            </select>
-
-            <textarea id="post-text" rows="3" placeholder="Antrenman hakkında bir şeyler yazın..."></textarea>
-            <button class="btn" style="width: 100%; padding: 14px; background-color: #008f39; color: white;" onclick="addPost()">✅ Seçili Gruba Yayınla</button>
-        </div>
-    </div>
-
-    <script>
-        // KALICI FOTOĞRAF LİNKLERİ (Asla silinmez)
-        let posts = [
-            { 
-                group: "U-12 Gelişim", 
-                text: "Hafta sonu oynanan hazırlık maçımızdan mücadele dolu anlar. Gelişim grubumuz sahada harika bir performans sergiledi!", 
-                img: "https://images.unsplash.com/photo-1518605368461-1ee182414168?q=80&w=1000&auto=format&fit=crop" 
-            },
-            { 
-                group: "Trabzonspor Kampı", 
-                text: "Oğuz Akalan hocamız kontrolünde Çağatay Kavak ve ekibinin Trabzonspor kampı hazırlıkları neşeyle devam ediyor. Veli izin belgeleri tamamlandı!", 
-                img: "https://images.unsplash.com/photo-1579952363873-27f3bade9f55?q=80&w=1000&auto=format&fit=crop" 
-            },
-             { 
-                group: "Kaleci Akademisi", 
-                text: "Kalecilerimiz bugün refleks ve yer tutma üzerine özel bir çalışma gerçekleştirdi. Kaleler emin ellerde!", 
-                img: "https://images.unsplash.com/photo-1511886929837-354d827aae26?q=80&w=1000&auto=format&fit=crop"
-            }
-        ];
-
-        let currentFilter = "Tümü";
-
-        function renderPosts() {
-            const feed = document.getElementById('post-feed');
+    <div id="public-view
