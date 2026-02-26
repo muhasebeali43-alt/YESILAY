@@ -3,283 +3,134 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kütahya Yeşilay SK - Premium Yönetim Sistemi</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-    
+    <title>Futbol Okulu Yönetim Sistemi</title>
     <style>
-        * { box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-        body { background-color: #f0f4f8; margin: 0; padding: 0; color: #333; }
-        
-        /* Üst Menü */
-        header { 
-            background: #ffffff; padding: 15px 5%; 
-            display: flex; justify-content: space-between; align-items: center; 
-            border-bottom: 3px solid #008f39; box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            position: sticky; top: 0; z-index: 1000;
+        :root {
+            --primary: #1e272e;
+            --okul-color: #2ecc71;
+            --gelisim-color: #3498db;
+            --akademi-color: #e67e22;
+            --bg: #f1f2f6;
         }
-        .logo { display: flex; align-items: center; gap: 10px; font-size: 22px; font-weight: 700; color: #006400; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; display: flex; }
         
-        .btn { padding: 12px 24px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 15px; transition: 0.2s; }
-        .btn-primary { background-color: #008f39; color: white; }
-        .btn-primary:hover { background-color: #006400; transform: translateY(-2px); }
-        .btn-danger { background-color: #ef4444; color: white; }
-        
-        /* Dinamik Navigasyon Menüsü */
-        nav { background-color: #006400; display: flex; justify-content: center; flex-wrap: wrap; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        .dropdown { position: relative; display: inline-block; }
-        .dropbtn { background-color: transparent; color: white; padding: 15px 20px; font-size: 15px; border: none; cursor: pointer; font-weight: 600; transition: 0.3s; }
-        .dropdown:hover .dropbtn { background-color: #008f39; }
-        .dropdown-content { display: none; position: absolute; background-color: #ffffff; min-width: 220px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 100; border-radius: 0 0 8px 8px; overflow: hidden; max-height: 400px; overflow-y: auto; }
-        .dropdown-content a { color: #333; padding: 12px 16px; text-decoration: none; display: block; border-bottom: 1px solid #eee; font-size: 14px; transition: 0.2s; cursor: pointer; }
-        .dropdown-content a:hover { background-color: #f4f9f4; color: #008f39; padding-left: 20px; font-weight: bold; }
-        .dropdown:hover .dropdown-content { display: block; }
+        /* Sol Menü */
+        .sidebar { width: 250px; background: var(--primary); color: white; height: 100vh; position: fixed; padding: 20px; }
+        .sidebar h2 { color: var(--okul-color); border-bottom: 1px solid #3d4e5e; padding-bottom: 10px; }
+        .stats { background: rgba(255,255,255,0.1); padding: 10px; border-radius: 8px; margin-top: 20px; font-size: 0.9rem; }
 
-        /* Gövde ve İçerik */
-        .container { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
-        #login-view, #admin-view { display: none; background: white; padding: 40px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); max-width: 800px; margin: 50px auto; }
+        /* Ana İçerik */
+        .content { margin-left: 290px; padding: 40px; width: 100%; }
         
-        .section-title { color: #008f39; border-bottom: 3px solid #008f39; padding-bottom: 10px; display: inline-block; margin-bottom: 20px; }
+        /* Grup Kartları */
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; margin-bottom: 40px; }
+        .card { background: white; padding: 20px; border-radius: 12px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.05); position: relative; overflow: hidden; }
+        .card b { font-size: 1.4rem; color: var(--primary); }
+        .card::before { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 5px; }
         
-        /* Grid Kart Sistemi */
-        #post-feed { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 30px; }
-        .post-card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.06); transition: 0.3s; border: 1px solid #f0f0f0; display: flex; flex-direction: column; }
-        .post-card:hover { transform: translateY(-5px); box-shadow: 0 12px 25px rgba(0,0,0,0.12); }
-        .post-img { width: 100%; height: 250px; object-fit: cover; }
-        .post-content { padding: 20px; flex-grow: 1; }
-        .post-badge { display: inline-block; background: rgba(0, 143, 57, 0.1); color: #008f39; padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 700; margin-bottom: 10px; }
+        /* Renk Sınıfları */
+        .border-okul::before { background: var(--okul-color); }
+        .border-gelisim::before { background: var(--gelisim-color); }
+        .border-akademi::before { background: var(--akademi-color); }
+
+        .section-header { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #ddd; padding-bottom: 10px; }
         
-        /* Formlar */
-        .form-group { margin-bottom: 20px; text-align: left; }
-        .form-group label { display: block; font-weight: 600; font-size: 14px; margin-bottom: 8px; color: #2d3748; }
-        input, select, textarea { width: 100%; padding: 14px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 15px; background: #f8fafc; }
-        input:focus, select:focus, textarea:focus { outline: none; border-color: #008f39; background: white; }
-        
-        .admin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
-        @media (max-width: 768px) { .admin-grid { grid-template-columns: 1fr; } }
-        
-        .admin-box { background: #f4f9f4; padding: 25px; border-radius: 12px; border: 1px solid #c3e6cb; }
+        /* Yönetici Paneli */
+        .admin-box { background: white; padding: 20px; border-radius: 12px; margin-bottom: 30px; display: flex; gap: 10px; align-items: flex-end; }
+        .field { display: flex; flex-direction: column; flex: 1; }
+        input, select, button { padding: 10px; border-radius: 6px; border: 1px solid #ccc; }
+        button { background: var(--primary); color: white; border: none; cursor: pointer; font-weight: bold; }
+        button:hover { background: #000; }
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="logo">⚽ Kütahya Yeşilay SK</div>
-        <div>
-            <button id="loginBtn" class="btn btn-primary" onclick="showLogin()">Yönetici Girişi</button>
-            <button id="logoutBtn" class="btn btn-danger" style="display:none;" onclick="logout()">Güvenli Çıkış</button>
+    <div class="sidebar">
+        <h2>KULÜP YÖNETİM</h2>
+        <div class="stats">
+            <div>⚽ Toplam Grup: <span id="totalTxt">0</span></div>
         </div>
-    </header>
-
-    <nav id="dynamic-nav">
-        </nav>
-
-    <div id="public-view" class="container">
-        <h2 class="section-title" id="current-category">📸 Tüm Paylaşımlar</h2>
-        <div id="post-feed"></div>
+        <p style="margin-top:30px; font-size:0.8rem; opacity:0.6;">HIZLI MENÜ</p>
+        <div style="cursor:pointer; margin:10px 0;">📋 Yoklama Listesi</div>
+        <div style="cursor:pointer; margin:10px 0;">💰 Ödeme Takibi</div>
     </div>
 
-    <div id="login-view">
-        <h2 style="color: #006400; text-align: center; margin-top:0;">Sistem Girişi</h2>
-        <div class="form-group"><label>Kullanıcı Adı</label><input type="text" id="username" placeholder="ALİ"></div>
-        <div class="form-group"><label>Şifre</label><input type="password" id="password" placeholder="ALİ43"></div>
-        <button class="btn btn-primary" style="width: 100%;" onclick="login()">Giriş Yap</button>
-        <button class="btn" style="width: 100%; background:#e2e8f0; margin-top: 10px;" onclick="showPublic()">İptal</button>
-        <div id="error-msg" style="color: red; text-align: center; margin-top: 15px; display: none; font-weight: bold;">Hatalı şifre!</div>
-    </div>
+    <div class="content">
+        <h1>Dashboard</h1>
 
-    <div id="admin-view">
-        <h2 style="color: #006400; border-bottom: 2px solid #eee; padding-bottom: 15px; margin-top:0;">⚙️ Yönetici Paneli <span style="font-size:14px; background:#008f39; color:white; padding:5px 10px; border-radius:20px; float:right;">Yetkili: ALİ</span></h2>
-        
-        <div class="admin-grid">
-            <div class="admin-box">
-                <h3 style="margin-top:0; color:#006400;">📸 Yeni Fotoğraf/İçerik Yükle</h3>
-                <div class="form-group">
-                    <label>Hangi Gruba Yüklenecek?</label>
-                    <select id="group-select">
-                        </select>
-                </div>
-                <div class="form-group">
-                    <label>Açıklama</label>
-                    <textarea id="post-text" rows="3" placeholder="Örn: Bugün harika bir antrenman yaptık..."></textarea>
-                </div>
-                <button class="btn btn-primary" style="width: 100%;" onclick="addPost()">✅ Seçili Gruba Yayınla</button>
+        <div class="admin-box">
+            <div class="field">
+                <label>Grup Türü</label>
+                <select id="type">
+                    <option value="OKUL">Ana Grup (Futbol Okulu)</option>
+                    <option value="GELISIM">Gelişim Grubu</option>
+                    <option value="AKADEMI">Akademi Grubu</option>
+                </select>
             </div>
-
-            <div class="admin-box" style="background: #fff8e1; border-color: #ffeeba;">
-                <h3 style="margin-top:0; color:#856404;">➕ Yeni Grup Ekle</h3>
-                <p style="font-size: 13px; color: #666; margin-top:-10px;">Sistemde olmayan yeni bir takımı buradan oluşturabilirsiniz.</p>
-                <div class="form-group">
-                    <label>Hangi Ana Başlığın Altına Eklensin?</label>
-                    <select id="new-group-parent">
-                        <option value="FUTBOL OKULU GRUPLARI">Futbol Okulu Grupları</option>
-                        <option value="GELİŞİM GRUPLARI">Gelişim Grupları</option>
-                        <option value="ANA GRUPLAR">Ana Gruplar</option>
-                        <option value="AKADEMİ GRUPLARI">Akademi Grupları</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Yeni Grubun Adı</label>
-                    <input type="text" id="new-group-name" placeholder="Örn: U-13 Akademi">
-                </div>
-                <button class="btn" style="width: 100%; background:#ffc107; color:#000;" onclick="addNewGroup()">Takımı Sisteme Ekle</button>
+            <div class="field">
+                <label>Grup Adı</label>
+                <input type="text" id="name" placeholder="Örn: 2020">
             </div>
+            <button onclick="yeniEkle()">Sisteme Ekle</button>
         </div>
+
+        <div class="section-header">
+            <div style="width:15px; height:15px; background:var(--okul-color); border-radius:3px;"></div>
+            <h2>Ana Gruplar (2010 - 2018)</h2>
+        </div>
+        <div class="grid" id="box-OKUL"></div>
+
+        <div class="section-header">
+            <div style="width:15px; height:15px; background:var(--akademi-color); border-radius:3px;"></div>
+            <h2>Akademi Grupları (Lisanslı)</h2>
+        </div>
+        <div class="grid" id="box-AKADEMI"></div>
+
+        <div class="section-header">
+            <div style="width:15px; height:15px; background:var(--gelisim-color); border-radius:3px;"></div>
+            <h2>Gelişim Grupları</h2>
+        </div>
+        <div class="grid" id="box-GELISIM"></div>
     </div>
 
     <script>
-        // 1. DİNAMİK KATEGORİ SİSTEMİ (Başlangıç Verileri)
-        const defaultCategories = {
-            "FUTBOL OKULU GRUPLARI": ["U-6 Futbol Okulu", "U-7 Futbol Okulu", "U-8 Futbol Okulu", "U-9 Futbol Okulu", "U-10 Futbol Okulu"],
-            "GELİŞİM GRUPLARI": ["U-9 Gelişim", "U-10 Gelişim", "U-11 Gelişim", "U-12 Gelişim", "Özel İdman Grubu"],
-            "ANA GRUPLAR": ["A Takım", "U-19 Ana Grup", "U-17 Ana Grup", "U-16 Ana Grup", "Trabzonspor Kampı"],
-            "AKADEMİ GRUPLARI": ["U-14 Akademi", "U-15 Akademi", "Kaleci Akademisi", "Atletik Performans"]
+        let data = {
+            OKUL: ["2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018"],
+            AKADEMI: ["2013", "2014", "2015", "2016", "2017", "2018"],
+            GELISIM: ["2014 Gelişim 1", "2014 Gelişim 2", "2015 Gelişim 1", "2015 Gelişim 2", "2014/2015 Gelişim 3", "2016 Gelişim 1", "2016 Gelişim 2"]
         };
 
-        // Hafızadan kategorileri çek, yoksa varsayılanı kullan
-        let categories = JSON.parse(localStorage.getItem('yesilay_categories')) || defaultCategories;
-
-        // 2. İÇERİK (POST) SİSTEMİ
-        const defaultPosts = [
-            { group: "Trabzonspor Kampı", text: "Oğuz Akalan hocamız kontrolünde Çağatay Kavak ve ekibinin Trabzonspor kampı hazırlıkları neşeyle devam ediyor.", img: "https://images.pexels.com/photos/3621104/pexels-photo-3621104.jpeg?auto=compress&cs=tinysrgb&w=800" },
-            { group: "U-12 Gelişim", text: "Gelişim grubumuz pas ve taktik çalışmasında. Harika bir iş çıkardılar!", img: "https://images.pexels.com/photos/50713/pexels-photo-50713.jpeg?auto=compress&cs=tinysrgb&w=800" },
-            { group: "U-10 Futbol Okulu", text: "Miniklerimiz sahadaki enerjileriyle herkesi büyüledi.", img: "https://images.pexels.com/photos/18473151/pexels-photo-18473151.jpeg?auto=compress&cs=tinysrgb&w=800" }
-        ];
-
-        let posts = JSON.parse(localStorage.getItem('yesilay_posts')) || defaultPosts;
-        let currentFilter = "Tümü";
-
-        // --- ARAYÜZÜ ÇİZİCİ FONKSİYONLAR ---
-
-        // Menüyü Dinamik Olarak Oluşturur
-        function renderMenu() {
-            const nav = document.getElementById('dynamic-nav');
-            let navHTML = `<div class="dropdown"><button class="dropbtn" onclick="filterPosts('Tümü')">TÜM PAYLAŞIMLAR</button></div>`;
+        function yenile() {
+            let total = 0;
+            const categories = ["OKUL", "AKADEMI", "GELISIM"];
             
-            for (const [parent, groups] of Object.entries(categories)) {
-                navHTML += `<div class="dropdown"><button class="dropbtn">${parent} ▼</button><div class="dropdown-content">`;
-                groups.forEach(group => {
-                    navHTML += `<a onclick="filterPosts('${group}')">${group}</a>`;
-                });
-                navHTML += `</div></div>`;
-            }
-            nav.innerHTML = navHTML;
-        }
-
-        // Yönetici Panelindeki Seçim Kutusunu Dinamik Olarak Oluşturur
-        function renderAdminSelect() {
-            const select = document.getElementById('group-select');
-            let selectHTML = '';
-            
-            for (const [parent, groups] of Object.entries(categories)) {
-                selectHTML += `<optgroup label="${parent}">`;
-                groups.forEach(group => {
-                    selectHTML += `<option value="${group}">${group}</option>`;
-                });
-                selectHTML += `</optgroup>`;
-            }
-            select.innerHTML = selectHTML;
-        }
-
-        // Gönderileri Ekrana Çizer
-        function renderPosts() {
-            const feed = document.getElementById('post-feed');
-            feed.innerHTML = '';
-            
-            let filteredPosts = currentFilter === "Tümü" ? posts : posts.filter(post => post.group === currentFilter);
-
-            if (filteredPosts.length === 0) {
-                feed.innerHTML = `<div style="grid-column: 1 / -1; text-align:center; padding:40px; background:white; border-radius:12px;">Bu grupta henüz içerik yok. Yönetici panelinden ekleyebilirsiniz.</div>`;
-            }
-
-            // En yeniler en üstte çıksın diye ters çevirerek (reverse) ekliyoruz
-            [...filteredPosts].reverse().forEach(post => {
-                feed.innerHTML += `
-                    <div class="post-card">
-                        <img src="${post.img}" class="post-img" alt="Antrenman">
-                        <div class="post-content">
-                            <div class="post-badge">${post.group}</div>
-                            <p style="margin:0; font-size:15px; color:#444;">${post.text}</p>
+            categories.forEach(cat => {
+                const container = document.getElementById(`box-${cat}`);
+                container.innerHTML = "";
+                data[cat].forEach(item => {
+                    total++;
+                    container.innerHTML += `
+                        <div class="card border-${cat.toLowerCase()}">
+                            <b>${item}</b><br>
+                            <small>${cat === 'OKUL' ? 'Futbol Okulu' : cat}</small>
                         </div>
-                    </div>
-                `;
+                    `;
+                });
             });
+            document.getElementById('totalTxt').innerText = total;
         }
 
-        // --- İŞLEM FONKSİYONLARI ---
-
-        // Yeni Grup Ekleme Fonksiyonu
-        function addNewGroup() {
-            let parent = document.getElementById('new-group-parent').value;
-            let groupName = document.getElementById('new-group-name').value.trim();
-            
-            if(groupName === "") { alert("Lütfen yeni grubun adını yazın!"); return; }
-            if(categories[parent].includes(groupName)) { alert("Bu grup zaten var!"); return; }
-
-            // Veriyi ekle ve hafızaya kaydet
-            categories[parent].push(groupName);
-            localStorage.setItem('yesilay_categories', JSON.stringify(categories));
-            
-            // Arayüzü güncelle
-            renderMenu();
-            renderAdminSelect();
-            document.getElementById('new-group-name').value = '';
-            
-            alert(`✅ Harika! "${groupName}" sistemi başarıyla eklendi. Artık bu gruba fotoğraf yükleyebilirsiniz.`);
+        function yeniEkle() {
+            const type = document.getElementById('type').value;
+            const name = document.getElementById('name').value;
+            if(name) {
+                data[type].push(name);
+                document.getElementById('name').value = "";
+                yenile();
+            }
         }
 
-        // Yeni Fotoğraf Ekleme Fonksiyonu
-        function addPost() {
-            let group = document.getElementById('group-select').value;
-            let text = document.getElementById('post-text').value;
-            if(text === "") { alert("Lütfen bir açıklama yazın!"); return; }
-            
-            // Yeni yüklenen fotoğraflar için sistemden rastgele bir çocuk futbol resmi
-            const randomImages = [
-                "https://images.pexels.com/photos/114296/pexels-photo-114296.jpeg?auto=compress&cs=tinysrgb&w=800",
-                "https://images.pexels.com/photos/274422/pexels-photo-274422.jpeg?auto=compress&cs=tinysrgb&w=800",
-                "https://images.pexels.com/photos/1618269/pexels-photo-1618269.jpeg?auto=compress&cs=tinysrgb&w=800"
-            ];
-            let img = randomImages[Math.floor(Math.random() * randomImages.length)];
-            
-            posts.push({ group: group, text: text, img: img });
-            localStorage.setItem('yesilay_posts', JSON.stringify(posts)); // Hafızaya kaydet
-            
-            document.getElementById('post-text').value = ''; 
-            showPublic(); 
-            filterPosts(group);
-        }
-
-        function filterPosts(groupName) {
-            currentFilter = groupName;
-            document.getElementById('current-category').innerText = groupName === "Tümü" ? "📸 Tüm Paylaşımlar" : "📸 " + groupName + " Paylaşımları";
-            showPublic(); 
-            renderPosts();
-        }
-
-        // --- GİRİŞ / ÇIKIŞ VE SAYFA GEÇİŞLERİ ---
-        function showLogin() { hideAll(); document.getElementById('login-view').style.display = 'block'; window.scrollTo(0,0); }
-        function showPublic() { hideAll(); document.getElementById('public-view').style.display = 'block'; window.scrollTo(0,0); }
-        function showAdmin() { hideAll(); document.getElementById('admin-view').style.display = 'block'; window.scrollTo(0,0); }
-        function hideAll() { document.getElementById('public-view').style.display='none'; document.getElementById('login-view').style.display='none'; document.getElementById('admin-view').style.display='none'; document.getElementById('error-msg').style.display='none'; }
-
-        function login() {
-            let user = document.getElementById('username').value.toUpperCase().trim();
-            let pass = document.getElementById('password').value.toUpperCase().trim();
-            if((user === 'ALİ' || user === 'ALI') && (pass === 'ALİ43' || pass === 'ALI43')) {
-                document.getElementById('loginBtn').style.display = 'none'; document.getElementById('logoutBtn').style.display = 'block'; showAdmin();
-            } else { document.getElementById('error-msg').style.display = 'block'; }
-        }
-
-        function logout() {
-            document.getElementById('username').value = ''; document.getElementById('password').value = '';
-            document.getElementById('loginBtn').style.display = 'block'; document.getElementById('logoutBtn').style.display = 'none';
-            filterPosts('Tümü'); 
-        }
-
-        // SAYFA YÜKLENDİĞİNDE ÇALIŞTIRILACAKLAR
-        renderMenu();
-        renderAdminSelect();
-        renderPosts();
+        yenile();
     </script>
 </body>
 </html>
