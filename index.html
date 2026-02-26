@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kütahya Yeşilay Futbol Okulu | Ali Hoca Tam Yetkili Portal</title>
+    <title>Kütahya Yeşilay Futbol Okulu | Ali Hoca Tam Yetkili Yönetim Portalı</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         :root { --yesil: #006a33; --sari: #f1c40f; --dark: #121212; --light: #f4f7f6; }
         body, html { margin: 0; padding: 0; font-family: 'Poppins', sans-serif; background: var(--light); height: 100vh; overflow: hidden; }
 
-        /* --- ŞIK HEADER --- */
+        /* --- MODERN HEADER --- */
         header { 
             background: linear-gradient(90deg, var(--yesil) 0%, #004d26 100%); 
             color: white; padding: 15px 50px; display: flex; justify-content: space-between; align-items: center; 
@@ -24,18 +24,16 @@
         .page.active { display: block; }
         .section-title { font-weight: 800; font-size: 2.2rem; color: var(--yesil); margin-bottom: 30px; border-bottom: 5px solid var(--sari); display: inline-block; }
 
-        /* --- HOCALAR & GRUPLAR GRID (5'ERLİ) --- */
+        /* --- GRID YAPILARI (5'ERLİ) --- */
         .grid-5 { display: grid; grid-template-columns: repeat(5, 1fr); gap: 20px; }
         .card { background: white; padding: 20px; border-radius: 15px; text-align: center; border-bottom: 5px solid var(--yesil); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-        .card img { width: 110px; height: 110px; border-radius: 50%; object-fit: cover; border: 3px solid var(--yesil); margin-bottom: 15px; }
+        .card img { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 3px solid var(--yesil); margin-bottom: 10px; }
         
-        /* VİTRİN */
+        /* VİTRİN VE LIGHTBOX */
         .vitrin-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; }
         .vitrin-item { width: 100%; height: 160px; object-fit: cover; border-radius: 10px; border: 3px solid white; cursor: pointer; }
-
-        /* LIGHTBOX */
         #lightbox { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 10000; justify-content: center; align-items: center; cursor: pointer; }
-        #lightbox img { max-width: 90%; max-height: 80%; border: 5px solid white; border-radius: 10px; }
+        #lightbox img { max-width: 90%; max-height: 85%; border: 5px solid white; border-radius: 10px; }
 
         /* --- ADMİN PANELİ --- */
         #admin-panel { display: none; position: fixed; inset: 0; background: #fff; z-index: 5000; flex-direction: column; }
@@ -48,9 +46,15 @@
 
         /* MODALLAR */
         #login-modal, #photo-manager-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 6000; justify-content: center; align-items: center; }
-        .modal-box { background: white; padding: 35px; border-radius: 20px; width: 600px; max-height: 85vh; overflow-y: auto; text-align: center; }
+        .modal-box { background: white; padding: 35px; border-radius: 20px; width: 650px; max-height: 85vh; overflow-y: auto; text-align: center; }
         input, textarea, select { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; font-family: inherit; }
         .btn-green { background: var(--yesil); color: white; border: none; padding: 12px 25px; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        .btn-del { background: #ff4757; color: white; padding: 8px 15px; border-radius: 5px; border: none; cursor: pointer; }
+
+        .photo-grid-edit { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 10px; margin-top: 20px; }
+        .photo-wrapper { position: relative; height: 100px; }
+        .photo-wrapper img { width: 100%; height: 100%; object-fit: cover; border-radius: 8px; }
+        .del-photo { position: absolute; top: -5px; right: -5px; background: red; color: white; border: none; border-radius: 50%; width: 22px; height: 22px; cursor: pointer; font-size: 12px; }
     </style>
 </head>
 <body>
@@ -74,7 +78,7 @@
             <div id="vitrin-grid" class="vitrin-grid"></div>
         </div>
         <div id="page-groups" class="page">
-            <h2 class="section-title">GRUPLARIMIZ</h2>
+            <h2 class="section-title">GRUPLARIMIZ VE PROGRAMLAR</h2>
             <div id="public-group-list" class="grid-5"></div>
         </div>
         <div id="page-coaches" class="page">
@@ -82,7 +86,7 @@
             <div id="public-coach-list" class="grid-5"></div>
         </div>
         <div id="page-contact" class="page">
-            <h2 class="section-title">İLETİŞİM</h2>
+            <h2 class="section-title">İLETİŞİM BİLGİLERİ</h2>
             <div id="contact-display" style="background:white; padding:40px; border-radius:20px; border-left:15px solid var(--yesil);"></div>
         </div>
     </div>
@@ -96,7 +100,7 @@
             <div class="admin-sidebar">
                 <div class="sidebar-btn active" onclick="adminTab('groups', this)">⚽ GRUPLARI YÖNET</div>
                 <div class="sidebar-btn" onclick="adminTab('coaches', this)">👤 HOCALARI YÖNET</div>
-                <div class="sidebar-btn" onclick="adminTab('contact', this)">📞 İLETİŞİM DÜZENLE</div>
+                <div class="sidebar-btn" onclick="adminTab('contact', this)">📞 İLETİŞİMİ DÜZENLE</div>
             </div>
             <div class="admin-main" id="admin-view-content"></div>
         </div>
@@ -108,87 +112,142 @@
             <input type="text" id="u" placeholder="Kullanıcı: ALİ">
             <input type="password" id="p" placeholder="Şifre: ALİ43">
             <button class="btn-green" style="width:100%" onclick="login()">SİSTEME GİR</button>
-            <p onclick="document.getElementById('login-modal').style.display='none'" style="color:red; cursor:pointer; margin-top:15px; font-weight:bold;">İptal</p>
+            <p onclick="document.getElementById('login-modal').style.display='none'" style="color:red; cursor:pointer; margin-top:15px;">İptal</p>
+        </div>
+    </div>
+
+    <div id="photo-manager-modal">
+        <div class="modal-box">
+            <h3 id="mgr-title">Grup Fotoğrafları</h3>
+            <input type="file" id="bulk-upload" multiple accept="image/*" onchange="uploadPhotos()">
+            <div id="mgr-grid" class="photo-grid-edit"></div>
+            <button class="btn-green" style="margin-top:20px; background:#444;" onclick="document.getElementById('photo-manager-modal').style.display='none'">KAPAT</button>
         </div>
     </div>
 
     <script>
-        // ANA VERİ (LocalStorage)
-        let db = JSON.parse(localStorage.getItem('yesilay_v5_master')) || {
+        // SİSTEM HAFIZASI (LocalStorage)
+        let db = JSON.parse(localStorage.getItem('yesilay_master_v6')) || {
             groups: [
                 { id: 1, name: "2014/15-1 Gelişim", coach: "Ali Hoca", time: "Cmt-Paz 09:30", photos: [] },
                 { id: 2, name: "2010 Futbol Okulu", coach: "Mehmet Hoca", time: "Cmt-Paz 11:00", photos: [] }
             ],
             coaches: Array.from({length: 35}, (_, i) => ({ id: i+1, name: i===0 ? "Ali Hoca" : "Hoca "+(i+1), img: `https://i.pravatar.cc/150?u=${i}` })),
-            contact: { tel: "0543 434 43 01", adres: "Yeşilay Spor Tesisleri, Kütahya" }
+            contact: { t1: "0543 434 43 01", t2: "0543 434 43 02", t3: "0543 434 43 03", t4: "0543 434 43 04", adr: "Yeşilay Spor Tesisleri, Kütahya" }
         };
 
-        function saveData() { localStorage.setItem('yesilay_v5_master', JSON.stringify(db)); }
+        function saveData() { localStorage.setItem('yesilay_master_v6', JSON.stringify(db)); }
 
         // SAYFA GEÇİŞLERİ
         function showPage(p) {
             document.querySelectorAll('.page').forEach(pg => pg.classList.remove('active'));
             document.getElementById('page-' + p).classList.add('active');
-            if(p === 'groups') renderGroups();
-            if(p === 'coaches') renderCoaches();
-            if(p === 'contact') renderContact();
+            if(p === 'groups') renderPublicGroups();
+            if(p === 'coaches') renderPublicCoaches();
+            if(p === 'contact') renderPublicContact();
         }
 
-        // LOGIN
         function login() {
             if(document.getElementById('u').value === "ALİ" && document.getElementById('p').value === "ALİ43") {
                 document.getElementById('login-modal').style.display = 'none';
                 document.getElementById('admin-panel').style.display = 'flex';
                 adminTab('groups', document.querySelector('.sidebar-btn'));
-            } else { alert("Hatalı!"); }
+            } else { alert("Hatalı Giriş!"); }
         }
 
-        // ADMİN PANELİ TABLAR
+        // --- ADMİN PANELİ ---
         function adminTab(tab, btn) {
             document.querySelectorAll('.sidebar-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
             const view = document.getElementById('admin-view-content');
 
             if(tab === 'groups') {
-                view.innerHTML = `<h2>Grupları Yönet</h2><div class="grid-5" id="adm-g"></div>`;
+                view.innerHTML = `<h2>⚽ Grupları Yönet</h2><button class="btn-green" onclick="addNewGrup()">+ Yeni Grup Ekle</button><div class="grid-5" id="adm-g-list" style="margin-top:20px;"></div>`;
                 db.groups.forEach(g => {
-                    document.getElementById('adm-g').innerHTML += `<div class="card"><b>${g.name}</b><br><button onclick="deleteG(${g.id})" style="color:red; border:none; background:none; cursor:pointer;">Sil</button></div>`;
+                    document.getElementById('adm-g-list').innerHTML += `
+                        <div class="card">
+                            <b>${g.name}</b><br>
+                            <button class="btn-green" style="padding:5px 10px; margin-top:5px; font-size:12px;" onclick="openPhotoManager(${g.id})">Fotoğraflar (${g.photos.length})</button><br>
+                            <button class="btn-del" style="margin-top:10px;" onclick="deleteG(${g.id})">Sil</button>
+                        </div>`;
+                });
+            } else if(tab === 'coaches') {
+                view.innerHTML = `<h2>👤 Hocaları Yönet</h2><button class="btn-green" onclick="addNewHoca()">+ Yeni Hoca Ekle</button><div class="grid-5" id="adm-h-list" style="margin-top:20px;"></div>`;
+                db.coaches.forEach(c => {
+                    document.getElementById('adm-h-list').innerHTML += `
+                        <div class="card"><img src="${c.img}"><b>${c.name}</b><br>
+                        <button class="btn-del" onclick="deleteH(${c.id})">Sil</button></div>`;
                 });
             } else if(tab === 'contact') {
-                view.innerHTML = `<h2>İletişim Düzenle</h2><input type="text" id="it-t" value="${db.contact.tel}"><textarea id="it-a">${db.contact.adres}</textarea><button class="btn-green" onclick="saveC()">KAYDET</button>`;
-            } else {
-                view.innerHTML = `<h2>Teknik Kadro (35 Hoca)</h2><div class="grid-5" id="adm-c"></div>`;
-                db.coaches.forEach(c => {
-                    document.getElementById('adm-c').innerHTML += `<div class="card"><img src="${c.img}"><b>${c.name}</b></div>`;
-                });
+                view.innerHTML = `<h2>📞 İletişim Bilgileri</h2>
+                    <input type="text" id="it1" value="${db.contact.t1}"><input type="text" id="it2" value="${db.contact.t2}">
+                    <input type="text" id="it3" value="${db.contact.t3}"><input type="text" id="it4" value="${db.contact.t4}">
+                    <textarea id="iadr">${db.contact.adr}</textarea>
+                    <button class="btn-green" onclick="saveC()">KAYDET</button>`;
             }
         }
 
-        function saveC() { db.contact.tel = document.getElementById('it-t').value; db.contact.adres = document.getElementById('it-a').value; saveData(); alert("Kaydedildi!"); }
-        function deleteG(id) { db.groups = db.groups.filter(x => x.id !== id); saveData(); adminTab('groups', document.querySelector('.active')); }
-
-        // HALK GÖRÜNÜMLERİ
-        function renderGroups() {
-            const list = document.getElementById('public-group-list'); list.innerHTML = "";
-            db.groups.forEach(g => { list.innerHTML += `<div class="card"><h3>${g.name}</h3><p>${g.coach}<br>${g.time}</p></div>`; });
+        // --- İŞLEMLER ---
+        function addNewGrup() { const n = prompt("Grup Adı:"); if(n) { db.groups.push({id:Date.now(), name:n, coach:"Atanmadı", time:"Belli Değil", photos:[]}); saveData(); adminTab('groups', document.querySelector('.active')); } }
+        function deleteG(id) { if(confirm("Grubu silmek istediğine emin misin?")) { db.groups = db.groups.filter(x => x.id !== id); saveData(); adminTab('groups', document.querySelector('.active')); } }
+        
+        function addNewHoca() { const n = prompt("Hoca Adı:"); if(n) { db.coaches.push({id:Date.now(), name:n, img:"https://i.pravatar.cc/150?u="+Date.now()}); saveData(); adminTab('coaches', document.querySelector('.active')); } }
+        function deleteH(id) { if(confirm("Hocayı silmek istediğine emin misin?")) { db.coaches = db.coaches.filter(x => x.id !== id); saveData(); adminTab('coaches', document.querySelector('.active')); } }
+        
+        function saveC() { 
+            db.contact.t1 = document.getElementById('it1').value; db.contact.t2 = document.getElementById('it2').value;
+            db.contact.t3 = document.getElementById('it3').value; db.contact.t4 = document.getElementById('it4').value;
+            db.contact.adr = document.getElementById('iadr').value; saveData(); alert("Bilgiler Güncellendi!");
         }
-        function renderCoaches() {
+
+        // FOTOĞRAF YÖNETİMİ
+        let activeGroupId = null;
+        function openPhotoManager(id) {
+            activeGroupId = id; const g = db.groups.find(x => x.id === id);
+            document.getElementById('mgr-title').innerText = g.name + " Fotoğrafları";
+            renderPhotoEdit(g);
+            document.getElementById('photo-manager-modal').style.display = 'flex';
+        }
+        function renderPhotoEdit(g) {
+            const grid = document.getElementById('mgr-grid'); grid.innerHTML = "";
+            g.photos.forEach((src, idx) => {
+                grid.innerHTML += `<div class="photo-wrapper"><img src="${src}"><button class="del-photo" onclick="removeP(${idx})">X</button></div>`;
+            });
+        }
+        function uploadPhotos() {
+            const g = db.groups.find(x => x.id === activeGroupId);
+            const files = document.getElementById('bulk-upload').files;
+            Array.from(files).forEach(f => {
+                const r = new FileReader();
+                r.onload = (e) => { if(g.photos.length >= 100) g.photos.shift(); g.photos.push(e.target.result); saveData(); renderPhotoEdit(g); };
+                r.readAsDataURL(f);
+            });
+        }
+        function removeP(idx) { const g = db.groups.find(x => x.id === activeGroupId); g.photos.splice(idx, 1); saveData(); renderPhotoEdit(g); }
+
+        // --- VELİ GÖRÜNÜMÜ ---
+        function renderPublicGroups() {
+            const list = document.getElementById('public-group-list'); list.innerHTML = "";
+            db.groups.forEach(g => { list.innerHTML += `<div class="card" onclick="alert('${g.photos.length} fotoğraf var.')"><h3>${g.name}</h3><p>${g.coach}<br>${g.time}</p></div>`; });
+        }
+        function renderPublicCoaches() {
             const list = document.getElementById('public-coach-list'); list.innerHTML = "";
             db.coaches.forEach(c => { list.innerHTML += `<div class="card"><img src="${c.img}"><h4>${c.name}</h4><p>Antrenör</p></div>`; });
         }
-        function renderContact() {
-            document.getElementById('contact-display').innerHTML = `<p>📞 <b>İletişim:</b> ${db.contact.tel}</p><p>📍 <b>Adres:</b> ${db.contact.adres}</p>`;
+        function renderPublicContact() {
+            document.getElementById('contact-display').innerHTML = `
+                <p>📞 <b>Kayıt:</b> ${db.contact.t1}</p><p>📞 <b>Yönetim:</b> ${db.contact.t2}</p>
+                <p>📞 <b>Veli Hattı 1:</b> ${db.contact.t3}</p><p>📞 <b>Veli Hattı 2:</b> ${db.contact.t4}</p>
+                <hr><p>📍 <b>Adres:</b> ${db.contact.adr}</p>`;
         }
 
         window.onload = () => {
             const v = document.getElementById('vitrin-grid');
             for(let i=1; i<=30; i++) {
-                const s = `https://picsum.photos/seed/${i+900}/600/400`;
+                const s = `https://picsum.photos/seed/${i+100}/600/400`;
                 v.innerHTML += `<img src="${s}" class="vitrin-item" onclick="openImg('${s}')">`;
             }
-            renderContact();
         };
-
         function openImg(s) { document.getElementById('lbox-img').src = s; document.getElementById('lightbox').style.display = 'flex'; }
     </script>
 </body>
