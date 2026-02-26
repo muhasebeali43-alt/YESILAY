@@ -3,76 +3,146 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kütahya Yeşilay SK Futbol Okulu</title>
+    <title>Kütahya Yeşilay SK - Prototip</title>
     <style>
-        body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            background-color: #f8fff8; 
-            color: #333; 
-            margin: 0; 
-            padding: 0; 
-        }
-        header { 
-            background-color: #008f39; 
-            color: white; 
-            text-align: center; 
-            padding: 2.5rem; 
-        }
-        .container { 
-            max-width: 1000px; 
-            margin: 0 auto; 
-            padding: 20px; 
-        }
-        h2 { 
-            border-bottom: 3px solid #008f39; 
-            padding-bottom: 10px; 
-            margin-top: 40px;
-        }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f9f4; margin: 0; padding: 0; }
+        header { background-color: #008f39; color: white; padding: 1.5rem; display: flex; justify-content: space-between; align-items: center; }
+        header h1 { margin: 0; font-size: 20px; }
+        .btn { padding: 8px 15px; background-color: #ffc107; color: #333; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        .btn-danger { background-color: #dc3545; color: white; }
+        .container { max-width: 900px; margin: 20px auto; padding: 20px; background: white; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
         
-        /* Duyuru Panosu Çerçevesi */
-        .announcement-container {
-            width: 100%;
-            height: 400px; /* Panonun yüksekliği */
-            border: 2px solid #ffc107;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            margin-bottom: 30px;
-        }
-        .announcement-container iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-
-        /* Instagram Butonu */
-        .btn-instagram {
-            display: inline-block;
-            background-color: #E1306C; 
-            color: white;
-            padding: 12px 24px;
-            text-decoration: none;
-            border-radius: 5px;
-            font-weight: bold;
-            margin-bottom: 20px;
-            transition: 0.3s;
-        }
-        .btn-instagram:hover {
-            background-color: #c13584;
-        }
-        .instagram-container {
-            text-align: center;
-            margin-top: 20px;
-        }
+        /* Görünümler (Sayfa geçişleri için) */
+        #login-view, #admin-view { display: none; }
+        
+        /* Formlar */
+        input, select, textarea { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        
+        /* Galeri Kartları */
+        .post-card { border: 1px solid #ddd; border-radius: 8px; padding: 15px; margin-bottom: 15px; background-color: #fafafa; }
+        .post-badge { display: inline-block; background-color: #008f39; color: white; padding: 3px 8px; border-radius: 12px; font-size: 12px; margin-bottom: 10px; }
+        .post-img { width: 100%; max-height: 300px; object-fit: cover; border-radius: 5px; margin-top: 10px; }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>⚽ Kütahya Yeşilay SK Futbol Okulu ⚽</h1>
-        <p>Geleceğin Yıldızları Sahada Yetişiyor!</p>
+        <h1>⚽ Kütahya Yeşilay SK</h1>
+        <button id="loginBtn" class="btn" onclick="showLogin()">Yönetici Girişi</button>
+        <button id="logoutBtn" class="btn btn-danger" style="display:none;" onclick="logout()">Çıkış Yap</button>
     </header>
 
-    <div class="container">
+    <div id="public-view" class="container">
+        <h2>📸 Güncel Paylaşımlar (35 Gruptan Seçmeler)</h2>
+        <p>Aşağıdaki paylaşımlar yönetici panelinden eklenmektedir.</p>
+        <div id="post-feed">
+            </div>
+    </div>
 
-        <h2>📢 Veliler İçin Duyuru Panosu</h2>
+    <div id="login-view" class="container">
+        <h2>🔒 Yönetici Girişi</h2>
+        <input type="text" id="username" placeholder="Kullanıcı Adı (Örn: ALİ)">
+        <input type="password" id="password" placeholder="Şifre (Örn: ALİ43)">
+        <button class="btn" onclick="login()">Giriş Yap</button>
+        <button class="btn" style="background:#ccc;" onclick="showPublic()">İptal</button>
+        <p id="error-msg" style="color:red; display:none;">Hatalı kullanıcı adı veya şifre!</p>
+    </div>
+
+    <div id="admin-view" class="container">
+        <h2>⚙️ Yönetici Paneli - Hoş Geldin ALİ</h2>
+        <div style="background: #e9ecef; padding: 15px; border-radius: 8px;">
+            <h3>Yeni İçerik Ekle</h3>
+            <select id="group-select">
+                <option value="U-10 Grubu">U-10 Grubu</option>
+                <option value="U-11 Grubu">U-11 Grubu</option>
+                <option value="U-12 Grubu">U-12 Grubu</option>
+                <option value="Trabzonspor Kampı">Trabzonspor Kampı</option>
+            </select>
+            <textarea id="post-text" rows="3" placeholder="Açıklama yazın..."></textarea>
+            <input type="text" id="post-image" placeholder="Fotoğraf URL'si (İsteğe bağlı - İnternetten bir resim linki yapıştırın)">
+            <button class="btn" onclick="addPost()">Paylaş</button>
+        </div>
+    </div>
+
+    <script>
+        // Prototip için varsayılan sahte veriler (Yönetimi etkilemek için)
+        let posts = [
+            { group: "Trabzonspor Kampı", text: "Oğuz Akalan hocamız kontrolünde Çağatay Kavak ve ekibinin Trabzonspor kampı hazırlıkları tüm hızıyla devam ediyor. Veli izin belgeleri tamamlandı!", img: "" },
+            { group: "U-12 Grubu", text: "Hafta sonu oynanan hazırlık maçından kareler. Çocuklar harikaydı!", img: "https://via.placeholder.com/600x300/008f39/ffffff?text=U-12+Mac+Goruntusu" }
+        ];
+
+        function renderPosts() {
+            const feed = document.getElementById('post-feed');
+            feed.innerHTML = '';
+            posts.forEach(post => {
+                let imgHTML = post.img ? `<img src="${post.img}" class="post-img">` : '';
+                feed.innerHTML = `
+                    <div class="post-card">
+                        <span class="post-badge">${post.group}</span>
+                        <p><strong>${post.text}</strong></p>
+                        ${imgHTML}
+                    </div>
+                ` + feed.innerHTML; // Yeni eklenen en üste gelsin
+            });
+        }
+
+        // Sayfa geçiş fonksiyonları
+        function showLogin() { hideAll(); document.getElementById('login-view').style.display = 'block'; }
+        function showPublic() { hideAll(); document.getElementById('public-view').style.display = 'block'; }
+        function showAdmin() { 
+            hideAll(); 
+            document.getElementById('admin-view').style.display = 'block'; 
+            document.getElementById('public-view').style.display = 'block'; 
+        }
+        function hideAll() {
+            document.getElementById('public-view').style.display = 'none';
+            document.getElementById('login-view').style.display = 'none';
+            document.getElementById('admin-view').style.display = 'none';
+            document.getElementById('error-msg').style.display = 'none';
+        }
+
+        // Giriş ve Çıkış Sistemi (ALİ - ALİ43)
+        function login() {
+            let user = document.getElementById('username').value.toUpperCase();
+            let pass = document.getElementById('password').value.toUpperCase();
+            
+            if(user === 'ALİ' && pass === 'ALİ43' || user === 'ALI' && pass === 'ALI43') {
+                document.getElementById('loginBtn').style.display = 'none';
+                document.getElementById('logoutBtn').style.display = 'block';
+                showAdmin();
+            } else {
+                document.getElementById('error-msg').style.display = 'block';
+            }
+        }
+
+        function logout() {
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+            document.getElementById('loginBtn').style.display = 'block';
+            document.getElementById('logoutBtn').style.display = 'none';
+            showPublic();
+        }
+
+        // Post Ekleme Sistemi
+        function addPost() {
+            let group = document.getElementById('group-select').value;
+            let text = document.getElementById('post-text').value;
+            let img = document.getElementById('post-image').value;
+
+            if(text === "") { alert("Lütfen bir açıklama yazın!"); return; }
+
+            posts.push({ group: group, text: text, img: img });
+            
+            // Formu temizle
+            document.getElementById('post-text').value = '';
+            document.getElementById('post-image').value = '';
+            
+            alert("İçerik başarıyla " + group + " grubuna eklendi!");
+            renderPosts();
+        }
+
+        // Sayfa yüklendiğinde postları göster
+        renderPosts();
+    </script>
+</body>
+</html>
