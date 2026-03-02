@@ -12,7 +12,7 @@
         :root { --yesil: #006a33; --sari: #f1c40f; --dark: #121212; --light: #f8faf9; }
         body, html { margin: 0; padding: 0; font-family: 'Poppins', sans-serif; background: var(--light); color: #333; font-size: 18px; }
 
-        /* --- DEV VE HEYBETLİ BAŞLIK --- */
+        /* --- DEV VE HEYBETLİ BAŞLIK (ALTIN KOD) --- */
         header { 
             background: linear-gradient(135deg, var(--yesil) 0%, #004d26 100%); color: white; padding: 40px 5%; 
             display: flex; flex-direction: column; align-items: center; 
@@ -39,12 +39,13 @@
         @media (min-width: 1200px) { .grid-4 { grid-template-columns: repeat(4, 1fr); gap: 25px; } }
         .v-img { width: 100%; height: 280px; object-fit: cover; border-radius: 25px; border: 6px solid white; box-shadow: 0 10px 25px rgba(0,0,0,0.1); cursor: pointer; transition: 0.3s; }
 
-        /* --- AKILLI DUYURU PANOSU (MAX 4) --- */
+        /* --- AKILLI DUYURU PANOSU (İSTEDİĞİN GİBİ ESNEK) --- */
         .ann-sidebar { 
             background: white; padding: 30px; border-radius: 35px; border-top: 12px solid var(--sari); 
-            box-shadow: 0 15px 40px rgba(0,0,0,0.08); height: auto; transition: all 0.5s ease;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.08); height: auto; min-height: 100px; transition: all 0.5s ease;
         }
         .ann-box { background: #fafafa; padding: 25px; border-radius: 20px; margin-bottom: 20px; border-left: 8px solid var(--yesil); }
+        .ann-box:last-child { margin-bottom: 0; }
         .ann-box h4 { margin: 0 0 10px 0; color: var(--yesil); font-weight: 800; font-size: 1.2rem; }
         .ann-box p { margin: 0; font-size: 1.1rem; line-height: 1.4; color: #555; }
 
@@ -56,7 +57,7 @@
         #lightbox { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.96); z-index: 10000; justify-content: center; align-items: center; cursor: pointer; }
         #lb-img { max-width: 90%; max-height: 85vh; border: 6px solid white; border-radius: 20px; }
 
-        /* YÖNETİM PANELİ (KİBAR TASARIM) */
+        /* YÖNETİM PANELİ (KİBAR VE EKSİKSİZ) */
         #admin-panel { display: none; position: fixed; inset: 0; background: #fff; z-index: 5000; flex-direction: column; }
         .admin-nav { background: var(--dark); color: white; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; border-bottom: 6px solid var(--sari); }
         .admin-layout { display: flex; flex-direction: column; flex: 1; overflow: hidden; }
@@ -104,7 +105,6 @@
         </div>
 
         <div id="page-groups" class="page"><h2 class="section-title">Gruplarımız</h2><div id="p-grp" class="grid-4"></div></div>
-
         <div id="page-coaches" class="page"><h2 class="section-title">Teknik Kadro</h2><div id="p-hoc" class="grid-4"></div></div>
 
         <div id="page-contact" class="page">
@@ -115,7 +115,7 @@
             <h2 class="section-title">Bize Yazın</h2>
             <div style="background:white; padding:45px; border-radius:35px; box-shadow:0 15px 40px rgba(0,0,0,0.08); border-top:12px solid var(--sari);">
                 <input type="text" id="v-ad" placeholder="Ad Soyad"><input type="tel" id="v-tel" placeholder="Telefon">
-                <textarea id="v-mesaj" rows="5" placeholder="Mesajınızı buraya yazınız..."></textarea>
+                <textarea id="v-mesaj" rows="5" placeholder="Mesajınız..."></textarea>
                 <button class="btn-ok" onclick="sendVeliMsg()">GÖNDER</button>
             </div>
         </div>
@@ -135,20 +135,6 @@
             <h3 style="color:var(--yesil); text-align:center;">Giriş</h3>
             <input type="text" id="u" placeholder="Kullanıcı"><input type="password" id="p" placeholder="Şifre">
             <button class="btn-ok" onclick="tryLogin()">GİRİŞ</button>
-        </div>
-    </div>
-
-    <div id="user-modal" class="modal-overlay" onclick="closeModal('user-modal')">
-        <div class="modal-box" onclick="event.stopPropagation()">
-            <span class="modal-close" onclick="closeModal('user-modal')">&times;</span>
-            <h3 id="user-title">Yetki Tanımları</h3>
-            <input type="text" id="new-u" placeholder="Kullanıcı"><input type="password" id="new-p" placeholder="Şifre">
-            <div id="perm-box" style="text-align:left; border:1px solid #eee; padding:20px; border-radius:15px; font-size: 0.9rem;">
-                <label><input type="checkbox" id="p-vit"> Vitrin</label><br><label><input type="checkbox" id="p-grp"> Gruplar</label><br>
-                <label><input type="checkbox" id="p-hoc"> Hocalar</label><br><label><input type="checkbox" id="p-ann"> Duyurular</label><br>
-                <label><input type="checkbox" id="p-con"> İletişim</label>
-            </div>
-            <button class="btn-ok" onclick="saveUser()">KAYDET</button>
         </div>
     </div>
 
@@ -181,11 +167,11 @@
             const hG = document.getElementById('p-hoc'); hG.innerHTML = "";
             (db.hocalar || []).forEach(h => { const src = h.img ? (typeof h.img === 'string' ? h.img : h.img.src) : ""; hG.innerHTML += `<div class="coach-card"><img src="${src}" onclick="openLB('${src}')"><h3>${h.ad}</h3><p>${h.unvan || ''}</p></div>`; });
             const cL = document.getElementById('p-con'); cL.innerHTML = "";
-            (db.iletisim.rehber || []).forEach(c => { cL.innerHTML += `<p style="font-size:1.3rem; margin:10px 0; border-bottom:1px solid #f0f0f0; padding-bottom:10px;">👤 <b>${c.ad}:</b> <a href="tel:${c.tel}" style="color:var(--yesil); text-decoration:none; font-weight:bold;">${c.tel}</a></p>`; });
-            document.getElementById('p-adr').innerHTML = `📍 <b>Okul Adresi:</b><br>${db.iletisim.adres || 'Eklenmemiş'}`;
+            (db.iletisim.rehber || []).forEach(c => { cL.innerHTML += `<p style="font-size:1.4rem; margin:10px 0; border-bottom:1px solid #f0f0f0; padding-bottom:10px;">👤 <b>${c.ad}:</b> <a href="tel:${c.tel}" style="color:var(--yesil); text-decoration:none; font-weight:bold;">${c.tel}</a></p>`; });
+            document.getElementById('p-adr').innerHTML = `📍 <b>Okul Adresi:</b><br>${db.iletisim.adres || 'Henüz Eklenmemiş'}`;
         }
 
-        // --- SIKIŞTIRMA VE PANEL FONKSİYONLARI ---
+        // --- SIKIŞTIRMA MOTORU ---
         async function compress(b64) {
             return new Promise(r => {
                 const img = new Image(); img.src = b64;
@@ -232,25 +218,20 @@
                 v.innerHTML = `<h4>Rehber</h4><button class="admin-btn" style="background:var(--yesil); color:white; margin-bottom:10px;" onclick="addCt()">+ Ekle</button><div id="ct-list"></div><h4>Adres</h4><textarea id="adr-in" rows="3">${db.iletisim.adres||''}</textarea><button class="btn-ok" style="width:200px" onclick="saveAdr()">KAYDET</button>`;
                 (db.iletisim.rehber || []).forEach((c, i) => { v.querySelector('#ct-list').innerHTML += `<div class="admin-card"><b>${c.ad}</b>: ${c.tel}<button class="admin-btn" style="color:red" onclick="delCt(${i})">Sil</button></div>`; });
             }
-            else if(tab === 'users') {
-                v.innerHTML = `<button class="admin-btn" style="background:var(--yesil); color:white; margin-bottom:10px;" onclick="openUserModal()">+ Yetkili</button><div id="u-list"></div>`;
-                (db.users || []).forEach((u, i) => { v.innerHTML += `<div class="admin-card"><b>${u.u} ${u.isFounder?'(K)':''}</b><button class="admin-btn" onclick="openUserModal(${i})">Yetkiler</button></div>`; });
-            }
         }
 
+        // PANEL EYLEMLERİ
         function upVitBulk(e) { runUp(e.target.files, (res) => { if(!db.vitrin) db.vitrin=[]; db.vitrin.unshift({src:res}); database.ref('/').set(db); }); }
         function addG() { const n=prompt("Grup:"), s=prompt("Saat:"); if(n) { if(!db.gruplar) db.gruplar=[]; db.gruplar.push({ad:n, saat:s}); database.ref('/').set(db); } }
         function editG(i) { const n=prompt("Ad:", db.gruplar[i].ad), s=prompt("Saat:", db.gruplar[i].saat); if(n) { db.gruplar[i].ad=n; db.gruplar[i].saat=s; database.ref('/').set(db); } }
         function addC() { const n=prompt("Hoca:"), u=prompt("Unvan:"); if(n) { if(!db.hocalar) db.hocalar=[]; db.hocalar.push({ad:n, unvan:u, img:""}); database.ref('/').set(db); } }
         function editC(i) { const n=prompt("Ad:", db.hocalar[i].ad), u=prompt("Unvan:", db.hocalar[i].unvan); if(n) { db.hocalar[i].ad=n; db.hocalar[i].unvan=u; database.ref('/').set(db); } }
         function upHImg(i) { const inp=document.createElement('input'); inp.type='file'; inp.onchange=e=>{ runUp(e.target.files, (res) => { db.hocalar[i].img=res; database.ref('/').set(db); }); }; inp.click(); }
-        function addA() { const b=prompt("Duyuru Başlığı:"), m=prompt("Mesaj:"); if(b) { if(!db.duyurular) db.duyurular=[]; db.duyurular.unshift({baslik:b, metin:m}); database.ref('/').set(db); } }
+        function addA() { const b=prompt("Duyuru:"), m=prompt("Mesaj:"); if(b) { if(!db.duyurular) db.duyurular=[]; db.duyurular.unshift({baslik:b, metin:m}); database.ref('/').set(db); } }
         function addCt() { const n=prompt("İsim:"), t=prompt("Tel:"); if(n) { db.iletisim.rehber.push({ad:n, tel:t}); database.ref('/').set(db); } }
         function saveAdr() { db.iletisim.adres = document.getElementById('adr-in').value; database.ref('/').set(db); alert("Kaydedildi!"); }
         function delCt(i) { if(confirm("Sil?")) { db.iletisim.rehber.splice(i,1); database.ref('/').set(db); } }
         function del(p, i) { if(confirm("Sil?")) { db[p].splice(i,1); database.ref('/').set(db); } }
-        function openUserModal(idx = null) { editingUserIdx = idx; const u = idx !== null ? db.users[idx] : null; document.getElementById('new-u').value = u ? u.u : ""; document.getElementById('new-p').value = u ? u.p : ""; openModal('user-modal'); }
-        function saveUser() { const u = document.getElementById('new-u').value.trim(), p = document.getElementById('new-p').value.trim(); if(!u || !p) return alert("Hata!"); let perms = { vit:document.getElementById('p-vit').checked, grp:document.getElementById('p-grp').checked, hoc:document.getElementById('p-hoc').checked, ann:document.getElementById('p-ann').checked, con:document.getElementById('p-con').checked }; if(editingUserIdx !== null) { const f = db.users[editingUserIdx].isFounder; db.users[editingUserIdx] = {u, p, perms: f ? {vit:true,grp:true,hoc:true,ann:true,con:true,usr:true} : perms, isFounder: f}; } else { db.users.push({u, p, perms, isFounder:false}); } database.ref('/').set(db); closeModal('user-modal'); }
         function tryLogin() { const u=document.getElementById('u').value.trim().toUpperCase(), p=document.getElementById('p').value.trim(); currentUser = (db.users || []).find(user => user.u.toUpperCase() === u && user.p.toUpperCase() === p); if(currentUser) { buildAdminSidebar(); closeModal('login-modal'); document.getElementById('admin-panel').style.display='flex'; } else alert("Hata!"); }
         function buildAdminSidebar() { 
             const s = document.getElementById('sidebar-menu'); const p = currentUser.perms; s.innerHTML = "";
@@ -259,7 +240,6 @@
             if(p.hoc) s.innerHTML += `<div class="sidebar-btn" data-tab="coaches" onclick="adminTab('coaches', this)">👤 Hocalar</div>`;
             if(p.ann) s.innerHTML += `<div class="sidebar-btn" data-tab="anns" onclick="adminTab('anns', this)">📢 Duyurular</div>`;
             if(p.con) s.innerHTML += `<div class="sidebar-btn" data-tab="contact" onclick="adminTab('contact', this)">📞 İletişim</div>`;
-            if(p.usr) s.innerHTML += `<div class="sidebar-btn" data-tab="users" onclick="adminTab('users', this)" style="color:var(--sari)">🔑 Yetkililer</div>`;
             s.firstChild.click(); 
         }
         function openLB(s) { document.getElementById('lb-img').src = s; document.getElementById('lightbox').style.display = 'flex'; }
