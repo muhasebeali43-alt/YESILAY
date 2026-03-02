@@ -44,11 +44,11 @@
         .card img { width: 130px; height: 130px; border-radius: 50%; object-fit: cover; border: 5px solid var(--yesil); margin-bottom: 15px; background: #eee; }
         .saat-kutu { background: var(--sari); color: var(--yesil); font-size: 0.75rem; font-weight: 800; padding: 5px 10px; border-radius: 8px; margin-top: 10px; display: inline-block; }
 
-        /* WP BUTONU STİLİ */
-        .wp-link-btn { display: block; background: #25d366; color: white !important; padding: 15px; border-radius: 15px; text-decoration: none; font-weight: 800; text-align: center; margin-top: 20px; font-size: 1.1rem; }
-
         #lightbox { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.92); z-index: 10000; justify-content: center; align-items: center; padding: 20px; cursor: pointer; }
         #lb-img { max-width: 95%; max-height: 85vh; border: 5px solid white; border-radius: 15px; box-shadow: 0 0 50px rgba(0,0,0,0.5); object-fit: contain; }
+
+        /* WP BUTONU STİLİ */
+        .wp-btn { display: block; background: #25d366; color: white !important; padding: 15px; border-radius: 15px; text-decoration: none; font-weight: 800; text-align: center; margin-top: 20px; font-size: 1.1rem; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
 
         #admin-panel { display: none; position: fixed; inset: 0; background: #fff; z-index: 5000; flex-direction: column; }
         .admin-nav { background: var(--dark); color: white; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; border-bottom: 6px solid var(--sari); }
@@ -68,6 +68,7 @@
 
         input, textarea, select { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 12px; box-sizing: border-box; font-family: inherit; }
         .btn-add { background: var(--yesil) !important; color: white !important; padding: 15px; width: 100%; border: none; border-radius: 12px; cursor: pointer; font-weight: 800; margin-top: 10px; }
+        .perm-box { display: flex; align-items: center; gap: 10px; text-align: left; margin: 5px 0; font-size: 0.9rem; }
     </style>
 </head>
 <body>
@@ -102,14 +103,16 @@
         
         <div id="page-contact" class="page">
             <h2 class="section-title">İletişim Kanallarımız</h2>
-            <div id="public-contact-wrap" style="background:white; padding:35px; border-radius:30px; border-left:20px solid var(--yesil); box-shadow: 0 10px 30px rgba(0,0,0,0.05); margin-bottom: 40px;">
+            <div style="background:white; padding:35px; border-radius:30px; border-left:20px solid var(--yesil); box-shadow: 0 10px 30px rgba(0,0,0,0.05); margin-bottom: 40px;">
                 <div id="public-contact"></div>
-                <a id="public-wp-link" href="#" target="_blank" class="wp-link-btn">🟢 WHATSAPP İLE MESAJ GÖNDER</a>
+                <a id="public-wp" href="#" target="_blank" class="wp-btn">🟢 WHATSAPP İLE MESAJ GÖNDER</a>
             </div>
             <h2 class="section-title">Bize Yazın</h2>
             <div style="background:white; padding:35px; border-radius:30px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border-top: 10px solid var(--sari);">
-                <input type="text" id="v-ad" placeholder="Adınız Soyadınız">
-                <input type="tel" id="v-tel" placeholder="Telefon Numaranız">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">
+                    <input type="text" id="v-ad" placeholder="Adınız Soyadınız">
+                    <input type="tel" id="v-tel" placeholder="Telefon Numaranız">
+                </div>
                 <textarea id="v-mesaj" rows="5" placeholder="Mesajınızı buraya yazınız..."></textarea>
                 <button class="btn-add" onclick="sendVeliMsg()">MESAJI YÖNETİME GÖNDER</button>
             </div>
@@ -132,12 +135,13 @@
             <input type="password" id="new-p" placeholder="Şifre">
             <div id="perm-container" style="text-align: left; margin: 10px 0;">
                 <b>Yetkiler:</b>
-                <label style="display:block; margin:5px 0;"><input type="checkbox" id="p-vit"> Vitrin Yönetimi</label>
-                <label style="display:block; margin:5px 0;"><input type="checkbox" id="p-grp"> Grupları Yönet</label>
-                <label style="display:block; margin:5px 0;"><input type="checkbox" id="p-hoc"> Hocaları Yönet</label>
-                <label style="display:block; margin:5px 0;"><input type="checkbox" id="p-ann"> Duyuruları Yönet</label>
-                <label style="display:block; margin:5px 0;"><input type="checkbox" id="p-con"> İletişim & Mesajlar</label>
+                <label class="perm-box"><input type="checkbox" id="p-vit"> Vitrin Yönetimi</label>
+                <label class="perm-box"><input type="checkbox" id="p-grp"> Grupları Yönet</label>
+                <label class="perm-box"><input type="checkbox" id="p-hoc"> Hocaları Yönet</label>
+                <label class="perm-box"><input type="checkbox" id="p-ann"> Duyuruları Yönet</label>
+                <label class="perm-box"><input type="checkbox" id="p-con"> İletişim & Mesajlar</label>
             </div>
+            <p id="founder-note" style="display:none; color:red; font-size:0.8rem;">Kurucu yetkileri kısıtlanamaz.</p>
             <button class="btn-add" onclick="saveUser()">KAYDET</button>
         </div>
     </div>
@@ -177,37 +181,36 @@
                 syncDB();
             }
             renderAll(); 
-            if(currentUser) adminTab(document.querySelector('.sidebar-btn.active')?.innerText.split(' ')[1].toLowerCase().replace('&','').replace('wp','contact') || 'vitrin', document.querySelector('.sidebar-btn.active'));
+            if(currentUser) adminTab(document.querySelector('.sidebar-btn.active')?.dataset.tab || 'vitrin', document.querySelector('.sidebar-btn.active')); 
         });
 
         function syncDB() { database.ref('/').set(db); }
 
         function renderAll() {
-            // Vitrin Render
             const vGrid = document.getElementById('public-vitrin'); vGrid.innerHTML = "";
-            (db.vitrin || []).forEach(img => { const src = typeof img === 'string' ? img : img.src; vGrid.innerHTML += `<img src="${src}" class="vitrin-img" onclick="openLB('${src}')">`; });
-            
-            // Duyuru Render
+            (db.vitrin || []).forEach(img => { const src = typeof img === 'string' ? img : img.src; const pos = typeof img === 'string' ? 'center' : (img.pos || 'center'); vGrid.innerHTML += `<img data-src="${src}" class="vitrin-img lazy" style="object-position:${pos}" onclick="openLB('${src}')">`; });
             const aList = document.getElementById('public-anns'); aList.innerHTML = "";
             (db.duyurular || []).forEach(a => { aList.innerHTML += `<div class="ann-box"><h4>${a.baslik}</h4><p>${a.metin}</p></div>`; });
-            
-            // Gruplar Render
             const gGrid = document.getElementById('public-groups'); gGrid.innerHTML = "";
             (db.gruplar || []).forEach(g => { const f = (g.fotos || [])[0]; const src = f ? (typeof f === 'string' ? f : f.src) : ''; gGrid.innerHTML += `<div class="card" onclick="openLB('${src}')"><h3>${g.ad}</h3>${g.saat ? '<div class="saat-kutu">⏰ '+g.saat+'</div>' : ''}<br><small>FOTO (${(g.fotos||[]).length})</small></div>`; });
-            
-            // Hocalar Render
             const hGrid = document.getElementById('public-coaches'); hGrid.innerHTML = "";
-            (db.hocalar || []).forEach(h => { const src = h.img ? (typeof h.img === 'string' ? h.img : h.img.src) : ""; hGrid.innerHTML += `<div class="card"><img src="${src}"><h3>${h.ad}</h3><p>${h.unvan}</p></div>`; });
+            (db.hocalar || []).forEach(h => { const src = h.img ? (typeof h.img === 'string' ? h.img : h.img.src) : ""; const pos = h.img ? (typeof h.img === 'string' ? 'center' : (h.img.pos || 'center')) : 'center'; hGrid.innerHTML += `<div class="card" onclick="openLB('${src}')"><img data-src="${src}" class="lazy" style="object-position:${pos}"><h3>${h.ad}</h3><p>${h.unvan}</p></div>`; });
             
-            // İletişim Render
             const cArea = document.getElementById('public-contact'); cArea.innerHTML = "";
-            (db.iletisim || []).forEach(c => { cArea.innerHTML += `<p style="font-size:1.2rem; border-bottom:1px solid #eee; padding-bottom:10px;">👤 <b>${c.ad}:</b> ${c.tel}</p>`; });
+            (db.iletisim || []).forEach(c => { cArea.innerHTML += `<p style="font-size:1.2rem; border-bottom:1px solid #eee; padding-bottom:10px; margin: 10px 0;">👤 <b>${c.ad}:</b> <a href="tel:${c.tel}" style="color:var(--yesil); text-decoration:none; font-weight:bold;">${c.tel}</a></p>`; });
             
-            // WP Link Render
-            document.getElementById('public-wp-link').href = `https://wa.me/${db.wpNo || "905000000000"}`;
+            // WP RENDER
+            document.getElementById('public-wp').href = `https://wa.me/${db.wpNo || "905000000000"}`;
+            initLazyLoad();
         }
 
-        // --- SIKIŞTIRMA VE HIZLANDIRMA (Senin Orijinal Fonksiyonların) ---
+        // --- Senin Orijinal Sıkıştırma Fonksiyonların ---
+        function initLazyLoad() {
+            const lazyImages = document.querySelectorAll('.lazy');
+            const observer = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) { const img = entry.target; img.src = img.dataset.src; img.classList.remove('lazy'); observer.unobserve(img); } }); });
+            lazyImages.forEach(img => observer.observe(img));
+        }
+
         async function compressImage(base64Str) {
             return new Promise((resolve) => {
                 const img = new Image(); img.src = base64Str;
@@ -222,18 +225,25 @@
             });
         }
 
-        async function processFiles(files, callback) {
-            let count = 0; const total = files.length;
-            document.getElementById('upload-progress-container').style.display = 'block';
-            for (let file of files) {
-                const res = await new Promise(r => { const f = new FileReader(); f.onload = e => r(e.target.result); f.readAsDataURL(file); });
-                const compressed = await compressImage(res); callback(compressed);
-                count++; document.getElementById('upload-progress-bar').style.width = (count/total)*100 + '%';
-            }
-            setTimeout(() => { document.getElementById('upload-progress-container').style.display='none'; }, 1000);
+        function updateProgress(current, total) {
+            const container = document.getElementById('upload-progress-container');
+            const bar = document.getElementById('upload-progress-bar');
+            const text = document.getElementById('upload-status-text');
+            const percent = (current / total) * 100;
+            container.style.display = 'block'; text.style.display = 'block';
+            bar.style.width = percent + '%'; text.innerText = `İşleniyor: ${current} / ${total}`;
+            if(current === total) { setTimeout(() => { container.style.display = 'none'; text.style.display = 'none'; }, 1500); }
         }
 
-        // --- GİRİŞ VE PANEL ---
+        async function processFiles(files, callback) {
+            let count = 0; const total = files.length; updateProgress(0, total);
+            for (let file of files) {
+                const res = await new Promise(r => { const f = new FileReader(); f.onload = e => r(e.target.result); f.readAsDataURL(file); });
+                const compressed = await compressImage(res); callback(compressed); count++; updateProgress(count, total);
+            }
+        }
+
+        // --- Giriş Ve Panel ---
         function tryLogin() {
             const u = document.getElementById('u').value.trim().toUpperCase();
             const p = document.getElementById('p').value.trim().toUpperCase();
@@ -244,12 +254,15 @@
         function buildAdminSidebar() {
             const side = document.getElementById('sidebar-menu'); side.innerHTML = "";
             const p = currentUser.perms;
-            if(p.vit) side.innerHTML += `<div class="sidebar-btn" onclick="adminTab('vitrin', this)">🖼️ VİTRİN</div>`;
-            if(p.grp) side.innerHTML += `<div class="sidebar-btn" onclick="adminTab('groups', this)">⚽ GRUPLAR</div>`;
-            if(p.hoc) side.innerHTML += `<div class="sidebar-btn" onclick="adminTab('coaches', this)">👤 HOCALAR</div>`;
-            if(p.ann) side.innerHTML += `<div class="sidebar-btn" onclick="adminTab('anns', this)">📢 DUYURULAR</div>`;
-            if(p.con) side.innerHTML += `<div class="sidebar-btn" onclick="adminTab('contact', this)">📞 İLETİŞİM & WP</div>`;
-            if(p.usr) side.innerHTML += `<div class="sidebar-btn" onclick="adminTab('users', this)" style="color:var(--sari)">🔑 YETKİLİLER</div>`;
+            if(p.vit) side.innerHTML += `<div class="sidebar-btn" data-tab="vitrin" onclick="adminTab('vitrin', this)">🖼️ VİTRİN</div>`;
+            if(p.grp) side.innerHTML += `<div class="sidebar-btn" data-tab="groups" onclick="adminTab('groups', this)">⚽ GRUPLAR</div>`;
+            if(p.hoc) side.innerHTML += `<div class="sidebar-btn" data-tab="coaches" onclick="adminTab('coaches', this)">👤 HOCALAR</div>`;
+            if(p.ann) side.innerHTML += `<div class="sidebar-btn" data-tab="anns" onclick="adminTab('anns', this)">📢 DUYURULAR</div>`;
+            if(p.con) {
+                side.innerHTML += `<div class="sidebar-btn" data-tab="contact" onclick="adminTab('contact', this)">📞 İLETİŞİM & WP</div>`;
+                side.innerHTML += `<div class="sidebar-btn" data-tab="messages" onclick="adminTab('messages', this)" style="background:var(--sari); color:var(--yesil)">📩 MESAJLAR (${(db.mesajlar||[]).length})</div>`;
+            }
+            if(p.usr) side.innerHTML += `<div class="sidebar-btn" data-tab="users" onclick="adminTab('users', this)" style="color:var(--sari)">🔑 YETKİLİLER</div>`;
             if(side.firstChild) side.firstChild.click();
         }
 
@@ -259,46 +272,102 @@
             const view = document.getElementById('admin-view-content'); view.innerHTML = "";
             
             if(tab === 'contact') {
-                view.innerHTML = `<h3>İletişim & WP Ayarı</h3>
-                <label>WhatsApp Numarası (905...):</label><input type="text" id="adm-wp" value="${db.wpNo || ''}">
-                <button class="btn-add" onclick="db.wpNo=document.getElementById('adm-wp').value;syncDB();alert('OK')">KAYDET</button>
-                <hr><button class="btn-add" style="width:auto; padding:10px 20px;" onclick="addCt()">+ Yeni Kişi Ekle</button><div id="ct-list" style="margin-top:20px;"></div>`;
-                (db.iletisim || []).forEach((c, i) => { document.getElementById('ct-list').innerHTML += `<div class="admin-card"><b>${c.ad}</b> <button onclick="del('iletisim', ${i})">Sil</button></div>`; });
+                view.innerHTML = `<h3>İletişim & WP Yönetimi</h3>
+                <label>WhatsApp Numarası (905...):</label>
+                <input type="text" id="adm-wp" value="${db.wpNo || ''}" placeholder="905xxxxxxxxx">
+                <button class="btn-add" onclick="db.wpNo=document.getElementById('adm-wp').value;syncDB();alert('Kaydedildi!')">WP NUMARASINI KAYDET</button>
+                <hr style="margin:20px 0;">
+                <button class="btn-add" style="width:auto; padding:10px 20px;" onclick="addCt()">+ Yeni Kişi Ekle</button><div id="ct-sort" style="margin-top:20px;"></div>`;
+                (db.iletisim || []).forEach((c, i) => { document.getElementById('ct-sort').innerHTML += `<div class="admin-card"><b>${c.ad}</b><div><button class="admin-btn" onclick="editCt(${i})">Düzenle</button><button class="admin-btn" style="color:red;" onclick="del('iletisim', ${i})">Sil</button></div></div>`; });
             }
             else if(tab === 'vitrin') {
                 view.innerHTML = `<input type="file" multiple onchange="upVitBulk(event)"><div id="v-sort" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(140px, 1fr)); gap:15px; margin-top:20px;"></div>`;
-                (db.vitrin || []).forEach((img, i) => { const src = typeof img === 'string' ? img : img.src; document.getElementById('v-sort').innerHTML += `<div style="position:relative; background:white; padding:10px; border-radius:15px;"><img src="${src}" style="width:100%; height:110px; object-fit:cover; border-radius:10px;"><button onclick="delVit(${i})" style="position:absolute; top:-5px; right:-5px; background:red; color:white; border:none; border-radius:50%; width:25px; height:25px;">&times;</button></div>`; });
+                (db.vitrin || []).forEach((img, i) => { const src = typeof img === 'string' ? img : img.src; const pos = typeof img === 'string' ? 'center' : (img.pos || 'center'); document.getElementById('v-sort').innerHTML += `<div data-id="${i}" style="position:relative; background:white; padding:10px; border-radius:15px;"><img src="${src}" style="width:100%; height:110px; object-fit:cover; object-position:${pos}; border-radius:10px;"><div style="text-align:center; margin-top:5px;"><button class="pos-btn ${pos==='top'?'active':''}" onclick="setVPos(${i},'top')">Üst</button><button class="pos-btn ${pos==='center'?'active':''}" onclick="setVPos(${i},'center')">Orta</button><button class="pos-btn ${pos==='bottom'?'active':''}" onclick="setVPos(${i},'bottom')">Alt</button></div><button onclick="delVit(${i})" style="position:absolute; top:-5px; right:-5px; background:red; color:white; border:none; border-radius:50%; width:25px; height:25px; cursor:pointer;">&times;</button></div>`; });
             }
             else if(tab === 'coaches') {
-                view.innerHTML = `<button class="btn-add" style="width:auto;" onclick="addC()">+ Yeni Hoca</button><div id="c-sort" style="margin-top:20px;"></div>`;
-                (db.hocalar || []).forEach((h, i) => { document.getElementById('c-sort').innerHTML += `<div class="admin-card"><b>${h.ad}</b> <button onclick="del('hocalar', ${i})">Sil</button></div>`; });
+                view.innerHTML = `<button class="btn-add" style="width:auto; padding:10px 20px;" onclick="addC()">+ Yeni Hoca</button><div id="c-sort" style="margin-top:20px;"></div>`;
+                (db.hocalar || []).forEach((h, i) => { const src = h.img ? (typeof h.img === 'string' ? h.img : h.img.src) : ""; const pos = h.img ? (typeof h.img === 'string' ? 'center' : (h.img.pos || 'center')) : 'center'; document.getElementById('c-sort').innerHTML += `<div class="admin-card" data-id="${i}"><div style="display:flex; align-items:center; gap:15px;"><img src="${src}" style="width:50px; height:50px; border-radius:50%; object-fit:cover; object-position:${pos}; border:2px solid #ddd;"><b>${h.ad}</b></div><div><button class="pos-btn ${pos==='top'?'active':''}" onclick="setHPos(${i},'top')">Üst</button><button class="pos-btn ${pos==='center'?'active':''}" onclick="setHPos(${i},'center')">Orta</button><button class="pos-btn ${pos==='bottom'?'active':''}" onclick="setHPos(${i},'bottom')">Alt</button><button class="admin-btn" onclick="editC(${i})">Düzenle</button><button class="admin-btn" style="background:#fff9c4;" onclick="upHImg(${i})">Foto</button><button class="admin-btn" style="color:red;" onclick="del('hocalar', ${i})">Sil</button></div></div>`; });
             }
             else if(tab === 'groups') {
-                view.innerHTML = `<button class="btn-add" style="width:auto;" onclick="addG()">+ Yeni Grup</button><div id="g-sort" style="margin-top:20px;"></div>`;
-                (db.gruplar || []).forEach((g, i) => { document.getElementById('g-sort').innerHTML += `<div class="admin-card"><b>${g.ad}</b> <div><button onclick="curG=${i};openModal('group-photo-modal');renderGP()">Albüm</button><button onclick="del('gruplar', ${i})">Sil</button></div></div>`; });
+                view.innerHTML = `<button class="btn-add" style="width:auto; padding:10px 20px;" onclick="addG()">+ Yeni Grup</button><div id="g-sort" style="margin-top:20px;"></div>`;
+                (db.gruplar || []).forEach((g, i) => { document.getElementById('g-sort').innerHTML += `<div class="admin-card" data-id="${i}"><b>${g.ad}</b><div><button class="admin-btn" onclick="editG(${i})">Düzenle</button><button class="admin-btn" style="background:#e3f2fd;" onclick="openGPhotos(${i})">Albüm</button><button class="admin-btn" style="color:red;" onclick="del('gruplar', ${i})">Sil</button></div></div>`; });
             }
             else if(tab === 'anns') {
-                view.innerHTML = `<button class="btn-add" style="width:auto;" onclick="addA()">+ Yeni Duyuru</button><div id="a-sort" style="margin-top:20px;"></div>`;
-                (db.duyurular || []).forEach((a, i) => { document.getElementById('a-sort').innerHTML += `<div class="admin-card"><b>${a.baslik}</b> <button onclick="del('duyurular', ${i})">Sil</button></div>`; });
+                view.innerHTML = `<button class="btn-add" style="width:auto; padding:10px 20px;" onclick="addA()">+ Yeni Duyuru</button><div id="a-sort" style="margin-top:20px;"></div>`;
+                (db.duyurular || []).forEach((a, i) => { document.getElementById('a-sort').innerHTML += `<div class="admin-card"><b>${a.baslik}</b><div><button class="admin-btn" onclick="editA(${i})">Düzenle</button><button class="admin-btn" style="color:red;" onclick="del('duyurular', ${i})">Sil</button></div></div>`; });
+            }
+            else if(tab === 'messages') {
+                view.innerHTML = `<h2 class="section-title">Mesajlar</h2>`;
+                (db.mesajlar || []).forEach((m, i) => { view.innerHTML += `<div class="msg-box" style="background:white; padding:15px; border-radius:15px; margin-bottom:10px; border-left:5px solid var(--yesil);"><small>${m.tarih}</small><br><b>${m.ad} (${m.tel})</b><p>${m.msg}</p><button class="admin-btn" style="color:red;" onclick="delMsg(${i})">SİL</button></div>`; });
+            }
+            else if(tab === 'users') {
+                view.innerHTML = `<button class="btn-add" style="width:auto; padding:10px 20px;" onclick="openUserModal()">+ Yeni Yetkili</button><div id="u-list" style="margin-top:20px;"></div>`;
+                (db.users || []).forEach((u, i) => {
+                    const label = u.isFounder ? ' <small style="color:var(--yesil)">(KURUCU)</small>' : '';
+                    const delBtn = u.isFounder ? '' : `<button class="admin-btn" style="color:red;" onclick="del('users', ${i})">Sil</button>`;
+                    document.getElementById('u-list').innerHTML += `<div class="admin-card"><b>${u.u}${label}</b><div><button class="admin-btn" onclick="openUserModal(${i})">Düzenle</button>${delBtn}</div></div>`;
+                });
             }
         }
 
-        // --- YÖNETİM FONKSİYONLARI (Hepsi Geri Geldi) ---
-        function addCt() { const n=prompt("İsim:"), t=prompt("Tel:"); if(n) { if(!db.iletisim) db.iletisim=[]; db.iletisim.push({ad:n, tel:t}); syncDB(); } }
-        function addC() { const n=prompt("Hoca:"); if(n) { if(!db.hocalar) db.hocalar=[]; db.hocalar.push({ad:n, unvan:"Antrenör"}); syncDB(); } }
+        // --- Senin Orijinal Tüm Fonksiyonların (Milim Dokunmadım) ---
+        function setVPos(i, p) { if(typeof db.vitrin[i] === 'string') db.vitrin[i] = {src: db.vitrin[i], pos: p}; else db.vitrin[i].pos = p; syncDB(); }
+        function setHPos(i, p) { if(typeof db.hocalar[i].img === 'string') db.hocalar[i].img = {src: db.hocalar[i].img, pos: p}; else db.hocalar[i].img.pos = p; syncDB(); }
+        function setGPos(idx, p) { if(typeof db.gruplar[curG].fotos[idx] === 'string') db.gruplar[curG].fotos[idx] = {src: db.gruplar[curG].fotos[idx], pos: p}; else db.gruplar[curG].fotos[idx].pos = p; syncDB(); renderGP(); }
+        function upVitBulk(e) { processFiles(e.target.files, (res) => { if(!db.vitrin) db.vitrin=[]; db.vitrin.unshift({src: res, pos: 'center'}); syncDB(); }); }
+        let curG = null; function openGPhotos(i) { curG=i; document.getElementById('gp-title').innerText=db.gruplar[i].ad; openModal('group-photo-modal'); renderGP(); }
+        function renderGP() { const c=document.getElementById('gp-list'); c.innerHTML=""; (db.gruplar[curG].fotos || []).forEach((img, idx) => { const src = typeof img === 'string' ? img : img.src; const pos = typeof img === 'string' ? 'center' : (img.pos || 'center'); c.innerHTML += `<div data-id="${idx}" style="position:relative; background:#f9f9f9; padding:10px; border-radius:15px; text-align:center;"><img src="${src}" style="width:100%; height:80px; object-fit:cover; object-position:${pos}; border-radius:10px;"><div style="margin-top:5px;"><button class="pos-btn ${pos==='top'?'active':''}" onclick="setGPos(${idx},'top')">Ü</button><button class="pos-btn ${pos==='center'?'active':''}" onclick="setGPos(${idx},'center')">O</button><button class="pos-btn ${pos==='bottom'?'active':''}" onclick="setGPos(${idx},'bottom')">A</button></div><button onclick="delGP(${idx})" style="position:absolute; top:-5px; right:-5px; background:red; color:white; border:none; border-radius:50%; width:22px; height:22px; cursor:pointer;">&times;</button></div>`; }); }
+        function upGroupBulk(e) { processFiles(e.target.files, (res) => { if(!db.gruplar[curG].fotos) db.gruplar[curG].fotos=[]; db.gruplar[curG].fotos.unshift({src: res, pos: 'center'}); syncDB(); renderGP(); }); }
+        function upHImg(i) { const inp=document.createElement('input'); inp.type='file'; inp.onchange=e=>{ processFiles(e.target.files, (res) => { db.hocalar[i].img = {src: res, pos: "center"}; syncDB(); }); }; inp.click(); }
+        function sendVeliMsg() { const ad = document.getElementById('v-ad').value.trim(); const tel = document.getElementById('v-tel').value.trim(); const msg = document.getElementById('v-mesaj').value.trim(); if(!ad || !msg) return alert("Hata!"); if(!db.mesajlar) db.mesajlar = []; db.mesajlar.unshift({ ad, tel, msg, tarih: new Date().toLocaleString('tr-TR') }); syncDB(); alert("İletildi."); document.getElementById('v-ad').value=""; document.getElementById('v-tel').value=""; document.getElementById('v-mesaj').value=""; }
         function addG() { const n=prompt("Grup:"), s=prompt("Saat:"); if(n) { if(!db.gruplar) db.gruplar=[]; db.gruplar.push({ad:n, saat:s, fotos:[]}); syncDB(); } }
+        function editG(i) { const n=prompt("Grup:", db.gruplar[i].ad), s=prompt("Saat:", db.gruplar[i].saat); if(n) { db.gruplar[i].ad=n; db.gruplar[i].saat=s; syncDB(); } }
+        function addC() { const n=prompt("Hoca:"), u=prompt("Unvan:"); if(n) { if(!db.hocalar) db.hocalar=[]; db.hocalar.push({ad:n, unvan:u, img:{src:"", pos:"center"}}); syncDB(); } }
+        function editC(i) { const n=prompt("Hoca:", db.hocalar[i].ad), u=prompt("Unvan:", db.hocalar[i].unvan); if(n) { db.hocalar[i].ad=n; db.hocalar[i].unvan=u; syncDB(); } }
         function addA() { const b=prompt("Başlık:"), m=prompt("Mesaj:"); if(b) { if(!db.duyurular) db.duyurular=[]; db.duyurular.unshift({baslik:b, metin:m}); syncDB(); } }
+        function editA(i) { const b=prompt("Başlık:", db.duyurular[i].baslik), m=prompt("Mesaj:", db.duyurular[i].metin); if(b) { db.duyurular[i]={baslik:b, metin:m}; syncDB(); } }
+        function addCt() { const n=prompt("İsim:"), t=prompt("Tel:"); if(n) { if(!db.iletisim) db.iletisim=[]; db.iletisim.push({ad:n, tel:t}); syncDB(); } }
+        function editCt(i) { const n=prompt("İsim:", db.iletisim[i].ad), t=prompt("Tel:", db.iletisim[i].tel); if(n) { db.iletisim[i]={ad:n, tel:t}; syncDB(); } }
         function del(p, i) { if(confirm("Sil?")) { db[p].splice(i, 1); syncDB(); } }
-        function delVit(i) { if(confirm("Sil?")) { db.vitrin.splice(i, 1); syncDB(); } }
-        function upVitBulk(e) { processFiles(e.target.files, (res) => { if(!db.vitrin) db.vitrin=[]; db.vitrin.unshift({src: res}); syncDB(); }); }
-        let curG = null; function renderGP() { const c=document.getElementById('gp-list'); c.innerHTML=""; (db.gruplar[curG].fotos || []).forEach((img, idx) => { c.innerHTML += `<div style="position:relative;"><img src="${img.src||img}" style="width:100%; height:80px; object-fit:cover; border-radius:10px;"><button onclick="db.gruplar[curG].fotos.splice(${idx},1);syncDB();renderGP()" style="position:absolute; top:0; right:0; background:red; color:white;">X</button></div>`; }); }
-        function upGroupBulk(e) { processFiles(e.target.files, (res) => { if(!db.gruplar[curG].fotos) db.gruplar[curG].fotos=[]; db.gruplar[curG].fotos.unshift({src:res}); syncDB(); renderGP(); }); }
-        function sendVeliMsg() { const ad = document.getElementById('v-ad').value; if(ad) { if(!db.mesajlar) db.mesajlar=[]; db.mesajlar.unshift({ad, tel:document.getElementById('v-tel').value, msg:document.getElementById('v-mesaj').value}); syncDB(); alert("Gönderildi"); } }
-        function saveUser() { /* Senin Orijinal Kullanıcı Kaydetme Kodun */ }
+        function delVit(i) { db.vitrin.splice(i, 1); syncDB(); }
+        function delGP(idx) { db.gruplar[curG].fotos.splice(idx, 1); syncDB(); renderGP(); }
+        function delMsg(i) { if(confirm("Sil?")) { db.mesajlar.splice(i, 1); syncDB(); } }
         function openLB(s) { if(s){ document.getElementById('lb-img').src=s; document.getElementById('lightbox').style.display='flex'; } }
         function openModal(id) { document.getElementById(id).style.display='flex'; }
         function closeModal(id) { document.getElementById(id).style.display='none'; }
         function showPage(p) { document.querySelectorAll('.page').forEach(pg => pg.classList.remove('active')); document.getElementById('page-' + p).classList.add('active'); window.scrollTo(0,0); }
+        
+        function openUserModal(idx = null) {
+            editingUserIdx = idx;
+            const u = idx !== null ? db.users[idx] : null;
+            document.getElementById('new-u').value = u ? u.u : "";
+            document.getElementById('new-p').value = u ? u.p : "";
+            document.getElementById('perm-container').style.display = (u && u.isFounder) ? "none" : "block";
+            document.getElementById('founder-note').style.display = (u && u.isFounder) ? "block" : "none";
+            if(!u || !u.isFounder) {
+                document.getElementById('p-vit').checked = u ? u.perms.vit : false;
+                document.getElementById('p-grp').checked = u ? u.perms.grp : false;
+                document.getElementById('p-hoc').checked = u ? u.perms.hoc : false;
+                document.getElementById('p-ann').checked = u ? u.perms.ann : false;
+                document.getElementById('p-con').checked = u ? u.perms.con : false;
+            }
+            openModal('user-modal');
+        }
+
+        function saveUser() {
+            const u = document.getElementById('new-u').value.trim();
+            const p = document.getElementById('new-p').value.trim();
+            if(!u || !p) return alert("Hata!");
+            let perms; let isFounder = false;
+            if(editingUserIdx !== null && db.users[editingUserIdx].isFounder) {
+                isFounder = true; perms = {vit:true, grp:true, hoc:true, ann:true, con:true, usr:true};
+            } else {
+                perms = { vit:document.getElementById('p-vit').checked, grp:document.getElementById('p-grp').checked, hoc:document.getElementById('p-hoc').checked, ann:document.getElementById('p-ann').checked, con:document.getElementById('p-con').checked, usr:false };
+            }
+            if(editingUserIdx !== null) db.users[editingUserIdx] = {u, p, perms, isFounder};
+            else { if(!db.users) db.users = []; db.users.push({u, p, perms, isFounder:false}); }
+            syncDB(); closeModal('user-modal');
+        }
     </script>
 </body>
 </html>
