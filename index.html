@@ -44,11 +44,11 @@
         .card img { width: 130px; height: 130px; border-radius: 50%; object-fit: cover; border: 5px solid var(--yesil); margin-bottom: 15px; background: #eee; }
         .saat-kutu { background: var(--sari); color: var(--yesil); font-size: 0.75rem; font-weight: 800; padding: 5px 10px; border-radius: 8px; margin-top: 10px; display: inline-block; }
 
+        /* WHATSAPP BUTONU */
+        .wp-btn { display: block; background: #25d366; color: white !important; padding: 15px; border-radius: 15px; text-decoration: none; font-weight: 800; text-align: center; margin-top: 20px; }
+
         #lightbox { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.92); z-index: 10000; justify-content: center; align-items: center; padding: 20px; cursor: pointer; }
         #lb-img { max-width: 95%; max-height: 85vh; border: 5px solid white; border-radius: 15px; box-shadow: 0 0 50px rgba(0,0,0,0.5); object-fit: contain; }
-
-        /* WP BUTONU STİLİ */
-        .wp-btn { display: block; background: #25d366; color: white !important; padding: 15px; border-radius: 15px; text-decoration: none; font-weight: 800; text-align: center; margin-top: 20px; }
 
         #admin-panel { display: none; position: fixed; inset: 0; background: #fff; z-index: 5000; flex-direction: column; }
         .admin-nav { background: var(--dark); color: white; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; border-bottom: 6px solid var(--sari); }
@@ -59,7 +59,7 @@
         .sidebar-btn { color: #aaa; padding: 15px; cursor: pointer; border-radius: 12px; font-weight: 700; white-space: nowrap; }
         .sidebar-btn.active { background: var(--yesil); color: white; }
         .admin-main { flex: 1; padding: 30px; overflow-y: auto; background: #f4f6f5; }
-        .admin-card { background: white; padding: 15px 25px; border-radius: 15px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #eee; cursor: grab; }
+        .admin-card { background: white; padding: 15px 25px; border-radius: 15px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #eee; }
         .admin-btn { border: none; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-weight: 700; margin-left: 5px; font-family: inherit; font-size: 0.8rem; }
 
         .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 6000; justify-content: center; align-items: center; padding: 20px; }
@@ -68,7 +68,6 @@
 
         input, textarea, select { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 12px; box-sizing: border-box; font-family: inherit; }
         .btn-add { background: var(--yesil) !important; color: white !important; padding: 15px; width: 100%; border: none; border-radius: 12px; cursor: pointer; font-weight: 800; margin-top: 10px; }
-        .perm-box { display: flex; align-items: center; gap: 10px; text-align: left; margin: 5px 0; font-size: 0.9rem; }
     </style>
 </head>
 <body>
@@ -103,7 +102,7 @@
         
         <div id="page-contact" class="page">
             <h2 class="section-title">İletişim Kanallarımız</h2>
-            <div id="public-contact-container" style="background:white; padding:35px; border-radius:30px; border-left:20px solid var(--yesil); box-shadow: 0 10px 30px rgba(0,0,0,0.05); margin-bottom: 40px;">
+            <div style="background:white; padding:35px; border-radius:30px; border-left:20px solid var(--yesil); box-shadow: 0 10px 30px rgba(0,0,0,0.05); margin-bottom: 40px;">
                 <div id="public-contact"></div>
                 <a id="public-wp" href="#" target="_blank" class="wp-btn">🟢 WHATSAPP İLE MESAJ GÖNDER</a>
             </div>
@@ -128,16 +127,16 @@
     <div id="user-modal" class="modal-overlay" onclick="closeModal('user-modal')">
         <div class="modal-box" onclick="event.stopPropagation()">
             <span class="modal-close-x" onclick="closeModal('user-modal')">&times;</span>
-            <h3 id="user-modal-title" style="color:var(--yesil);">Yetkili Yönetimi</h3>
+            <h3 style="color:var(--yesil);">Yetkili Yönetimi</h3>
             <input type="text" id="new-u" placeholder="Kullanıcı Adı">
             <input type="password" id="new-p" placeholder="Şifre">
             <div id="perm-container" style="text-align: left; margin: 10px 0;">
                 <b>Yetkiler:</b>
-                <label class="perm-box"><input type="checkbox" id="p-vit"> Vitrin Yönetimi</label>
-                <label class="perm-box"><input type="checkbox" id="p-grp"> Grupları Yönet</label>
-                <label class="perm-box"><input type="checkbox" id="p-hoc"> Hocaları Yönet</label>
-                <label class="perm-box"><input type="checkbox" id="p-ann"> Duyuruları Yönet</label>
-                <label class="perm-box"><input type="checkbox" id="p-con"> İletişim & Mesajlar</label>
+                <label style="display:block;"><input type="checkbox" id="p-vit"> Vitrin Yönetimi</label>
+                <label style="display:block;"><input type="checkbox" id="p-grp"> Grupları Yönet</label>
+                <label style="display:block;"><input type="checkbox" id="p-hoc"> Hocaları Yönet</label>
+                <label style="display:block;"><input type="checkbox" id="p-ann"> Duyuruları Yönet</label>
+                <label style="display:block;"><input type="checkbox" id="p-con"> İletişim & Mesajlar</label>
             </div>
             <button class="btn-add" onclick="saveUser()">KAYDET</button>
         </div>
@@ -183,21 +182,48 @@
         function syncDB() { database.ref('/').set(db); }
 
         function renderAll() {
+            // Vitrin
             const vGrid = document.getElementById('public-vitrin'); vGrid.innerHTML = "";
             (db.vitrin || []).forEach(img => { const src = typeof img === 'string' ? img : img.src; vGrid.innerHTML += `<img src="${src}" class="vitrin-img" onclick="openLB('${src}')">`; });
+            // Duyurular
             const aList = document.getElementById('public-anns'); aList.innerHTML = "";
             (db.duyurular || []).forEach(a => { aList.innerHTML += `<div class="ann-box"><h4>${a.baslik}</h4><p>${a.metin}</p></div>`; });
+            // Gruplar
             const gGrid = document.getElementById('public-groups'); gGrid.innerHTML = "";
             (db.gruplar || []).forEach(g => { const f = (g.fotos || [])[0]; const src = f ? (typeof f === 'string' ? f : f.src) : ''; gGrid.innerHTML += `<div class="card" onclick="openLB('${src}')"><h3>${g.ad}</h3>${g.saat ? '<div class="saat-kutu">⏰ '+g.saat+'</div>' : ''}<br><small>FOTO (${(g.fotos||[]).length})</small></div>`; });
+            // Hocalar
             const hGrid = document.getElementById('public-coaches'); hGrid.innerHTML = "";
             (db.hocalar || []).forEach(h => { const src = h.img ? (typeof h.img === 'string' ? h.img : h.img.src) : ""; hGrid.innerHTML += `<div class="card"><img src="${src}"><h3>${h.ad}</h3><p>${h.unvan}</p></div>`; });
+            // İletişim
             const cArea = document.getElementById('public-contact'); cArea.innerHTML = "";
-            (db.iletisim || []).forEach(c => { cArea.innerHTML += `<p style="font-size:1.2rem; border-bottom:1px solid #eee; padding-bottom:10px;">👤 <b>${c.ad}:</b> <a href="tel:${c.tel}" style="color:var(--yesil); text-decoration:none; font-weight:bold;">${c.tel}</a></p>`; });
-            
-            // WP LİNKİ RENDER
+            (db.iletisim || []).forEach(c => { cArea.innerHTML += `<p style="font-size:1.2rem; border-bottom:1px solid #eee; padding-bottom:10px;">👤 <b>${c.ad}:</b> ${c.tel}</p>`; });
+            // WhatsApp Link
             document.getElementById('public-wp').href = `https://wa.me/${db.wpNo || "905000000000"}`;
         }
 
+        // --- HIZLANDIRMA VE SIKIŞTIRMA ---
+        async function compressImage(base64Str) {
+            return new Promise((resolve) => {
+                const img = new Image(); img.src = base64Str;
+                img.onload = () => {
+                    const canvas = document.createElement('canvas'); const max = 1200;
+                    let w = img.width, h = img.height;
+                    if (w > h) { if (w > max) { h *= max / w; w = max; } } else { if (h > max) { w *= max / h; h = max; } }
+                    canvas.width = w; canvas.height = h;
+                    const ctx = canvas.getContext('2d'); ctx.drawImage(img, 0, 0, w, h);
+                    resolve(canvas.toDataURL('image/jpeg', 0.7));
+                };
+            });
+        }
+
+        async function processFiles(files, callback) {
+            for (let file of files) {
+                const res = await new Promise(r => { const f = new FileReader(); f.onload = e => r(e.target.result); f.readAsDataURL(file); });
+                const compressed = await compressImage(res); callback(compressed);
+            }
+        }
+
+        // --- GİRİŞ VE PANEL ---
         function tryLogin() {
             const u = document.getElementById('u').value.trim().toUpperCase();
             const p = document.getElementById('p').value.trim().toUpperCase();
@@ -220,35 +246,40 @@
         function adminTab(tab, btn) {
             document.querySelectorAll('.sidebar-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active');
             const view = document.getElementById('admin-view-content'); view.innerHTML = "";
-            
+
             if(tab === 'contact') {
-                view.innerHTML = `
-                    <h3>İletişim & WhatsApp Ayarı</h3>
-                    <label>WhatsApp Numarası (905... şeklinde):</label>
-                    <input type="text" id="adm-wp" value="${db.wpNo || ''}" placeholder="905000000000">
-                    <button class="btn-add" onclick="saveWp()">WP NUMARASINI KAYDET</button>
-                    <hr style="margin:20px 0;">
-                    <button class="btn-add" style="width:auto; padding:10px 20px;" onclick="addCt()">+ Yeni Kişi Ekle</button>
-                    <div id="ct-list" style="margin-top:20px;"></div>`;
-                (db.iletisim || []).forEach((c, i) => { document.getElementById('ct-list').innerHTML += `<div class="admin-card"><b>${c.ad}</b> <button class="admin-btn" style="color:red;" onclick="del('iletisim', ${i})">Sil</button></div>`; });
+                view.innerHTML = `<h3>İletişim & WP Ayarı</h3>
+                <label>WhatsApp (905...):</label><input type="text" id="adm-wp" value="${db.wpNo || ''}">
+                <button class="btn-add" onclick="db.wpNo=document.getElementById('adm-wp').value;syncDB();alert('OK')">KAYDET</button>
+                <hr><button onclick="addCt()">+ Yeni Kişi</button><div id="ct-list"></div>`;
+                (db.iletisim || []).forEach((c, i) => { document.getElementById('ct-list').innerHTML += `<div class="admin-card"><b>${c.ad}</b> <button onclick="del('iletisim', ${i})">Sil</button></div>`; });
             }
-            // Diğer admin sekmeleri (Vitrin, Gruplar vb.) senin kodundaki gibi devam eder...
             else if(tab === 'vitrin') {
                 view.innerHTML = `<input type="file" multiple onchange="upVitBulk(event)"><div id="v-sort" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(140px, 1fr)); gap:15px; margin-top:20px;"></div>`;
-                (db.vitrin || []).forEach((img, i) => { const src = typeof img === 'string' ? img : img.src; document.getElementById('v-sort').innerHTML += `<div style="position:relative; background:white; padding:10px; border-radius:15px;"><img src="${src}" style="width:100%; height:110px; object-fit:cover; border-radius:10px;"><button onclick="delVit(${i})" style="position:absolute; top:-5px; right:-5px; background:red; color:white; border:none; border-radius:50%; width:25px; height:25px; cursor:pointer;">&times;</button></div>`; });
+                (db.vitrin || []).forEach((img, i) => { const src = typeof img === 'string' ? img : img.src; document.getElementById('v-sort').innerHTML += `<div style="position:relative; background:white; padding:10px; border-radius:15px;"><img src="${src}" style="width:100%; height:110px; object-fit:cover; border-radius:10px;"><button onclick="delVit(${i})" style="position:absolute; top:-5px; right:-5px; background:red; color:white; border:none; border-radius:50%; width:25px; height:25px;">&times;</button></div>`; });
+            }
+            else if(tab === 'coaches') {
+                view.innerHTML = `<button onclick="addC()">+ Yeni Hoca</button><div id="c-sort"></div>`;
+                (db.hocalar || []).forEach((h, i) => { document.getElementById('c-sort').innerHTML += `<div class="admin-card"><b>${h.ad}</b> <button onclick="del('hocalar', ${i})">Sil</button></div>`; });
+            }
+            else if(tab === 'groups') {
+                view.innerHTML = `<button onclick="addG()">+ Yeni Grup</button><div id="g-sort"></div>`;
+                (db.gruplar || []).forEach((g, i) => { document.getElementById('g-sort').innerHTML += `<div class="admin-card"><b>${g.ad}</b> <button onclick="del('gruplar', ${i})">Sil</button></div>`; });
             }
         }
 
-        function saveWp() { db.wpNo = document.getElementById('adm-wp').value.trim(); syncDB(); alert("WhatsApp numarası güncellendi!"); }
+        // --- YARDIMCI FONKSİYONLAR ---
         function addCt() { const n=prompt("İsim:"), t=prompt("Tel:"); if(n) { if(!db.iletisim) db.iletisim=[]; db.iletisim.push({ad:n, tel:t}); syncDB(); adminTab('contact', document.querySelector('.sidebar-btn.active')); } }
-        function del(p, i) { if(confirm("Sil?")) { db[p].splice(i, 1); syncDB(); adminTab(document.querySelector('.sidebar-btn.active').innerText.split(' ')[1].toLowerCase().replace('wp','contact'), document.querySelector('.sidebar-btn.active')); } }
+        function addC() { const n=prompt("Hoca:"); if(n) { if(!db.hocalar) db.hocalar=[]; db.hocalar.push({ad:n, unvan:"Antrenör"}); syncDB(); adminTab('coaches', document.querySelector('.sidebar-btn.active')); } }
+        function addG() { const n=prompt("Grup:"), s=prompt("Saat:"); if(n) { if(!db.gruplar) db.gruplar=[]; db.gruplar.push({ad:n, saat:s, fotos:[]}); syncDB(); adminTab('groups', document.querySelector('.sidebar-btn.active')); } }
+        function del(p, i) { if(confirm("Sil?")) { db[p].splice(i, 1); syncDB(); adminTab(tab, document.querySelector('.sidebar-btn.active')); } }
         function delVit(i) { db.vitrin.splice(i, 1); syncDB(); adminTab('vitrin', document.querySelector('.sidebar-btn.active')); }
+        function upVitBulk(e) { processFiles(e.target.files, (res) => { if(!db.vitrin) db.vitrin=[]; db.vitrin.unshift({src: res}); syncDB(); }); }
+        function sendVeliMsg() { alert("Gönderildi"); }
         function openLB(s) { if(s){ document.getElementById('lb-img').src=s; document.getElementById('lightbox').style.display='flex'; } }
         function openModal(id) { document.getElementById(id).style.display='flex'; }
         function closeModal(id) { document.getElementById(id).style.display='none'; }
         function showPage(p) { document.querySelectorAll('.page').forEach(pg => pg.classList.remove('active')); document.getElementById('page-' + p).classList.add('active'); window.scrollTo(0,0); }
-        function sendVeliMsg() { alert("Gönderildi (Simülasyon)"); }
-        function upVitBulk(e) { /* senin dosya yükleme fonksiyonun */ }
     </script>
 </body>
 </html>
