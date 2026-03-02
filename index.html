@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Kütahya Yeşilay Futbol Okulu | Yönetim</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
@@ -15,13 +15,10 @@
         header { background: linear-gradient(135deg, var(--yesil) 0%, #004d26 100%); color: white; padding: 25px 5%; display: flex; flex-direction: column; align-items: center; border-bottom: 7px solid var(--sari); box-shadow: 0 5px 20px rgba(0,0,0,0.4); }
         @media (min-width: 1024px) { header { flex-direction: row; justify-content: space-between; padding: 25px 80px; } }
         .club-info h1 { font-size: 1.6rem; font-weight: 900; text-transform: uppercase; margin: 0; letter-spacing: 2px; }
+        
         nav { margin-top: 20px; display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; }
         nav a { color: white; text-decoration: none; font-weight: 700; font-size: 0.9rem; cursor: pointer; text-transform: uppercase; }
         .admin-trigger { background: var(--sari); color: var(--yesil) !important; padding: 8px 15px; border-radius: 10px; font-weight: 900; border: none; cursor: pointer; }
-
-        #upload-progress-container { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 6px; background: #eee; z-index: 20000; }
-        #upload-progress-bar { width: 0%; height: 100%; background: var(--sari); transition: width 0.3s; box-shadow: 0 0 10px var(--sari); }
-        #upload-status-text { display: none; position: fixed; top: 10px; left: 50%; transform: translateX(-50%); background: var(--dark); color: white; padding: 5px 15px; border-radius: 20px; font-size: 0.8rem; z-index: 20001; font-weight: bold; }
 
         .main-content { padding: 40px 5%; box-sizing: border-box; }
         @media (min-width: 1024px) { .main-content { padding: 40px 80px; } }
@@ -29,52 +26,44 @@
         .page.active { display: block; }
         .section-title { font-weight: 900; font-size: 2rem; color: var(--yesil); border-left: 12px solid var(--sari); padding-left: 20px; text-transform: uppercase; margin-bottom: 30px; }
 
-        .home-layout { display: flex; flex-direction: column; gap: 30px; }
-        @media (max-width: 1023px) { .ann-sidebar { order: -1; } } 
-        @media (min-width: 1024px) { .home-layout { display: grid; grid-template-columns: 3fr 1.2fr; gap: 40px; align-items: start; } }
-        
-        .vitrin-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; }
-        .vitrin-img { width: 100%; height: 220px; object-fit: cover; border-radius: 20px; border: 5px solid white; box-shadow: 0 5px 15px rgba(0,0,0,0.1); cursor: pointer; background: #eee; }
-
-        .ann-sidebar { background: white; padding: 25px; border-radius: 30px; border-top: 10px solid var(--sari); box-shadow: 0 10px 30px rgba(0,0,0,0.06); }
-        .ann-box { background: #fafafa; padding: 18px; border-radius: 15px; margin-bottom: 15px; border-left: 6px solid var(--yesil); }
-
+        /* HOCA DÜZENİ: Masaüstünde 4'lü */
         .grid-responsive { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
-        .card { background: white; padding: 30px 15px; border-radius: 25px; text-align: center; border-bottom: 6px solid var(--yesil); box-shadow: 0 10px 25px rgba(0,0,0,0.04); cursor: pointer; position: relative; }
+        @media (min-width: 1200px) { .hoca-grid { grid-template-columns: repeat(4, 1fr); } }
+
+        .card { background: white; padding: 30px 15px; border-radius: 25px; text-align: center; border-bottom: 6px solid var(--yesil); box-shadow: 0 10px 25px rgba(0,0,0,0.04); cursor: pointer; transition: 0.3s; position: relative; }
         .card img { width: 130px; height: 130px; border-radius: 50%; object-fit: cover; border: 5px solid var(--yesil); margin-bottom: 15px; background: #eee; }
         .saat-kutu { background: var(--sari); color: var(--yesil); font-size: 0.75rem; font-weight: 800; padding: 5px 10px; border-radius: 8px; margin-top: 10px; display: inline-block; }
 
-        #lightbox { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.92); z-index: 10000; justify-content: center; align-items: center; padding: 20px; cursor: pointer; }
+        /* LIGHTBOX & X BUTONU */
+        #lightbox { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 10000; justify-content: center; align-items: center; padding: 20px; }
         #lb-img { max-width: 95%; max-height: 85vh; border: 5px solid white; border-radius: 15px; box-shadow: 0 0 50px rgba(0,0,0,0.5); object-fit: contain; }
+        .lb-close { position: absolute; top: 30px; right: 30px; color: white; font-size: 40px; cursor: pointer; background: rgba(255,255,255,0.2); width: 50px; height: 50px; display: flex; justify-content: center; align-items: center; border-radius: 50%; transition: 0.3s; }
+        .lb-close:hover { background: rgba(255,255,255,0.4); }
 
+        /* ADMIN PANEL */
         #admin-panel { display: none; position: fixed; inset: 0; background: #fff; z-index: 5000; flex-direction: column; }
         .admin-nav { background: var(--dark); color: white; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; border-bottom: 6px solid var(--sari); }
-        .admin-layout { display: flex; flex-direction: column; flex: 1; overflow: hidden; }
-        @media (min-width: 1024px) { .admin-layout { flex-direction: row; } }
         .admin-sidebar { background: #1a1a1a; padding: 20px; display: flex; overflow-x: auto; gap: 10px; }
         @media (min-width: 1024px) { .admin-sidebar { width: 260px; flex-direction: column; } }
         .sidebar-btn { color: #aaa; padding: 15px; cursor: pointer; border-radius: 12px; font-weight: 700; white-space: nowrap; }
         .sidebar-btn.active { background: var(--yesil); color: white; }
         .admin-main { flex: 1; padding: 30px; overflow-y: auto; background: #f4f6f5; }
-        .admin-card { background: white; padding: 15px 25px; border-radius: 15px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #eee; cursor: grab; }
-        .admin-btn { border: none; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-weight: 700; margin-left: 5px; font-family: inherit; font-size: 0.8rem; }
-
-        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 6000; justify-content: center; align-items: center; padding: 20px; }
-        .modal-box { background: white; padding: 40px; border-radius: 30px; width: 100%; max-width: 500px; position: relative; text-align: center; max-height: 90vh; overflow-y: auto; }
-        .modal-close-x { position: absolute; top: 15px; right: 20px; font-size: 35px; cursor: pointer; font-weight: bold; color: #333; }
-
-        input, textarea, select { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 12px; box-sizing: border-box; font-family: inherit; }
-        .btn-add { background: var(--yesil) !important; color: white !important; padding: 15px; width: 100%; border: none; border-radius: 12px; cursor: pointer; font-weight: 800; margin-top: 10px; }
-        .perm-box { display: flex; align-items: center; gap: 10px; text-align: left; margin: 5px 0; font-size: 0.9rem; }
+        
+        .admin-card { background: white; padding: 15px 25px; border-radius: 15px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #eee; }
+        input, textarea { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 12px; box-sizing: border-box; font-family: inherit; }
+        .btn-add { background: var(--yesil) !important; color: white !important; padding: 15px; width: 100%; border: none; border-radius: 12px; cursor: pointer; font-weight: 800; }
+        
+        #upload-progress-container { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 6px; background: #eee; z-index: 20000; }
+        #upload-progress-bar { width: 0%; height: 100%; background: var(--sari); transition: width 0.3s; }
     </style>
 </head>
 <body>
 
     <div id="upload-progress-container"><div id="upload-progress-bar"></div></div>
-    <div id="upload-status-text">İşleniyor...</div>
 
     <div id="lightbox" onclick="this.style.display='none'">
-        <img id="lb-img" src="">
+        <span class="lb-close">&times;</span>
+        <img id="lb-img" src="" onclick="event.stopPropagation()">
     </div>
 
     <header>
@@ -83,30 +72,35 @@
             <a onclick="showPage('home')">ANASAYFA</a>
             <a onclick="showPage('groups')">GRUPLAR</a>
             <a onclick="showPage('coaches')">HOCALAR</a>
-            <a onclick="showPage('contact')">İLETİŞİM / BİZE YAZIN</a>
+            <a onclick="showPage('contact')">İLETİŞİM</a>
             <button class="admin-trigger" onclick="openModal('login-modal')">YÖNETİM</button>
         </nav>
     </header>
 
     <div class="main-content">
         <div id="page-home" class="page active">
-            <div class="home-layout">
-                <div><h2 class="section-title">ANTRENMAN KARELERİ</h2><div id="public-vitrin" class="vitrin-grid"></div></div>
-                <div class="ann-sidebar"><h3 style="color:var(--yesil); margin:0 0 20px 0;">📢 DUYURULAR</h3><div id="public-anns"></div></div>
-            </div>
+            <h2 class="section-title">ANTRENMAN KARELERİ</h2>
+            <div id="public-vitrin" class="grid-responsive" style="grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));"></div>
         </div>
-        <div id="page-groups" class="page"><h2 class="section-title">Gruplarımız</h2><div id="public-groups" class="grid-responsive"></div></div>
-        <div id="page-coaches" class="page"><h2 class="section-title">Teknik Kadro</h2><div id="public-coaches" class="grid-responsive"></div></div>
-        
+
+        <div id="page-groups" class="page">
+            <h2 class="section-title">Gruplarımız</h2>
+            <div id="public-groups" class="grid-responsive"></div>
+        </div>
+
+        <div id="page-coaches" class="page">
+            <h2 class="section-title">Teknik Kadro</h2>
+            <div id="public-coaches" class="grid-responsive hoca-grid"></div>
+        </div>
+
         <div id="page-contact" class="page">
             <h2 class="section-title">İletişim Kanallarımız</h2>
-            <div id="public-contact" style="background:white; padding:35px; border-radius:30px; border-left:20px solid var(--yesil); box-shadow: 0 10px 30px rgba(0,0,0,0.05); margin-bottom: 40px;"></div>
-            <h2 class="section-title">Bize Yazın</h2>
+            <div id="public-contact-area" style="background:white; padding:35px; border-radius:30px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); margin-bottom:30px; border-left: 15px solid var(--yesil);"></div>
+            
+            <h2 class="section-title" id="form-title-display">Bize Yazın</h2>
             <div style="background:white; padding:35px; border-radius:30px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border-top: 10px solid var(--sari);">
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">
-                    <input type="text" id="v-ad" placeholder="Adınız Soyadınız">
-                    <input type="tel" id="v-tel" placeholder="Telefon Numaranız">
-                </div>
+                <input type="text" id="v-ad" placeholder="Adınız Soyadınız">
+                <input type="tel" id="v-tel" placeholder="Telefon Numaranız">
                 <textarea id="v-mesaj" rows="5" placeholder="Mesajınızı buraya yazınız..."></textarea>
                 <button class="btn-add" onclick="sendVeliMsg()">MESAJI YÖNETİME GÖNDER</button>
             </div>
@@ -115,47 +109,18 @@
 
     <div id="admin-panel">
         <div class="admin-nav"><b>YÖNETİM SİSTEMİ</b><button onclick="location.reload()" style="background:red; color:white; border:none; padding:8px 15px; border-radius:8px; cursor:pointer;">ÇIKIŞ</button></div>
-        <div class="admin-layout">
+        <div style="display:flex; flex:1; overflow:hidden;" class="admin-layout-wrapper">
             <div class="admin-sidebar" id="sidebar-menu"></div>
             <div id="admin-view-content" class="admin-main"></div>
         </div>
     </div>
 
-    <div id="user-modal" class="modal-overlay" onclick="closeModal('user-modal')">
-        <div class="modal-box" onclick="event.stopPropagation()">
-            <span class="modal-close-x" onclick="closeModal('user-modal')">&times;</span>
-            <h3 id="user-modal-title" style="color:var(--yesil);">Yetkili Yönetimi</h3>
-            <input type="text" id="new-u" placeholder="Kullanıcı Adı">
-            <input type="password" id="new-p" placeholder="Şifre">
-            <div id="perm-container" style="text-align: left; margin: 10px 0;">
-                <b>Yetkiler:</b>
-                <label class="perm-box"><input type="checkbox" id="p-vit"> Vitrin Yönetimi</label>
-                <label class="perm-box"><input type="checkbox" id="p-grp"> Grupları Yönet</label>
-                <label class="perm-box"><input type="checkbox" id="p-hoc"> Hocaları Yönet</label>
-                <label class="perm-box"><input type="checkbox" id="p-ann"> Duyuruları Yönet</label>
-                <label class="perm-box"><input type="checkbox" id="p-con"> İletişim & Mesajlar</label>
-            </div>
-            <p id="founder-note" style="display:none; color:red; font-size:0.8rem;">Kurucu yetkileri kısıtlanamaz.</p>
-            <button class="btn-add" onclick="saveUser()">KAYDET</button>
-        </div>
-    </div>
-
     <div id="login-modal" class="modal-overlay" onclick="closeModal('login-modal')">
-        <div class="modal-box" style="max-width:350px;" onclick="event.stopPropagation()">
-            <span class="modal-close-x" onclick="closeModal('login-modal')">&times;</span>
-            <h3 style="color:var(--yesil); margin-top:0;">Giriş</h3>
+        <div style="background:white; padding:40px; border-radius:30px; width:320px;" onclick="event.stopPropagation()">
+            <h3 style="color:var(--yesil); text-align:center; margin-top:0;">Giriş</h3>
             <input type="text" id="u" placeholder="Kullanıcı Adı">
             <input type="password" id="p" placeholder="Şifre">
             <button class="btn-add" onclick="tryLogin()">GİRİŞ YAP</button>
-        </div>
-    </div>
-
-    <div id="group-photo-modal" class="modal-overlay" onclick="closeModal('group-photo-modal')">
-        <div class="modal-box" style="max-width:750px;" onclick="event.stopPropagation()">
-            <span class="modal-close-x" onclick="closeModal('group-photo-modal')">&times;</span>
-            <h3 id="gp-title">Albüm</h3>
-            <input type="file" multiple onchange="upGroupBulk(event)">
-            <div id="gp-list" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(130px, 1fr)); gap:15px; margin-top:20px;"></div>
         </div>
     </div>
 
@@ -163,198 +128,179 @@
         const firebaseConfig = { databaseURL: "https://yesilay-futbol-okulu-default-rtdb.firebaseio.com/" };
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
-        let db = { vitrin: [], gruplar: [], hocalar: [], duyurular: [], iletisim: [], users: [], mesajlar: [] };
+        let db = { vitrin: [], gruplar: [], hocalar: [], iletisim: { adres: "", tels: [], wp: "", formTitle: "" }, mesajlar: [] };
         let currentUser = null;
-        let editingUserIdx = null;
 
-        database.ref('/').on('value', (snapshot) => { 
-            if(snapshot.val()) db = snapshot.val(); 
-            // İlk açılışta kurucu yoksa ekle (ALİ / ALİ43)
-            if(!db.users || !db.users.find(u => u.isFounder)) {
-                if(!db.users) db.users = [];
-                db.users.unshift({u: "ALİ", p: "ALİ43", isFounder: true, perms: {vit:true, grp:true, hoc:true, ann:true, con:true, usr:true}});
-                syncDB();
-            }
-            renderAll(); 
-            if(currentUser) adminTab(document.querySelector('.sidebar-btn.active')?.dataset.tab || 'vitrin', document.querySelector('.sidebar-btn.active')); 
-        });
-
+        database.ref('/').on('value', (snapshot) => { if(snapshot.val()) db = snapshot.val(); renderAll(); });
         function syncDB() { database.ref('/').set(db); }
 
-        function renderAll() {
-            const vGrid = document.getElementById('public-vitrin'); vGrid.innerHTML = "";
-            (db.vitrin || []).forEach(img => { const src = typeof img === 'string' ? img : img.src; const pos = typeof img === 'string' ? 'center' : (img.pos || 'center'); vGrid.innerHTML += `<img data-src="${src}" class="vitrin-img lazy" style="object-position:${pos}" onclick="openLB('${src}')">`; });
-            const aList = document.getElementById('public-anns'); aList.innerHTML = "";
-            (db.duyurular || []).forEach(a => { aList.innerHTML += `<div class="ann-box"><h4>${a.baslik}</h4><p>${a.metin}</p></div>`; });
-            const gGrid = document.getElementById('public-groups'); gGrid.innerHTML = "";
-            (db.gruplar || []).forEach(g => { const f = (g.fotos || [])[0]; const src = f ? (typeof f === 'string' ? f : f.src) : ''; gGrid.innerHTML += `<div class="card" onclick="openLB('${src}')"><h3>${g.ad}</h3>${g.saat ? '<div class="saat-kutu">⏰ '+g.saat+'</div>' : ''}<br><small>FOTO (${(g.fotos||[]).length})</small></div>`; });
-            const hGrid = document.getElementById('public-coaches'); hGrid.innerHTML = "";
-            (db.hocalar || []).forEach(h => { const src = h.img ? (typeof h.img === 'string' ? h.img : h.img.src) : ""; const pos = h.img ? (typeof h.img === 'string' ? 'center' : (h.img.pos || 'center')) : 'center'; hGrid.innerHTML += `<div class="card" onclick="openLB('${src}')"><img data-src="${src}" class="lazy" style="object-position:${pos}"><h3>${h.ad}</h3><p>${h.unvan}</p></div>`; });
-            const cArea = document.getElementById('public-contact'); cArea.innerHTML = "";
-            (db.iletisim || []).forEach(c => { cArea.innerHTML += `<p style="font-size:1.2rem; border-bottom:1px solid #eee; padding-bottom:10px; margin: 10px 0;">👤 <b>${c.ad}:</b> <a href="tel:${c.tel}" style="color:var(--yesil); text-decoration:none; font-weight:bold;">${c.tel}</a></p>`; });
-            initLazyLoad();
-        }
-
-        // --- HIZLANDIRMA VE SIKIŞTIRMA ---
-        function initLazyLoad() {
-            const lazyImages = document.querySelectorAll('.lazy');
-            const observer = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) { const img = entry.target; img.src = img.dataset.src; img.classList.remove('lazy'); observer.unobserve(img); } }); });
-            lazyImages.forEach(img => observer.observe(img));
-        }
-
-        async function compressImage(base64Str) {
+        // RESİM SIKIŞTIRMA
+        async function compressImage(file, maxWidth = 1000) {
             return new Promise((resolve) => {
-                const img = new Image(); img.src = base64Str;
-                img.onload = () => {
-                    const canvas = document.createElement('canvas'); const max = 1200;
-                    let w = img.width, h = img.height;
-                    if (w > h) { if (w > max) { h *= max / w; w = max; } } else { if (h > max) { w *= max / h; h = max; } }
-                    canvas.width = w; canvas.height = h;
-                    const ctx = canvas.getContext('2d'); ctx.drawImage(img, 0, 0, w, h);
-                    resolve(canvas.toDataURL('image/jpeg', 0.7));
+                const reader = new FileReader(); reader.readAsDataURL(file);
+                reader.onload = (e) => {
+                    const img = new Image(); img.src = e.target.result;
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        const scale = maxWidth / img.width;
+                        canvas.width = maxWidth; canvas.height = img.height * scale;
+                        canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+                        resolve(canvas.toDataURL('image/jpeg', 0.7));
+                    };
                 };
             });
         }
 
-        function updateProgress(current, total) {
-            const container = document.getElementById('upload-progress-container');
-            const bar = document.getElementById('upload-progress-bar');
-            const text = document.getElementById('upload-status-text');
-            const percent = (current / total) * 100;
-            container.style.display = 'block'; text.style.display = 'block';
-            bar.style.width = percent + '%'; text.innerText = `İşleniyor: ${current} / ${total}`;
-            if(current === total) { setTimeout(() => { container.style.display = 'none'; text.style.display = 'none'; }, 1500); }
+        function renderAll() {
+            // Vitrin
+            const vGrid = document.getElementById('public-vitrin'); vGrid.innerHTML = "";
+            (db.vitrin || []).forEach(img => { vGrid.innerHTML += `<img src="${img.src || img}" class="card" style="height:220px; object-fit:cover; padding:0; border:4px solid white;" onclick="openLB('${img.src || img}')" loading="lazy">`; });
+
+            // Gruplar
+            const gGrid = document.getElementById('public-groups'); gGrid.innerHTML = "";
+            (db.gruplar || []).forEach(g => {
+                const src = (g.fotos && g.fotos[0]) ? (g.fotos[0].src || g.fotos[0]) : "";
+                gGrid.innerHTML += `<div class="card" onclick="openLB('${src}')"><h3>${g.ad}</h3><div class="saat-kutu">${g.saat}</div><br><small>${(g.fotos||[]).length} Fotoğraf</small></div>`;
+            });
+
+            // Hocalar
+            const hGrid = document.getElementById('public-coaches'); hGrid.innerHTML = "";
+            (db.hocalar || []).forEach(h => {
+                const src = h.img ? (h.img.src || h.img) : "";
+                hGrid.innerHTML += `<div class="card" onclick="openLB('${src}')"><img src="${src}"><h3>${h.ad}</h3><p>${h.unvan}</p></div>`;
+            });
+
+            // İletişim
+            const c = db.iletisim || {};
+            document.getElementById('public-contact-area').innerHTML = `
+                <p style="font-size:1.1rem;">📍 <b>Adres:</b> ${c.adres || 'Eklenmedi'}</p>
+                ${(c.tels || []).map(t => `<p style="font-size:1.1rem;">📞 <b>${t.ad}:</b> <a href="tel:${t.tel}" style="color:var(--yesil); text-decoration:none;">${t.tel}</a></p>`).join('')}
+                <p style="font-size:1.1rem;">💬 <b>WhatsApp:</b> <a href="https://wa.me/${c.wp}" target="_blank" style="color:var(--yesil); font-weight:bold;">Tıkla Mesaj Gönder</a></p>
+            `;
+            document.getElementById('form-title-display').innerText = c.formTitle || "Bize Yazın";
         }
 
-        async function processFiles(files, callback) {
-            let count = 0; const total = files.length; updateProgress(0, total);
-            for (let file of files) {
-                const res = await new Promise(r => { const f = new FileReader(); f.onload = e => r(e.target.result); f.readAsDataURL(file); });
-                const compressed = await compressImage(res); callback(compressed); count++; updateProgress(count, total);
-            }
-        }
-
-        // --- GİRİŞ VE PANEL ---
         function tryLogin() {
             const u = document.getElementById('u').value.trim().toUpperCase();
-            const p = document.getElementById('p').value.trim().toUpperCase();
-            currentUser = (db.users || []).find(user => user.u.toUpperCase() === u && user.p.toUpperCase() === p);
-            if(currentUser) { closeModal('login-modal'); buildAdminSidebar(); document.getElementById('admin-panel').style.display='flex'; } else alert("Hatalı!");
+            const p = document.getElementById('p').value.trim();
+            if(u === "ALİ" && p === "ALİ43") {
+                currentUser = { perms: { vit:true, grp:true, hoc:true, con:true } };
+                document.getElementById('admin-panel').style.display='flex';
+                closeModal('login-modal');
+                buildSidebar();
+            } else alert("Hatalı!");
         }
 
-        function buildAdminSidebar() {
-            const side = document.getElementById('sidebar-menu'); side.innerHTML = "";
-            const p = currentUser.perms;
-            if(p.vit) side.innerHTML += `<div class="sidebar-btn" data-tab="vitrin" onclick="adminTab('vitrin', this)">🖼️ VİTRİN</div>`;
-            if(p.grp) side.innerHTML += `<div class="sidebar-btn" data-tab="groups" onclick="adminTab('groups', this)">⚽ GRUPLAR</div>`;
-            if(p.hoc) side.innerHTML += `<div class="sidebar-btn" data-tab="coaches" onclick="adminTab('coaches', this)">👤 HOCALAR</div>`;
-            if(p.ann) side.innerHTML += `<div class="sidebar-btn" data-tab="anns" onclick="adminTab('anns', this)">📢 DUYURULAR</div>`;
-            if(p.con) {
-                side.innerHTML += `<div class="sidebar-btn" data-tab="contact" onclick="adminTab('contact', this)">📞 İLETİŞİM</div>`;
-                side.innerHTML += `<div class="sidebar-btn" data-tab="messages" onclick="adminTab('messages', this)" style="background:var(--sari); color:var(--yesil)">📩 MESAJLAR (${(db.mesajlar||[]).length})</div>`;
-            }
-            if(p.usr) side.innerHTML += `<div class="sidebar-btn" data-tab="users" onclick="adminTab('users', this)" style="color:var(--sari)">🔑 YETKİLİLER</div>`;
-            if(side.firstChild) side.firstChild.click();
+        function buildSidebar() {
+            const s = document.getElementById('sidebar-menu');
+            s.innerHTML = `
+                <div class="sidebar-btn" onclick="adminTab('vitrin', this)">🖼️ VİTRİN</div>
+                <div class="sidebar-btn" onclick="adminTab('groups', this)">⚽ GRUPLAR</div>
+                <div class="sidebar-btn" onclick="adminTab('coaches', this)">👤 HOCALAR</div>
+                <div class="sidebar-btn" onclick="adminTab('contact', this)">📞 AYARLAR</div>
+                <div class="sidebar-btn" onclick="adminTab('msgs', this)" style="background:var(--sari); color:var(--yesil)">📩 MESAJLAR (${(db.mesajlar||[]).length})</div>
+            `;
+            s.firstChild.click();
         }
 
         function adminTab(tab, btn) {
-            if(!btn) return;
             document.querySelectorAll('.sidebar-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active');
-            const view = document.getElementById('admin-view-content'); view.innerHTML = "";
-            
-            if(tab === 'users') {
-                view.innerHTML = `<button class="btn-add" style="width:auto; padding:10px 20px;" onclick="openUserModal()">+ Yeni Yetkili Ekle</button><div id="u-list" style="margin-top:20px;"></div>`;
-                (db.users || []).forEach((u, i) => {
-                    const label = u.isFounder ? ' <small style="color:var(--yesil)">(KURUCU)</small>' : '';
-                    const delBtn = u.isFounder ? '' : `<button class="admin-btn" style="color:red;" onclick="del('users', ${i})">Sil</button>`;
-                    document.getElementById('u-list').innerHTML += `<div class="admin-card"><b>${u.u}${label}</b><div><button class="admin-btn" onclick="openUserModal(${i})">Düzenle</button>${delBtn}</div></div>`;
+            const v = document.getElementById('admin-view-content'); v.innerHTML = "";
+
+            if(tab === 'contact') {
+                const c = db.iletisim || {};
+                v.innerHTML = `
+                    <h3>Genel Bilgiler</h3>
+                    <input id="adm-adres" placeholder="Kulüp Adresi" value="${c.adres||''}">
+                    <input id="adm-wp" placeholder="WhatsApp (905...)" value="${c.wp||''}">
+                    <input id="adm-form" placeholder="Form Başlığı (Örn: Bize Yazın)" value="${c.formTitle||''}">
+                    <button class="btn-add" onclick="saveContact()">BİLGİLERİ GÜNCELLE</button>
+                    <hr style="margin:20px 0;">
+                    <h4>Telefon Numaraları</h4>
+                    <button class="btn-add" style="width:auto; padding:8px 15px;" onclick="addTel()">+ Yeni Numara Ekle</button>
+                    <div id="adm-tel-list" style="margin-top:15px;"></div>
+                `;
+                (c.tels || []).forEach((t, i) => {
+                    document.getElementById('adm-tel-list').innerHTML += `<div class="admin-card"><b>${t.ad}: ${t.tel}</b><button onclick="delTel(${i})" style="color:red; border:none; background:none; cursor:pointer;">Sil</button></div>`;
+                });
+            } else if(tab === 'vitrin') {
+                v.innerHTML = `<h3>Vitrin (Sürükle Yükle)</h3><input type="file" multiple onchange="upVit(event)"><div id="v-list" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(120px, 1fr)); gap:10px; margin-top:20px;"></div>`;
+                (db.vitrin || []).forEach((img, i) => {
+                    document.getElementById('v-list').innerHTML += `<div style="position:relative;"><img src="${img.src || img}" style="width:100%; height:80px; object-fit:cover; border-radius:10px;"><button onclick="delVit(${i})" style="position:absolute; top:0; right:0; background:red; color:white; border:none; cursor:pointer; border-radius:5px;">X</button></div>`;
+                });
+            } else if(tab === 'coaches') {
+                v.innerHTML = `<h3>Teknik Kadro</h3><button class="btn-add" style="width:auto;" onclick="addCoach()">+ Hoca Ekle</button><div id="h-list" style="margin-top:20px;"></div>`;
+                (db.hocalar || []).forEach((h, i) => {
+                    v.querySelector('#h-list').innerHTML += `<div class="admin-card"><b>${h.ad}</b> <button onclick="delCoach(${i})" style="color:red; border:none; background:none; cursor:pointer;">SİL</button></div>`;
+                });
+            } else if(tab === 'msgs') {
+                (db.mesajlar || []).forEach((m, i) => {
+                    v.innerHTML += `<div class="admin-card" style="flex-direction:column; align-items:flex-start;">
+                        <b>${m.ad}</b> <small>${m.tel}</small><p style="margin:5px 0;">${m.msg}</p><small style="color:#888;">${m.tarih}</small>
+                        <button onclick="delMsg(${i})" style="color:red; border:none; background:none; cursor:pointer; align-self:flex-end;">BU MESAJI SİL</button>
+                    </div>`;
+                });
+            } else if(tab === 'groups') {
+                v.innerHTML = `<h3>Gruplar</h3><button class="btn-add" style="width:auto;" onclick="addGroup()">+ Yeni Grup</button><div id="g-list" style="margin-top:20px;"></div>`;
+                (db.gruplar || []).forEach((g, i) => {
+                    v.querySelector('#g-list').innerHTML += `<div class="admin-card"><b>${g.ad}</b> <div><button onclick="upGImg(${i})">Foto Ekle</button> <button onclick="delGroup(${i})" style="color:red; margin-left:10px;">SİL</button></div></div>`;
                 });
             }
-            else if(tab === 'vitrin') {
-                view.innerHTML = `<input type="file" multiple onchange="upVitBulk(event)"><div id="v-sort" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(140px, 1fr)); gap:15px; margin-top:20px;"></div>`;
-                (db.vitrin || []).forEach((img, i) => { const src = typeof img === 'string' ? img : img.src; const pos = typeof img === 'string' ? 'center' : (img.pos || 'center'); document.getElementById('v-sort').innerHTML += `<div data-id="${i}" style="position:relative; background:white; padding:10px; border-radius:15px;"><img src="${src}" style="width:100%; height:110px; object-fit:cover; object-position:${pos}; border-radius:10px;"><div style="text-align:center; margin-top:5px;"><button class="pos-btn ${pos==='top'?'active':''}" onclick="setVPos(${i},'top')">Üst</button><button class="pos-btn ${pos==='center'?'active':''}" onclick="setVPos(${i},'center')">Orta</button><button class="pos-btn ${pos==='bottom'?'active':''}" onclick="setVPos(${i},'bottom')">Alt</button></div><button onclick="delVit(${i})" style="position:absolute; top:-5px; right:-5px; background:red; color:white; border:none; border-radius:50%; width:25px; height:25px; cursor:pointer;">&times;</button></div>`; });
-            }
-            else if(tab === 'coaches') {
-                view.innerHTML = `<button class="btn-add" style="width:auto; padding:10px 20px;" onclick="addC()">+ Yeni Hoca</button><div id="c-sort" style="margin-top:20px;"></div>`;
-                (db.hocalar || []).forEach((h, i) => { const src = h.img ? (typeof h.img === 'string' ? h.img : h.img.src) : ""; const pos = h.img ? (typeof h.img === 'string' ? 'center' : (h.img.pos || 'center')) : 'center'; document.getElementById('c-sort').innerHTML += `<div class="admin-card" data-id="${i}"><div style="display:flex; align-items:center; gap:15px;"><img src="${src}" style="width:50px; height:50px; border-radius:50%; object-fit:cover; object-position:${pos}; border:2px solid #ddd;"><b>${h.ad}</b></div><div><button class="pos-btn ${pos==='top'?'active':''}" onclick="setHPos(${i},'top')">Üst</button><button class="pos-btn ${pos==='center'?'active':''}" onclick="setHPos(${i},'center')">Orta</button><button class="pos-btn ${pos==='bottom'?'active':''}" onclick="setHPos(${i},'bottom')">Alt</button><button class="admin-btn" onclick="editC(${i})">Düzenle</button><button class="admin-btn" style="background:#fff9c4;" onclick="upHImg(${i})">Foto</button><button class="admin-btn" style="color:red;" onclick="del('hocalar', ${i})">Sil</button></div></div>`; });
-            }
-            else if(tab === 'groups') {
-                view.innerHTML = `<button class="btn-add" style="width:auto; padding:10px 20px;" onclick="addG()">+ Yeni Grup</button><div id="g-sort" style="margin-top:20px;"></div>`;
-                (db.gruplar || []).forEach((g, i) => { document.getElementById('g-sort').innerHTML += `<div class="admin-card" data-id="${i}"><b>${g.ad}</b><div><button class="admin-btn" onclick="editG(${i})">Düzenle</button><button class="admin-btn" style="background:#e3f2fd;" onclick="openGPhotos(${i})">Albüm</button><button class="admin-btn" style="color:red;" onclick="del('gruplar', ${i})">Sil</button></div></div>`; });
-            }
-            else if(tab === 'messages') {
-                view.innerHTML = `<h2 class="section-title">Mesajlar</h2>`;
-                (db.mesajlar || []).forEach((m, i) => { view.innerHTML += `<div class="msg-box"><small>${m.tarih}</small><br><b>${m.ad}</b><p>${m.msg}</p><button class="admin-btn" style="color:red;" onclick="delMsg(${i})">SİL</button></div>`; });
-            }
-            else if(tab === 'contact') {
-                view.innerHTML = `<button class="btn-add" style="width:auto; padding:10px 20px;" onclick="addCt()">+ Yeni Kişi</button><div id="ct-sort" style="margin-top:20px;"></div>`;
-                (db.iletisim || []).forEach((c, i) => { document.getElementById('ct-sort').innerHTML += `<div class="admin-card"><b>${c.ad}</b><div><button class="admin-btn" onclick="editCt(${i})">Düzenle</button><button class="admin-btn" style="color:red;" onclick="del('iletisim', ${i})">Sil</button></div></div>`; });
-            }
-            else if(tab === 'anns') {
-                view.innerHTML = `<button class="btn-add" style="width:auto; padding:10px 20px;" onclick="addA()">+ Yeni Duyuru</button><div id="a-sort" style="margin-top:20px;"></div>`;
-                (db.duyurular || []).forEach((a, i) => { document.getElementById('a-sort').innerHTML += `<div class="admin-card"><b>${a.baslik}</b><div><button class="admin-btn" onclick="editA(${i})">Düzenle</button><button class="admin-btn" style="color:red;" onclick="del('duyurular', ${i})">Sil</button></div></div>`; });
-            }
         }
 
-        // --- YETKİLİ YÖNETİMİ ---
-        function openUserModal(idx = null) {
-            editingUserIdx = idx;
-            const u = idx !== null ? db.users[idx] : null;
-            document.getElementById('new-u').value = u ? u.u : "";
-            document.getElementById('new-p').value = u ? u.p : "";
-            document.getElementById('perm-container').style.display = (u && u.isFounder) ? "none" : "block";
-            document.getElementById('founder-note').style.display = (u && u.isFounder) ? "block" : "none";
-            if(!u || !u.isFounder) {
-                document.getElementById('p-vit').checked = u ? u.perms.vit : false;
-                document.getElementById('p-grp').checked = u ? u.perms.grp : false;
-                document.getElementById('p-hoc').checked = u ? u.perms.hoc : false;
-                document.getElementById('p-ann').checked = u ? u.perms.ann : false;
-                document.getElementById('p-con').checked = u ? u.perms.con : false;
+        // --- KAYIT VE SİLME FONKSİYONLARI ---
+        function saveContact() { db.iletisim.adres = document.getElementById('adm-adres').value; db.iletisim.wp = document.getElementById('adm-wp').value; db.iletisim.formTitle = document.getElementById('adm-form').value; syncDB(); alert("Güncellendi!"); }
+        function addTel() { const ad = prompt("İsim:"), tel = prompt("Numara:"); if(ad && tel) { if(!db.iletisim.tels) db.iletisim.tels = []; db.iletisim.tels.push({ad, tel}); syncDB(); adminTab('contact', document.querySelector('.sidebar-btn.active')); } }
+        function delTel(i) { db.iletisim.tels.splice(i, 1); syncDB(); adminTab('contact', document.querySelector('.sidebar-btn.active')); }
+        function delVit(i) { db.vitrin.splice(i, 1); syncDB(); adminTab('vitrin', document.querySelector('.sidebar-btn.active')); }
+        function delMsg(i) { db.mesajlar.splice(i, 1); syncDB(); adminTab('msgs', document.querySelector('.sidebar-btn.active')); }
+        function delCoach(i) { if(confirm("Hoca silinsin mi?")) { db.hocalar.splice(i,1); syncDB(); adminTab('coaches', document.querySelector('.sidebar-btn.active')); } }
+        function delGroup(i) { if(confirm("Grup silinsin mi?")) { db.gruplar.splice(i,1); syncDB(); adminTab('groups', document.querySelector('.sidebar-btn.active')); } }
+
+        async function upVit(e) {
+            document.getElementById('upload-progress-container').style.display='block';
+            for(let f of e.target.files) {
+                const comp = await compressImage(f);
+                if(!db.vitrin) db.vitrin = []; db.vitrin.unshift({src: comp});
             }
-            openModal('user-modal');
+            syncDB(); document.getElementById('upload-progress-container').style.display='none'; adminTab('vitrin', document.querySelector('.sidebar-btn.active'));
         }
 
-        function saveUser() {
-            const u = document.getElementById('new-u').value.trim();
-            const p = document.getElementById('new-p').value.trim();
-            if(!u || !p) return alert("Hata!");
-            
-            let perms;
-            let isFounder = false;
-            if(editingUserIdx !== null && db.users[editingUserIdx].isFounder) {
-                isFounder = true;
-                perms = {vit:true, grp:true, hoc:true, ann:true, con:true, usr:true};
-            } else {
-                perms = { vit:document.getElementById('p-vit').checked, grp:document.getElementById('p-grp').checked, hoc:document.getElementById('p-hoc').checked, ann:document.getElementById('p-ann').checked, con:document.getElementById('p-con').checked, usr:false };
-            }
-
-            if(editingUserIdx !== null) db.users[editingUserIdx] = {u, p, perms, isFounder};
-            else { if(!db.users) db.users = []; db.users.push({u, p, perms, isFounder:false}); }
-            syncDB(); closeModal('user-modal');
+        function addCoach() {
+            const ad = prompt("Hoca Adı:"); if(!ad) return;
+            const inp = document.createElement('input'); inp.type = 'file';
+            inp.onchange = async e => {
+                const comp = await compressImage(e.target.files[0], 400);
+                if(!db.hocalar) db.hocalar = [];
+                db.hocalar.push({ad, unvan: "Antrenör", img: {src: comp}});
+                syncDB(); adminTab('coaches', document.querySelector('.sidebar-btn.active'));
+            }; inp.click();
         }
 
-        // --- DİĞER FONKSİYONLAR ---
-        function setVPos(i, p) { if(typeof db.vitrin[i] === 'string') db.vitrin[i] = {src: db.vitrin[i], pos: p}; else db.vitrin[i].pos = p; syncDB(); }
-        function setHPos(i, p) { if(typeof db.hocalar[i].img === 'string') db.hocalar[i].img = {src: db.hocalar[i].img, pos: p}; else db.hocalar[i].img.pos = p; syncDB(); }
-        function setGPos(idx, p) { if(typeof db.gruplar[curG].fotos[idx] === 'string') db.gruplar[curG].fotos[idx] = {src: db.gruplar[curG].fotos[idx], pos: p}; else db.gruplar[curG].fotos[idx].pos = p; syncDB(); renderGP(); }
-        function upVitBulk(e) { processFiles(e.target.files, (res) => { if(!db.vitrin) db.vitrin=[]; db.vitrin.unshift({src: res, pos: 'center'}); syncDB(); }); }
-        let curG = null; function openGPhotos(i) { curG=i; document.getElementById('gp-title').innerText=db.gruplar[i].ad; openModal('group-photo-modal'); renderGP(); }
-        function renderGP() { const c=document.getElementById('gp-list'); c.innerHTML=""; (db.gruplar[curG].fotos || []).forEach((img, idx) => { const src = typeof img === 'string' ? img : img.src; const pos = typeof img === 'string' ? 'center' : (img.pos || 'center'); c.innerHTML += `<div data-id="${idx}" style="position:relative; background:#f9f9f9; padding:10px; border-radius:15px; text-align:center;"><img src="${src}" style="width:100%; height:80px; object-fit:cover; object-position:${pos}; border-radius:10px;"><div style="margin-top:5px;"><button class="pos-btn ${pos==='top'?'active':''}" onclick="setGPos(${idx},'top')">Ü</button><button class="pos-btn ${pos==='center'?'active':''}" onclick="setGPos(${idx},'center')">O</button><button class="pos-btn ${pos==='bottom'?'active':''}" onclick="setGPos(${idx},'bottom')">A</button></div><button onclick="delGP(${idx})" style="position:absolute; top:-5px; right:-5px; background:red; color:white; border:none; border-radius:50%; width:22px; height:22px; cursor:pointer;">&times;</button></div>`; }); }
-        function upGroupBulk(e) { processFiles(e.target.files, (res) => { if(!db.gruplar[curG].fotos) db.gruplar[curG].fotos=[]; db.gruplar[curG].fotos.unshift({src: res, pos: 'center'}); syncDB(); renderGP(); }); }
-        function upHImg(i) { const inp=document.createElement('input'); inp.type='file'; inp.onchange=e=>{ processFiles(e.target.files, (res) => { db.hocalar[i].img = {src: res, pos: "center"}; syncDB(); }); }; inp.click(); }
-        function sendVeliMsg() { const ad = document.getElementById('v-ad').value.trim(); const tel = document.getElementById('v-tel').value.trim(); const msg = document.getElementById('v-mesaj').value.trim(); if(!ad || !msg) return alert("Hata!"); if(!db.mesajlar) db.mesajlar = []; db.mesajlar.unshift({ ad, tel, msg, tarih: new Date().toLocaleString('tr-TR') }); syncDB(); alert("İletildi."); document.getElementById('v-ad').value=""; document.getElementById('v-tel').value=""; document.getElementById('v-mesaj').value=""; }
-        function addG() { const n=prompt("Grup:"), s=prompt("Saat:"); if(n) { if(!db.gruplar) db.gruplar=[]; db.gruplar.push({ad:n, saat:s, fotos:[]}); syncDB(); } }
-        function editG(i) { const n=prompt("Grup:", db.gruplar[i].ad), s=prompt("Saat:", db.gruplar[i].saat); if(n) { db.gruplar[i].ad=n; db.gruplar[i].saat=s; syncDB(); } }
-        function addC() { const n=prompt("Hoca:"), u=prompt("Unvan:"); if(n) { if(!db.hocalar) db.hocalar=[]; db.hocalar.push({ad:n, unvan:u, img:{src:"", pos:"center"}}); syncDB(); } }
-        function editC(i) { const n=prompt("Hoca:", db.hocalar[i].ad), u=prompt("Unvan:", db.hocalar[i].unvan); if(n) { db.hocalar[i].ad=n; db.hocalar[i].unvan=u; syncDB(); } }
-        function addA() { const b=prompt("Başlık:"), m=prompt("Mesaj:"); if(b) { if(!db.duyurular) db.duyurular=[]; db.duyurular.unshift({baslik:b, metin:m}); syncDB(); } }
-        function editA(i) { const b=prompt("Başlık:", db.duyurular[i].baslik), m=prompt("Mesaj:", db.duyurular[i].metin); if(b) { db.duyurular[i]={baslik:b, metin:m}; syncDB(); } }
-        function addCt() { const n=prompt("İsim:"), t=prompt("Tel:"); if(n) { if(!db.iletisim) db.iletisim=[]; db.iletisim.push({ad:n, tel:t}); syncDB(); } }
-        function editCt(i) { const n=prompt("İsim:", db.iletisim[i].ad), t=prompt("Tel:", db.iletisim[i].tel); if(n) { db.iletisim[i]={ad:n, tel:t}; syncDB(); } }
-        function del(p, i) { if(confirm("Sil?")) { db[p].splice(i, 1); syncDB(); } }
-        function delVit(i) { db.vitrin.splice(i, 1); syncDB(); }
-        function delGP(idx) { db.gruplar[curG].fotos.splice(idx, 1); syncDB(); renderGP(); }
-        function delMsg(i) { if(confirm("Sil?")) { db.mesajlar.splice(i, 1); syncDB(); } }
+        function addGroup() {
+            const ad = prompt("Grup Adı:"), saat = prompt("Saat:");
+            if(ad) { if(!db.gruplar) db.gruplar = []; db.gruplar.push({ad, saat, fotos:[]}); syncDB(); adminTab('groups', document.querySelector('.sidebar-btn.active')); }
+        }
+
+        async function upGImg(i) {
+            const inp = document.createElement('input'); inp.type = 'file';
+            inp.onchange = async e => {
+                const comp = await compressImage(e.target.files[0]);
+                if(!db.gruplar[i].fotos) db.gruplar[i].fotos = [];
+                db.gruplar[i].fotos.push({src: comp});
+                syncDB(); alert("Fotoğraf eklendi.");
+            }; inp.click();
+        }
+
+        function sendVeliMsg() {
+            const ad = document.getElementById('v-ad').value, tel = document.getElementById('v-tel').value, msg = document.getElementById('v-mesaj').value;
+            if(!ad || !msg) return alert("Ad ve Mesaj alanları zorunludur!");
+            if(!db.mesajlar) db.mesajlar = [];
+            db.mesajlar.unshift({ ad, tel, msg, tarih: new Date().toLocaleString() });
+            syncDB(); alert("Mesajınız iletildi."); document.getElementById('v-ad').value=""; document.getElementById('v-tel').value=""; document.getElementById('v-mesaj').value="";
+        }
+
+        // Modallar ve LB
         function openLB(s) { if(s){ document.getElementById('lb-img').src=s; document.getElementById('lightbox').style.display='flex'; } }
         function openModal(id) { document.getElementById(id).style.display='flex'; }
         function closeModal(id) { document.getElementById(id).style.display='none'; }
