@@ -12,16 +12,19 @@
         :root { --yesil: #006a33; --sari: #f1c40f; --dark: #121212; --light: #f8faf9; --beyaz: #ffffff; }
         body, html { margin: 0; padding: 0; font-family: 'Poppins', sans-serif; background: var(--light); color: #333; overflow-x: hidden; }
 
-        header { background: linear-gradient(135deg, var(--yesil) 0%, #004d26 100%); color: white; padding: 25px 5%; display: flex; flex-direction: column; align-items: center; border-bottom: 7px solid var(--sari); box-shadow: 0 5px 20px rgba(0,0,0,0.4); }
-        @media (min-width: 1024px) { header { flex-direction: row; justify-content: space-between; padding: 25px 80px; } }
-        .club-info h1 { font-size: 1.6rem; font-weight: 900; text-transform: uppercase; margin: 0; letter-spacing: 2px; }
-        nav { margin-top: 20px; display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; }
+        header { background: linear-gradient(135deg, var(--yesil) 0%, #004d26 100%); color: white; padding: 20px 5%; display: flex; flex-direction: column; align-items: center; border-bottom: 7px solid var(--sari); box-shadow: 0 5px 20px rgba(0,0,0,0.4); }
+        @media (min-width: 1024px) { header { flex-direction: row; justify-content: space-between; padding: 20px 80px; } }
+        .club-info h1 { font-size: 1.5rem; font-weight: 900; text-transform: uppercase; margin: 0; letter-spacing: 2px; }
+        
+        nav { margin-top: 15px; display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; }
         nav a { color: white; text-decoration: none; font-weight: 700; font-size: 0.85rem; cursor: pointer; text-transform: uppercase; }
-        .admin-trigger { background: var(--sari); color: var(--yesil) !important; padding: 8px 15px; border-radius: 10px; font-weight: 900; border: none; cursor: pointer; }
+        .admin-trigger { background: var(--sari); color: var(--yesil) !important; padding: 6px 12px; border-radius: 8px; font-weight: 900; border: none; cursor: pointer; }
 
-        /* VİTRİN DÜZENİ */
-        .vitrin-grid { display: flex; flex-direction: column; gap: 20px; }
-        .vitrin-img { width: 100%; height: auto; min-height: 250px; object-fit: cover; border-radius: 25px; border: 5px solid white; box-shadow: 0 10px 25px rgba(0,0,0,0.1); cursor: pointer; background: #eee; }
+        /* ANA SAYFA GALERİ (4'LÜ) */
+        .vitrin-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
+        @media (min-width: 768px) { .vitrin-grid { grid-template-columns: repeat(3, 1fr); } }
+        @media (min-width: 1024px) { .vitrin-grid { grid-template-columns: repeat(4, 1fr); gap: 20px; } }
+        .vitrin-img { width: 100%; height: 250px; object-fit: cover; border-radius: 20px; border: 4px solid white; box-shadow: 0 5px 15px rgba(0,0,0,0.1); cursor: pointer; background: #eee; }
 
         .main-content { padding: 30px 5%; box-sizing: border-box; }
         @media (min-width: 1024px) { .main-content { padding: 40px 80px; } }
@@ -30,16 +33,15 @@
         .section-title { font-weight: 900; font-size: 1.8rem; color: var(--yesil); border-left: 10px solid var(--sari); padding-left: 15px; text-transform: uppercase; margin-bottom: 25px; }
 
         .home-layout { display: flex; flex-direction: column; gap: 30px; }
-        @media (max-width: 1023px) { .ann-sidebar { order: -1; } } 
         @media (min-width: 1024px) { .home-layout { display: grid; grid-template-columns: 3fr 1.2fr; gap: 40px; } }
-        
         .ann-sidebar { background: white; padding: 20px; border-radius: 25px; border-top: 8px solid var(--sari); box-shadow: 0 5px 20px rgba(0,0,0,0.05); }
         .ann-box { background: #fafafa; padding: 15px; border-radius: 15px; margin-bottom: 15px; border-left: 5px solid var(--yesil); }
 
         .grid-responsive { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
         .card { background: white; padding: 25px 15px; border-radius: 25px; text-align: center; border-bottom: 5px solid var(--yesil); box-shadow: 0 8px 20px rgba(0,0,0,0.04); cursor: pointer; }
+        .card img { width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 4px solid var(--yesil); margin-bottom: 10px; }
 
-        /* YÖNETİM PANELİ */
+        /* YÖNETİM PANELİ TASARIMI */
         #admin-panel { display: none; position: fixed; inset: 0; background: #fff; z-index: 5000; flex-direction: column; }
         .admin-nav { background: var(--dark); color: white; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; border-bottom: 5px solid var(--sari); }
         .admin-layout { display: flex; flex-direction: column; flex: 1; overflow: hidden; }
@@ -51,21 +53,18 @@
         .admin-main { flex: 1; padding: 25px; overflow-y: auto; background: #f4f6f5; }
         .admin-card { background: white; padding: 15px; border-radius: 15px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #eee; }
 
-        #upload-progress-container { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 5px; background: #eee; z-index: 20000; }
-        #upload-progress-bar { width: 0%; height: 100%; background: var(--yesil); transition: 0.3s; }
-        
         input, textarea { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 10px; font-family: inherit; }
         .btn-add { background: var(--yesil) !important; color: white !important; padding: 12px; width: 100%; border: none; border-radius: 10px; cursor: pointer; font-weight: 800; }
         .pos-btn { padding: 4px 8px; font-size: 0.7rem; border: 1px solid #ccc; border-radius: 4px; cursor: pointer; margin: 2px; background: white; }
         .pos-btn.active { background: var(--yesil); color: white; border-color: var(--yesil); }
         .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 6000; justify-content: center; align-items: center; padding: 20px; }
-        .modal-box { background: white; padding: 30px; border-radius: 25px; width: 100%; max-width: 450px; text-align: center; }
-        .msg-box { background: white; padding: 20px; border-radius: 20px; border-left: 10px solid var(--sari); margin-bottom: 15px; position: relative; text-align: left; }
+        .modal-box { background: white; padding: 30px; border-radius: 25px; width: 100%; max-width: 450px; text-align: center; max-height: 90vh; overflow-y: auto; }
     </style>
 </head>
 <body>
 
-    <div id="upload-progress-container"><div id="upload-progress-bar"></div></div>
+    <div id="upload-progress-container" style="display:none; position:fixed; top:0; left:0; width:100%; height:5px; background: #eee; z-index: 20000;"><div id="upload-progress-bar" style="width:0%; height:100%; background: var(--yesil); transition: 0.3s;"></div></div>
+
     <div id="lightbox" onclick="this.style.display='none'" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.95); z-index:10000; justify-content:center; align-items:center; cursor:pointer;">
         <img id="lb-img" src="" style="max-width:90%; max-height:85vh; border:4px solid white; border-radius:15px; object-fit:contain;">
     </div>
@@ -97,10 +96,8 @@
         <div id="page-contact" class="page">
             <h2 class="section-title">İletişim Kanallarımız</h2>
             <div id="public-contact" style="background:white; padding:35px; border-radius:30px; border-left:20px solid var(--yesil); box-shadow: 0 10px 30px rgba(0,0,0,0.05); margin-bottom: 40px;"></div>
-            
             <h2 class="section-title">Bize Yazın</h2>
             <div style="background:white; padding:35px; border-radius:30px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border-top: 10px solid var(--sari);">
-                <p style="color: #666; margin-bottom: 20px;">İstek, öneri veya şikayetlerinizi doğrudan yönetimimize iletebilirsiniz.</p>
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">
                     <input type="text" id="v-ad" placeholder="Adınız Soyadınız">
                     <input type="tel" id="v-tel" placeholder="Telefon Numaranız">
@@ -121,7 +118,7 @@
 
     <div id="login-modal" class="modal-overlay" onclick="closeModal('login-modal')">
         <div class="modal-box" style="max-width:320px;" onclick="event.stopPropagation()">
-            <h3 style="color:var(--yesil)">Panel Girişi</h3>
+            <h3 style="color:var(--yesil)">Giriş</h3>
             <input type="text" id="u" placeholder="Kullanıcı"><input type="password" id="p" placeholder="Şifre">
             <button class="btn-add" onclick="tryLogin()">GİRİŞ</button>
         </div>
@@ -129,7 +126,7 @@
 
     <div id="user-modal" class="modal-overlay" onclick="closeModal('user-modal')">
         <div class="modal-box" onclick="event.stopPropagation()">
-            <h3>Yetkili Düzenle</h3>
+            <h3 id="user-modal-title">Yetkili Ayarları</h3>
             <input type="text" id="new-u" placeholder="Kullanıcı"><input type="password" id="new-p" placeholder="Şifre">
             <div id="perm-container" style="text-align:left; margin:10px 0;">
                 <label><input type="checkbox" id="p-vit"> Vitrin</label><br>
@@ -143,9 +140,9 @@
     </div>
 
     <div id="group-photo-modal" class="modal-overlay" onclick="closeModal('group-photo-modal')">
-        <div class="modal-box" style="max-width:700px;" onclick="event.stopPropagation()">
+        <div class="modal-box" style="max-width:750px;" onclick="event.stopPropagation()">
             <h3 id="gp-title">Albüm</h3><input type="file" multiple onchange="upGroupBulk(event)">
-            <div id="gp-list" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(120px, 1fr)); gap:12px; margin-top:20px;"></div>
+            <div id="gp-list" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(130px, 1fr)); gap:12px; margin-top:20px;"></div>
         </div>
     </div>
 
@@ -175,17 +172,14 @@
                 const src = typeof img === 'string' ? img : img.src; const pos = typeof img === 'string' ? 'center' : (img.pos || 'center');
                 vGrid.innerHTML += `<img data-src="${src}" class="vitrin-img lazy" style="object-position:${pos}" onclick="openLB('${src}')">`; 
             });
-
             const aL = document.getElementById('public-anns'); aL.innerHTML = "";
             (db.duyurular || []).forEach(a => { aL.innerHTML += `<div class="ann-box"><h4>${a.baslik}</h4><p>${a.metin}</p></div>`; });
             const gG = document.getElementById('public-groups'); gG.innerHTML = "";
-            (db.gruplar || []).forEach(g => { const f = (g.fotos || [])[0]; const src = f ? (typeof f === 'string' ? f : f.src) : ''; gG.innerHTML += `<div class="card" onclick="openLB('${src}')"><h3>${g.ad}</h3>${g.saat ? '⏰ '+g.saat : ''}</div>`; });
+            (db.gruplar || []).forEach(g => { const f = (g.fotos || [])[0]; const src = f ? (typeof f === 'string' ? f : f.src) : ''; gG.innerHTML += `<div class="card" onclick="showPage('groups')"><h3>${g.ad}</h3>${g.saat ? '⏰ '+g.saat : ''}</div>`; });
             const hG = document.getElementById('public-coaches'); hG.innerHTML = "";
-            (db.hocalar || []).forEach(h => { const src = h.img ? (typeof h.img === 'string' ? h.img : h.img.src) : ""; hG.innerHTML += `<div class="card"><img data-src="${src}" class="lazy" style="width:100px; height:100px; border-radius:50%; object-fit:cover;"><h3>${h.ad}</h3></div>`; });
-            
+            (db.hocalar || []).forEach(h => { const src = (typeof h.img === 'string') ? h.img : (h.img ? h.img.src : ""); hG.innerHTML += `<div class="card"><img data-src="${src}" class="lazy"><h3>${h.ad}</h3></div>`; });
             const cA = document.getElementById('public-contact'); cA.innerHTML = "";
-            (db.iletisim || []).forEach(c => { cA.innerHTML += `<p style="font-size:1.2rem; border-bottom:1px solid #eee; padding-bottom:10px; margin: 10px 0;">👤 <b>${c.ad}:</b> <a href="tel:${c.tel}" style="color:var(--yesil); text-decoration:none; font-weight:bold;">${c.tel}</a></p>`; });
-            
+            (db.iletisim || []).forEach(c => { cA.innerHTML += `<p style="font-size:1.1rem; border-bottom:1px solid #eee; padding-bottom:10px;">👤 <b>${c.ad}:</b> <a href="tel:${c.tel}">${c.tel}</a></p>`; });
             initLazyLoad();
         }
 
@@ -228,93 +222,77 @@
                 const c = document.getElementById('v-sort');
                 (db.vitrin || []).forEach((img, i) => {
                     const src = typeof img === 'string' ? img : img.src; const pos = typeof img === 'string' ? 'center' : (img.pos || 'center');
-                    c.innerHTML += `<div class="admin-card" data-id="${i}" style="flex-direction:column; cursor:move; padding:10px;">
-                        <img src="${src}" style="width:100%; height:100px; object-fit:cover; object-position:${pos}; border-radius:10px;">
-                        <div style="margin-top:5px;">
-                            <button class="pos-btn ${pos==='top'?'active':''}" onclick="setVPos(${i},'top')">Ü</button>
-                            <button class="pos-btn ${pos==='center'?'active':''}" onclick="setVPos(${i},'center')">O</button>
-                            <button class="pos-btn ${pos==='bottom'?'active':''}" onclick="setVPos(${i},'bottom')">A</button>
-                            <button class="admin-btn" style="color:red; font-size:0.7rem;" onclick="delVit(${i})">Sil</button>
-                        </div>
-                    </div>`;
+                    c.innerHTML += `<div class="admin-card" data-id="${i}" style="flex-direction:column; cursor:move; padding:10px;"><img src="${src}" style="width:100%; height:100px; object-fit:cover; object-position:${pos}; border-radius:10px;"><div><button class="pos-btn ${pos==='top'?'active':''}" onclick="setVPos(${i},'top')">Ü</button><button class="pos-btn ${pos==='center'?'active':''}" onclick="setVPos(${i},'center')">O</button><button class="pos-btn ${pos==='bottom'?'active':''}" onclick="setVPos(${i},'bottom')">A</button><button class="admin-btn" style="color:red; font-size:0.7rem;" onclick="delVit(${i})">Sil</button></div></div>`;
                 });
                 new Sortable(c, { animation: 150, onEnd: () => { db.vitrin = Array.from(c.children).map(el => db.vitrin[el.dataset.id]); syncDB(); }});
             }
             else if(tab === 'groups') {
                 v.innerHTML = `<button class="btn-add" onclick="addG()">+ Yeni Grup</button><div id="g-sort" style="margin-top:20px;"></div>`;
                 const c = document.getElementById('g-sort');
-                (db.gruplar || []).forEach((g, i) => { c.innerHTML += `<div class="admin-card" data-id="${i}" style="cursor:move;"><b>${g.ad}</b><div><button class="admin-btn" onclick="editG(${i})">Ad</button><button class="admin-btn" onclick="openGPhotos(${i})">Albüm</button><button class="admin-btn" style="color:red;" onclick="del('gruplar',${i})">Sil</button></div></div>`; });
+                (db.gruplar || []).forEach((g, i) => { c.innerHTML += `<div class="admin-card" data-id="${i}" style="cursor:move;"><b>${g.ad}</b><div><button class="admin-btn" onclick="editG(${i})">Düzelt</button><button class="admin-btn" onclick="openGPhotos(${i})">Albüm</button><button class="admin-btn" style="color:red;" onclick="del('gruplar',${i})">Sil</button></div></div>`; });
                 new Sortable(c, { animation: 150, onEnd: () => { db.gruplar = Array.from(c.children).map(el => db.gruplar[el.dataset.id]); syncDB(); }});
             }
             else if(tab === 'coaches') {
                 v.innerHTML = `<button class="btn-add" onclick="addC()">+ Yeni Hoca</button><div id="c-sort" style="margin-top:20px;"></div>`;
                 const c = document.getElementById('c-sort');
-                (db.hocalar || []).forEach((h, i) => { c.innerHTML += `<div class="admin-card" data-id="${i}" style="cursor:move;"><b>${h.ad}</b><div><button class="admin-btn" onclick="upHImg(${i})">Foto</button><button class="admin-btn" style="color:red;" onclick="del('hocalar',${i})">Sil</button></div></div>`; });
+                (db.hocalar || []).forEach((h, i) => { const src = (typeof h.img === 'string') ? h.img : (h.img ? h.img.src : ""); c.innerHTML += `<div class="admin-card" data-id="${i}" style="cursor:move;"><img src="${src}" style="width:40px; height:40px; border-radius:50%; object-fit:cover;"><b>${h.ad}</b><div><button class="admin-btn" onclick="upHImg(${i})">Foto</button><button class="admin-btn" style="color:red;" onclick="del('hocalar',${i})">Sil</button></div></div>`; });
                 new Sortable(c, { animation: 150, onEnd: () => { db.hocalar = Array.from(c.children).map(el => db.hocalar[el.dataset.id]); syncDB(); }});
             }
-            else if(tab === 'messages') {
-                v.innerHTML = `<h2>Gelen Mesajlar</h2>`;
-                (db.mesajlar || []).forEach((m, i) => { v.innerHTML += `<div class="msg-box"><small>${m.tarih}</small><br><b>${m.ad}</b> - ${m.tel}<p>${m.msg}</p><button onclick="delMsg(${i})" style="color:red; border:none; background:none; cursor:pointer;">Sil</button></div>`; });
-            }
-            else if(tab === 'users') {
-                v.innerHTML = `<button class="btn-add" onclick="openUserModal()">+ Yetkili Ekle</button>`;
-                (db.users || []).forEach((u, i) => { v.innerHTML += `<div class="admin-card"><b>${u.u} ${u.isFounder?'(K)':''}</b><button class="admin-btn" onclick="openUserModal(${i})">Düzenle</button></div>`; });
-            }
             else if(tab === 'anns') {
-                v.innerHTML = `<button class="btn-add" onclick="addA()">+ Duyuru Ekle</button><div id="a-sort" style="margin-top:20px;"></div>`;
+                v.innerHTML = `<button class="btn-add" onclick="addA()">+ Yeni Duyuru</button><div id="a-sort" style="margin-top:20px;"></div>`;
                 const c = document.getElementById('a-sort');
                 (db.duyurular || []).forEach((a, i) => { c.innerHTML += `<div class="admin-card" data-id="${i}" style="cursor:move;"><b>${a.baslik}</b><button class="admin-btn" style="color:red;" onclick="del('duyurular',${i})">Sil</button></div>`; });
                 new Sortable(c, { animation: 150, onEnd: () => { db.duyurular = Array.from(c.children).map(el => db.duyurular[el.dataset.id]); syncDB(); }});
             }
             else if(tab === 'contact') {
-                v.innerHTML = `<button class="btn-add" onclick="addCt()">+ İletişim Ekle</button>`;
-                (db.iletisim || []).forEach((c, i) => { v.innerHTML += `<div class="admin-card"><b>${c.ad}</b><button class="admin-btn" onclick="editCt(${i})">Düzelt</button></div>`; });
+                v.innerHTML = `<button class="btn-add" onclick="addCt()">+ İletişim Ekle</button><div id="ct-list" style="margin-top:20px;"></div>`;
+                (db.iletisim || []).forEach((c, i) => { document.getElementById('ct-list').innerHTML += `<div class="admin-card"><b>${c.ad}</b> - ${c.tel}<button class="admin-btn" style="color:red;" onclick="del('iletisim',${i})">Sil</button></div>`; });
+            }
+            else if(tab === 'messages') {
+                v.innerHTML = `<h2>Gelen Mesajlar</h2>`;
+                (db.mesajlar || []).forEach((m, i) => { v.innerHTML += `<div class="msg-box"><small>${m.tarih}</small><br><b>${m.ad}</b> - ${m.tel}<p>${m.msg}</p><button class="admin-btn" style="color:red;" onclick="delMsg(${i})">SİL</button></div>`; });
+            }
+            else if(tab === 'users') {
+                v.innerHTML = `<button class="btn-add" onclick="openUserModal()">+ Yetkili Ekle</button>`;
+                (db.users || []).forEach((u, i) => { v.innerHTML += `<div class="admin-card"><b>${u.u} ${u.isFounder?'(K)':''}</b><button class="admin-btn" onclick="openUserModal(${i})">Düzenle</button></div>`; });
             }
         }
 
+        // PANEL EYLEMLERİ
         function upVitBulk(e) { runUp(e.target.files, (res) => { if(!db.vitrin) db.vitrin=[]; db.vitrin.push({src:res, pos:'center'}); syncDB(); }); }
         function upGroupBulk(e) { runUp(e.target.files, (res) => { if(!db.gruplar[curG].fotos) db.gruplar[curG].fotos=[]; db.gruplar[curG].fotos.push({src:res, pos:'center'}); syncDB(); renderGP(); }); }
         function upHImg(i) { const inp=document.createElement('input'); inp.type='file'; inp.onchange=e=>{ runUp(e.target.files, (res) => { db.hocalar[i].img = {src:res, pos:'center'}; syncDB(); }); }; inp.click(); }
-
-        let curG = null; function openGPhotos(i) { curG=i; document.getElementById('gp-title').innerText=db.gruplar[i].ad; openModal('group-photo-modal'); renderGP(); }
-        function renderGP() {
-            const c = document.getElementById('gp-list'); c.innerHTML = "";
-            (db.gruplar[curG].fotos || []).forEach((img, idx) => {
-                const src = typeof img === 'string' ? img : img.src; const pos = typeof img === 'string' ? 'center' : (img.pos || 'center');
-                c.innerHTML += `<div data-id="${idx}" style="position:relative; background:#eee; padding:5px; border-radius:10px; text-align:center;">
-                    <img src="${src}" style="width:100%; height:80px; object-fit:cover; object-position:${pos}; border-radius:8px;">
-                    <div style="margin-top:3px;">
-                        <button class="pos-btn ${pos==='top'?'active':''}" onclick="setGPos(${idx},'top')">Ü</button>
-                        <button class="pos-btn ${pos==='center'?'active':''}" onclick="setGPos(${idx},'center')">O</button>
-                        <button class="pos-btn ${pos==='bottom'?'active':''}" onclick="setGPos(${idx},'bottom')">A</button>
-                        <button onclick="delGP(${idx})" style="background:red; color:white; border:none; border-radius:50%; width:20px; height:20px; cursor:pointer;">&times;</button>
-                    </div>
-                </div>`;
-            });
-            new Sortable(c, { animation: 150, onEnd: () => { db.gruplar[curG].fotos = Array.from(c.children).map(el => db.gruplar[curG].fotos[el.dataset.id]); syncDB(); }});
-        }
-
-        function tryLogin() { const u = document.getElementById('u').value.trim().toUpperCase(), p = document.getElementById('p').value.trim().toUpperCase(); currentUser = (db.users || []).find(user => user.u.toUpperCase() === u && user.p.toUpperCase() === p); if(currentUser) { closeModal('login-modal'); buildAdminSidebar(); document.getElementById('admin-panel').style.display='flex'; } else alert("Hata!"); }
-        function buildAdminSidebar() { const s = document.getElementById('sidebar-menu'); s.innerHTML = ""; const p = currentUser.perms; if(p.vit) s.innerHTML += `<div class="sidebar-btn" data-tab="vitrin" onclick="adminTab('vitrin', this)">🖼️ VİTRİN</div>`; if(p.grp) s.innerHTML += `<div class="sidebar-btn" data-tab="groups" onclick="adminTab('groups', this)">⚽ GRUPLAR</div>`; if(p.hoc) s.innerHTML += `<div class="sidebar-btn" data-tab="coaches" onclick="adminTab('coaches', this)">👤 HOCALAR</div>`; if(p.ann) s.innerHTML += `<div class="sidebar-btn" data-tab="anns" onclick="adminTab('anns', this)">📢 DUYURULAR</div>`; if(p.con) { s.innerHTML += `<div class="sidebar-btn" data-tab="contact" onclick="adminTab('contact', this)">📞 İLETİŞİM</div>`; s.innerHTML += `<div class="sidebar-btn" data-tab="messages" onclick="adminTab('messages', this)" style="background:var(--sari); color:var(--yesil)">📩 MESAJLAR</div>`; } if(p.usr) s.innerHTML += `<div class="sidebar-btn" data-tab="users" onclick="adminTab('users', this)" style="color:var(--sari)">🔑 YETKİLİLER</div>`; if(s.firstChild) s.firstChild.click(); }
-        function openUserModal(idx = null) { editingUserIdx = idx; const u = idx !== null ? db.users[idx] : null; document.getElementById('new-u').value = u ? u.u : ""; document.getElementById('new-p').value = u ? u.p : ""; document.getElementById('perm-container').style.display = (u && u.isFounder) ? "none" : "block"; openModal('user-modal'); }
-        function saveUser() { const u = document.getElementById('new-u').value.trim(), p = document.getElementById('new-p').value.trim(); if(!u || !p) return alert("Hata!"); let perms = { vit:document.getElementById('p-vit').checked, grp:document.getElementById('p-grp').checked, hoc:document.getElementById('p-hoc').checked, ann:document.getElementById('p-ann').checked, con:document.getElementById('p-con').checked, usr:false }; if(editingUserIdx !== null) { const f = db.users[editingUserIdx].isFounder; db.users[editingUserIdx] = {u, p, perms: f ? {vit:true,grp:true,hoc:true,ann:true,con:true,usr:true} : perms, isFounder: f}; } else { db.users.push({u, p, perms, isFounder:false}); } syncDB(); closeModal('user-modal'); }
-        function setVPos(i, p) { db.vitrin[i].pos = p; syncDB(); }
-        function setGPos(idx, p) { db.gruplar[curG].fotos[idx].pos = p; syncDB(); renderGP(); }
-        function delVit(i) { if(confirm("Sil?")) { db.vitrin.splice(i, 1); syncDB(); } }
-        function delGP(i) { db.gruplar[curG].fotos.splice(i, 1); syncDB(); renderGP(); }
-        function sendVeliMsg() { const ad = document.getElementById('v-ad').value, tel = document.getElementById('v-tel').value, msg = document.getElementById('v-mesaj').value; if(!ad || !msg) return alert("Boş bırakma!"); if(!db.mesajlar) db.mesajlar = []; db.mesajlar.unshift({ad, tel, msg, tarih: new Date().toLocaleString()}); syncDB(); alert("Gönderildi."); document.getElementById('v-ad').value=""; document.getElementById('v-tel').value=""; document.getElementById('v-mesaj').value=""; }
         function addG() { const n = prompt("Grup adı:"); if(n) { if(!db.gruplar) db.gruplar=[]; db.gruplar.push({ad:n, fotos:[]}); syncDB(); } }
         function editG(i) { const n = prompt("Yeni ad:", db.gruplar[i].ad); if(n) { db.gruplar[i].ad=n; syncDB(); } }
         function addC() { const n = prompt("Hoca adı:"); if(n) { if(!db.hocalar) db.hocalar=[]; db.hocalar.push({ad:n, img:""}); syncDB(); } }
         function addA() { const b = prompt("Başlık:"), m = prompt("Mesaj:"); if(b) { if(!db.duyurular) db.duyurular=[]; db.duyurular.unshift({baslik:b, metin:m}); syncDB(); } }
-        function addCt() { const n = prompt("Ad:"), t = prompt("Tel:"); if(n) { if(!db.iletisim) db.iletisim=[]; db.iletisim.push({ad:n, tel:t}); syncDB(); } }
-        function editCt(i) { const n = prompt("Ad:", db.iletisim[i].ad), t = prompt("Tel:", db.iletisim[i].tel); if(n) { db.iletisim[i]={ad:n, tel:t}; syncDB(); } }
-        function del(p, i) { if(confirm("Sil?")) { db[p].splice(i, 1); syncDB(); } }
-        function delMsg(i) { if(confirm("Sil?")) { db.mesajlar.splice(i, 1); syncDB(); } }
+        function addCt() { const n = prompt("Ad Soyad:"), t = prompt("Telefon:"); if(n) { if(!db.iletisim) db.iletisim=[]; db.iletisim.push({ad:n, tel:t}); syncDB(); } }
+        
+        let curG = null; function openGPhotos(i) { curG=i; document.getElementById('gp-title').innerText=db.gruplar[i].ad; openModal('group-photo-modal'); renderGP(); }
+        function renderGP() {
+            const c = document.getElementById('gp-list'); c.innerHTML = "";
+            (db.gruplar[curG].fotos || []).forEach((img, idx) => {
+                const src = typeof img === 'string' ? img : img.src;
+                c.innerHTML += `<div data-id="${idx}" style="position:relative; background:#eee; padding:5px; border-radius:10px; text-align:center;"><img src="${src}" style="width:100%; height:80px; object-fit:cover; border-radius:8px;"><button onclick="delGP(${idx})" style="background:red; color:white; border:none; border-radius:50%; width:20px; height:20px; cursor:pointer;">&times;</button></div>`;
+            });
+            new Sortable(c, { animation: 150, onEnd: () => { db.gruplar[curG].fotos = Array.from(c.children).map(el => db.gruplar[curG].fotos[el.dataset.id]); syncDB(); }});
+        }
+
+        // TEMEL FONKSİYONLAR
+        function tryLogin() { const u = document.getElementById('u').value.trim().toUpperCase(), p = document.getElementById('p').value.trim().toUpperCase(); currentUser = (db.users || []).find(user => user.u.toUpperCase() === u && user.p.toUpperCase() === p); if(currentUser) { closeModal('login-modal'); buildAdminSidebar(); document.getElementById('admin-panel').style.display='flex'; } else alert("Hata!"); }
+        function buildAdminSidebar() { const s = document.getElementById('sidebar-menu'); s.innerHTML = ""; const p = currentUser.perms; if(p.vit) s.innerHTML += `<div class="sidebar-btn" data-tab="vitrin" onclick="adminTab('vitrin', this)">🖼️ VİTRİN</div>`; if(p.grp) s.innerHTML += `<div class="sidebar-btn" data-tab="groups" onclick="adminTab('groups', this)">⚽ GRUPLAR</div>`; if(p.hoc) s.innerHTML += `<div class="sidebar-btn" data-tab="coaches" onclick="adminTab('coaches', this)">👤 HOCALAR</div>`; if(p.ann) s.innerHTML += `<div class="sidebar-btn" data-tab="anns" onclick="adminTab('anns', this)">📢 DUYURULAR</div>`; if(p.con) { s.innerHTML += `<div class="sidebar-btn" data-tab="contact" onclick="adminTab('contact', this)">📞 İLETİŞİM</div>`; s.innerHTML += `<div class="sidebar-btn" data-tab="messages" onclick="adminTab('messages', this)" style="background:var(--sari); color:var(--yesil)">📩 MESAJLAR</div>`; } if(p.usr) s.innerHTML += `<div class="sidebar-btn" data-tab="users" onclick="adminTab('users', this)" style="color:var(--sari)">🔑 YETKİLİLER</div>`; if(s.firstChild) s.firstChild.click(); }
+        function openUserModal(idx = null) { editingUserIdx = idx; const u = idx !== null ? db.users[idx] : null; document.getElementById('new-u').value = u ? u.u : ""; document.getElementById('new-p').value = u ? u.p : ""; document.getElementById('perm-container').style.display = (u && u.isFounder) ? "none" : "block"; openModal('user-modal'); }
+        function saveUser() { const u = document.getElementById('new-u').value.trim(), p = document.getElementById('new-p').value.trim(); if(!u || !p) return alert("Hata!"); let perms = { vit:document.getElementById('p-vit').checked, grp:document.getElementById('p-grp').checked, hoc:document.getElementById('p-hoc').checked, ann:document.getElementById('p-ann').checked, con:document.getElementById('p-con').checked, usr:false }; if(editingUserIdx !== null) { const f = db.users[editingUserIdx].isFounder; db.users[editingUserIdx] = {u, p, perms: f ? {vit:true,grp:true,hoc:true,ann:true,con:true,usr:true} : perms, isFounder: f}; } else { db.users.push({u, p, perms, isFounder:false}); } syncDB(); closeModal('user-modal'); }
+        function sendVeliMsg() { const ad = document.getElementById('v-ad').value, tel = document.getElementById('v-tel').value, msg = document.getElementById('v-mesaj').value; if(!ad || !msg) return alert("Hata!"); if(!db.mesajlar) db.mesajlar = []; db.mesajlar.unshift({ad, tel, msg, tarih: new Date().toLocaleString()}); syncDB(); alert("İletildi."); }
         function openLB(s) { document.getElementById('lb-img').src=s; document.getElementById('lightbox').style.display='flex'; }
         function openModal(id) { document.getElementById(id).style.display='flex'; }
         function closeModal(id) { document.getElementById(id).style.display='none'; }
         function showPage(p) { document.querySelectorAll('.page').forEach(pg => pg.classList.remove('active')); document.getElementById('page-' + p).classList.add('active'); window.scrollTo(0,0); }
+        function setVPos(i, p) { db.vitrin[i].pos = p; syncDB(); }
+        function delVit(i) { if(confirm("Sil?")) { db.vitrin.splice(i, 1); syncDB(); } }
+        function delGP(i) { db.gruplar[curG].fotos.splice(i, 1); syncDB(); renderGP(); }
+        function delMsg(i) { if(confirm("Sil?")) { db.mesajlar.splice(i, 1); syncDB(); } }
+        function del(p, i) { if(confirm("Sil?")) { db[p].splice(i, 1); syncDB(); } }
     </script>
 </body>
 </html>
